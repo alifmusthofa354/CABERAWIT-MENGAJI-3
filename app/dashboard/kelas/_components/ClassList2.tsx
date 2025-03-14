@@ -5,6 +5,7 @@
 import { FaUserCheck, FaEllipsisV, FaGithub, FaUsers } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchClasses } from "../_actions/ClassAction";
+import Image from "next/image";
 
 interface Class {
   id: number;
@@ -19,10 +20,12 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
     className="rounded-lg shadow-md overflow-hidden bg-amber-50"
   >
     <div className="relative">
-      <img
+      <Image
         alt="Classroom image"
-        src="https://storage.googleapis.com/a1aa/image/r7llQzO2tecF9K7GxMVpojWxQgD4rus1zaTxQCqQYdE.jpg"
+        src="/coverclassroom.jpg"
         className="w-full h-32 object-cover"
+        width={500}
+        height={500}
       />
       <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
         <FaUserCheck className="mr-1" />
