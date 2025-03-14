@@ -21,11 +21,10 @@ export function NavMainMenu({
     icon: LucideIcon;
   }[];
 }) {
-  const { isMobile, setOpen } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const handleLinkClick = () => {
     if (isMobile) {
-      console.log("menutup");
-      setOpen(false); // Menutup sidebar saat link ditekan pada perangkat mobile
+      setOpenMobile(false); // Menutup sidebar saat link ditekan pada perangkat mobile
     }
   };
   return (
