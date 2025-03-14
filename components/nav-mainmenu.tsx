@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
@@ -20,6 +21,13 @@ export function NavMainMenu({
     icon: LucideIcon;
   }[];
 }) {
+  const { isMobile, setOpen } = useSidebar();
+  const handleLinkClick = () => {
+    if (isMobile) {
+      console.log("menutup");
+      setOpen(false); // Menutup sidebar saat link ditekan pada perangkat mobile
+    }
+  };
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
@@ -27,7 +35,7 @@ export function NavMainMenu({
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link href={item.url}>
+              <Link href={item.url} onClick={handleLinkClick}>
                 <item.icon />
                 <span>{item.name}</span>
               </Link>
