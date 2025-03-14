@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
+import { NavMainMenu } from "@/components/nav-mainmenu";
 import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 //import { TeamSwitcher } from "@/components/team-switcher";
@@ -53,8 +54,8 @@ const sampledata = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Class",
+      url: "/dashboard/kelas",
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -155,6 +156,23 @@ const sampledata = {
       icon: Map,
     },
   ],
+  NavMenu: [
+    {
+      name: "Home",
+      url: "/dashboard",
+      icon: Frame,
+    },
+    {
+      name: "Kelas",
+      url: "/dashboard/kelas",
+      icon: PieChart,
+    },
+    {
+      name: "Absensi",
+      url: "/dashboard/absensi",
+      icon: Map,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -179,6 +197,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader> */}
       <SidebarContent>
         <NavMain items={sampledata.navMain} />
+        <NavMainMenu projects={sampledata.NavMenu} />
         <NavProjects projects={sampledata.projects} />
       </SidebarContent>
       <SidebarFooter>
