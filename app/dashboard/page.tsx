@@ -1,7 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import HeaderDashboard from "@/components/ui/HeaderDashboard";
+
 export default function Page() {
   return (
     <>
+      <div className="flex items-center justify-between">
+        <HeaderDashboard />
+        <div className="p-4">
+          <h1 className="text-lg font-semibold">Dashboard</h1>
+        </div>
+      </div>
+
       <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
         <div className="rounded-lg bg-white px-5 py-3.5 text-base/5 shadow-sm font-semibold text-black">
           <div className="">Chart</div>
