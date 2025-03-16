@@ -6,6 +6,11 @@ import { FaUserCheck, FaEllipsisV, FaGithub, FaUsers } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchClasses } from "../_actions/ClassAction";
 import Image from "next/image";
+import ClassCardSkeleton from "./ClassCardSkeleton";
+import { FiAlertCircle, FiBookOpen } from "react-icons/fi";
+import { Button } from "@/components/ui/button";
+
+import AddClass from "./AddClass";
 
 interface Class {
   id: number;
@@ -62,17 +67,62 @@ export default function ClassList() {
     isLoading,
     isError,
     error,
+    refetch,
   } = useQuery<Class[], Error>({
-    queryKey: ["classes"],
+    queryKey: ["classroom"],
     queryFn: fetchClasses,
   });
+  const handleRetry = () => {
+    refetch(); // Panggil refetch untuk memicu permintaan ulang
+  };
 
-  if (isLoading) return <div className="text-center">Loading...</div>;
-
-  if (isError)
+  if (isLoading)
     return (
-      <div className="text-center text-red-500">Error: {error.message}</div>
+      <>
+        <div className="p-6">
+          <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-3">
+            <ClassCardSkeleton />
+            <ClassCardSkeleton />
+            <ClassCardSkeleton />
+          </div>
+        </div>
+      </>
     );
+
+  if (isError) {
+    const noClassroom = error.message === "No classroom";
+
+    return (
+      <div className="p-6 flex justify-center items-center min-h-full">
+        <div className="text-center">
+          {noClassroom ? (
+            <div>
+              <FiBookOpen className="h-12 w-12 text-gray-400 mx-auto mb-2" />
+              <p className="text-lg font-semibold text-gray-700 mb-4">
+                Tidak ada kelas.
+              </p>
+              <AddClass />
+            </div>
+          ) : (
+            <div>
+              <FiAlertCircle className="h-12 w-12 text-red-500 mx-auto mb-2" />
+              <p className="text-lg font-semibold text-red-700 mb-4">
+                Terjadi kesalahan: {error.message}
+              </p>
+
+              <Button
+                variant={"outline"}
+                className=" transition-all duration-300 transform hover:scale-105 active:scale-95"
+                onClick={handleRetry} // Tambahkan onClick di sini
+              >
+                Coba Lagi
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">

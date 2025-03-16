@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/auth";
+import { z } from "zod";
 
 export async function GET() {
   const session = await auth();
@@ -39,6 +40,11 @@ export async function GET() {
   }
 }
 
+// Skema validasi menggunakan Zod
+const classSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }).max(100),
+});
+
 export async function POST(req: Request) {
   const session = await auth();
 
@@ -51,22 +57,27 @@ export async function POST(req: Request) {
 
   const email = session.user.email;
 
-  if (req.method !== "POST") {
-    return NextResponse.json({ error: "Method Not Allowed" }, { status: 405 });
-  }
-
   try {
-    const { name } = await req.json();
-
-    if (!name) {
-      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    if (req.headers.get("Content-Type") !== "application/json") {
+      return NextResponse.json(
+        { error: "Invalid Content-Type" },
+        { status: 400 }
+      );
     }
 
+    const body = await req.json();
+
+    // Validasi menggunakan Zod
+    const validatedBody = classSchema.parse(body);
+
+    const { name } = validatedBody;
+
     const { data, error } = await supabase
-      .from("classes")
+      .from("classroom")
       .insert([{ name, email }]);
 
     if (error) {
+      console.error("Supabase error:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
@@ -75,7 +86,12 @@ export async function POST(req: Request) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(error);
+    if (error instanceof z.ZodError) {
+      // Penanganan error validasi Zod
+      console.log({ error: error.errors });
+      return NextResponse.json({ error: error.errors }, { status: 400 });
+    }
+    console.error("General error:", error);
     return NextResponse.json({ error: "An error occurred" }, { status: 500 });
   }
 }
