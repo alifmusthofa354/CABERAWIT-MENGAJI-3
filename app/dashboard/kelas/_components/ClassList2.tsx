@@ -11,6 +11,7 @@ import { FiAlertCircle, FiBookOpen } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 
 import AddClass from "./AddClass";
+import Link from "next/link";
 
 interface Class {
   id: number;
@@ -20,45 +21,47 @@ interface Class {
 }
 
 const ClassCard = ({ kelas }: { kelas: Class }) => (
-  <div
-    key={kelas.id}
-    className="rounded-lg shadow-md overflow-hidden bg-amber-50"
-  >
-    <div className="relative">
-      <Image
-        alt="Classroom image"
-        src="/coverclassroom.jpg"
-        className="w-full h-32 object-cover"
-        width={500}
-        height={500}
-      />
-      <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
-        <FaUserCheck className="mr-1" />
-        Members
+  <Link href={`/dashboard/kelas/${kelas.id}`}>
+    <div
+      key={kelas.id}
+      className="rounded-lg shadow-md overflow-hidden bg-amber-50"
+    >
+      <div className="relative">
+        <Image
+          alt="Classroom image"
+          src="/coverclassroom.jpg"
+          className="w-full h-32 object-cover"
+          width={500}
+          height={500}
+        />
+        <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+          <FaUserCheck className="mr-1" />
+          Members
+        </div>
+        <div className="absolute top-2 right-2 text-white">
+          <FaEllipsisV />
+        </div>
       </div>
-      <div className="absolute top-2 right-2 text-white">
-        <FaEllipsisV />
-      </div>
-    </div>
-    <div className="p-4">
-      <h3 className="text-lg font-semibold text-orange-600 mb-2 max-w-full truncate">
-        {kelas.name}
-      </h3>
+      <div className="p-4">
+        <h3 className="text-lg font-semibold text-orange-600 mb-2 max-w-full truncate">
+          {kelas.name}
+        </h3>
 
-      <div className="flex  justify-between items-center text-sm text-gray-700">
-        <span className="flex items-center max-w-2/3 truncate whitespace-nowrap flex-grow ">
-          <FaGithub className="mr-1" />
-          <p className="max-w-5/6 truncate">
-            {kelas.membersCount} NADIA ALIFA SALISA RAYA BATANA SAMA SAJA
-          </p>
-        </span>
-        <span className="flex items-center whitespace-nowrap min-w-min">
-          <FaUsers className="mr-1" />
-          <p className="">{kelas.membersCount} 1000 Murid</p>
-        </span>
+        <div className="flex  justify-between items-center text-sm text-gray-700">
+          <span className="flex items-center max-w-2/3 truncate whitespace-nowrap flex-grow ">
+            <FaGithub className="mr-1" />
+            <p className="max-w-5/6 truncate">
+              {kelas.membersCount} NADIA ALIFA SALISA RAYA BATANA SAMA SAJA
+            </p>
+          </span>
+          <span className="flex items-center whitespace-nowrap min-w-min">
+            <FaUsers className="mr-1" />
+            <p className="">{kelas.membersCount} 1000 Murid</p>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
+  </Link>
 );
 
 export default function ClassList() {
