@@ -93,8 +93,8 @@ export default function AddClass({ mobile = false }) {
             {/* Tombol Add Class untuk mobile */}
             {mobile && ( // Tampilkan tombol mobile jika mobile bernilai true
               <div className="md:hidden">
-                <button className="bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-md">
-                  <Plus />
+                <button className="bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full w-16 h-16 flex items-center justify-center shadow-md">
+                  <Plus className="w-8 h-8" />
                 </button>
               </div>
             )}
