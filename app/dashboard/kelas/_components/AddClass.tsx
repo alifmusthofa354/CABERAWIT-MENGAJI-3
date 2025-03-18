@@ -24,7 +24,7 @@ const createClass = async (formData: { name: string }) => {
   return response.data;
 };
 
-export default function AddClass() {
+export default function AddClass({ mobile = false }) {
   const [name, setName] = useState("");
   const [open, setOpen] = useState(false); // State untuk mengontrol dialog
   const queryClient = useQueryClient();
@@ -80,12 +80,25 @@ export default function AddClass() {
       <Toaster /> {/* Tempatkan Toaster di luar Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">
-            <span>
-              <Plus />
-            </span>
-            Create Class
-          </Button>
+          <div>
+            {/* Tombol Add Class untuk desktop */}
+            <div className="hidden md:block">
+              <Button variant="outline">
+                <span>
+                  <Plus />
+                </span>
+                Add Class
+              </Button>
+            </div>
+            {/* Tombol Add Class untuk mobile */}
+            {mobile && ( // Tampilkan tombol mobile jika mobile bernilai true
+              <div className="md:hidden">
+                <button className="bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full w-12 h-12 flex items-center justify-center shadow-md">
+                  <Plus />
+                </button>
+              </div>
+            )}
+          </div>
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px]">
