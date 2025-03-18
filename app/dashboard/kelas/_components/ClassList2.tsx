@@ -29,7 +29,7 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
     <div className="relative">
       <Image
         alt="Classroom image"
-        src="/coverclassroom.jpg"
+        src="https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/image-caberawit//coverclass.jpg"
         className="w-full h-32 object-cover"
         width={500}
         height={500}
