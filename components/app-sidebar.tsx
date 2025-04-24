@@ -5,18 +5,19 @@ import * as React from "react";
 import {
   // AudioWaveform,
   // BookOpen,
-  // Bot,
+  Bot,
   // Command,
   Frame,
   // GalleryVerticalEnd,
   Map,
   PieChart,
-  // Settings2,
-  // SquareTerminal,
+  Settings2,
+  SquareTerminal,
 } from "lucide-react";
+// import { NavMainMenu } from "@/components/nav-mainmenu";
+// import { NavMain } from "@/components/nav-main";
+import { NavMainCustom } from "@/components/nav-menucustom";
 
-//import { NavMain } from "@/components/nav-main";
-import { NavMainMenu } from "@/components/nav-mainmenu";
 //import { NavProjects } from "@/components/nav-projects";
 import { NavUser } from "@/components/nav-user";
 //import { TeamSwitcher } from "@/components/team-switcher";
@@ -35,6 +36,68 @@ const sampledata = {
     email: "UnAuthenticated",
     avatar: "/avatar_default.png",
   },
+  navMain: [
+    {
+      title: "Home",
+      url: "/dashboard",
+      icon: SquareTerminal,
+      isActive: true,
+      canCollapse: false,
+      items: [],
+    },
+    {
+      title: "Absensi",
+      url: "/dashboard/absensi",
+      icon: SquareTerminal,
+      isActive: true,
+      canCollapse: false,
+      items: [],
+    },
+    {
+      title: "History",
+      url: "#",
+      icon: Settings2,
+      canCollapse: true,
+      items: [
+        {
+          title: "History",
+          url: "/dashboard/histori",
+        },
+        {
+          title: "Team",
+          url: "#",
+        },
+        {
+          title: "Billing",
+          url: "#",
+        },
+        {
+          title: "Limits",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Kelas",
+      url: "#",
+      icon: Bot,
+      canCollapse: true,
+      items: [
+        {
+          title: "General",
+          url: "/dashboard/kelas",
+        },
+        {
+          title: "Explorer",
+          url: "#",
+        },
+        {
+          title: "Quantum",
+          url: "#",
+        },
+      ],
+    },
+  ],
   // teams: [
   //   {
   //     name: "Acme Inc",
@@ -172,6 +235,11 @@ const sampledata = {
       url: "/dashboard/absensi",
       icon: Map,
     },
+    {
+      name: "History",
+      url: "/dashboard/histori",
+      icon: Map,
+    },
   ],
 };
 
@@ -196,8 +264,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher teams={sampledata.teams} />
       </SidebarHeader> */}
       <SidebarContent>
-        {/* <NavMain items={sampledata.navMain} /> */}
-        <NavMainMenu projects={sampledata.NavMenu} />
+        {/* <NavMainMenu projects={sampledata.NavMenu} />
+        <NavMain items={sampledata.navMain} /> */}
+        <NavMainCustom items={sampledata.navMain} />
+
         {/* <NavProjects projects={sampledata.projects} /> */}
       </SidebarContent>
       <SidebarFooter>

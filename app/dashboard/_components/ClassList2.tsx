@@ -4,13 +4,13 @@
 
 import { FaUserCheck, FaEllipsisV, FaGithub, FaUsers } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
-import { fetchClasses } from "../_actions/ClassAction";
+import { fetchClasses } from "@/actions/ClassActions";
 import Image from "next/image";
 import ClassCardSkeleton from "./ClassCardSkeleton";
 import { FiAlertCircle, FiBookOpen } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 
-import AddClass from "./AddClass";
+import AddClass from "@/components/custom/AddClass";
 import Link from "next/link";
 
 interface Class {

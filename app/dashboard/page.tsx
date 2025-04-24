@@ -1,37 +1,26 @@
-import { Skeleton } from "@/components/ui/skeleton";
+//import ClassList from "./_components/ClassList";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
+import ClassList2 from "./_components/ClassList2";
+import AddClass from "@/components/custom/AddClass";
 
 export default function Page() {
+  //const teacherId = 1; // Ganti dengan ID guru yang sesuai
   return (
-    <>
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col min-h-svh relative">
+      <header className="flex items-center justify-between sticky top-0 bg-white z-50">
         <HeaderDashboard />
-        <div className="p-4">
-          <h1 className="text-lg font-semibold">Dashboard</h1>
+        <div className="p-3">
+          {/* Tombol Add Class untuk desktop */}
+          <AddClass mobile={false} />
         </div>
+      </header>
+      <div className="flex-grow bg-amber-100  pb-16 md:pb-0">
+        <ClassList2 />
       </div>
-
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <div className="rounded-lg bg-white px-5 py-3.5 text-base/5 shadow-sm font-semibold text-black">
-          <div className="">Chart</div>
-        </div>
-
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-red-700" />
-          <Skeleton className="aspect-video rounded-xl bg-muted/50" />
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-green-700" />
-        </div>
-        <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-green-700" />
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-amber-700" />
-        </div>
-        <Skeleton className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-60 md:bg-red-700" />
-        <Skeleton className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-60 md:bg-sky-700" />
-        <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-blue-500" />
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-purple-500" />
-        </div>
+      {/* Tombol Add Class untuk mobile di pojok kanan bawah */}
+      <div className="md:hidden fixed bottom-4 right-4">
+        <AddClass mobile={true} />
       </div>
-    </>
+    </div>
   );
 }
