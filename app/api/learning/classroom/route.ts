@@ -7,7 +7,11 @@ import { v4 as uuidv4 } from "uuid";
 // Konfigurasi Zod untuk data teks
 const classSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }).max(100),
-  description: z.string().max(255).optional(),
+  description: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .max(255)
+    .optional(),
 });
 
 // Fungsi untuk menangani upload file menggunakan formidable (Promise-based)
