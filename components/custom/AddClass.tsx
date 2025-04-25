@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import Image from "next/image";
 
 // Fungsi untuk membuat kelas
@@ -117,7 +117,6 @@ export default function AddClass({ mobile = false }) {
 
   return (
     <>
-      <Toaster /> {/* Tempatkan Toaster di luar Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <div>
