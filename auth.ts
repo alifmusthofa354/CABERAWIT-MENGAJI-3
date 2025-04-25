@@ -26,8 +26,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (error || !existingUser) {
           // Jika user tidak ada, tambahkan ke database dan set role
+          console.log(user);
           const { error: insertError } = await supabase.from("users").insert({
-            email: user.email, // Role default untuk pengguna baru
+            email: user.email,
+            name: user.name,
+            photo: user.image, // Role default untuk pengguna baru
           });
 
           if (insertError) {

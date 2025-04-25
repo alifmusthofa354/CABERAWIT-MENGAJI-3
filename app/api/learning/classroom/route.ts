@@ -2,6 +2,58 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/auth";
 import { z } from "zod";
+import { v4 as uuidv4 } from "uuid";
+
+// Konfigurasi Zod untuk data teks
+const classSchema = z.object({
+  name: z.string().min(1, { message: "Name is required" }).max(100),
+  description: z.string().max(255).optional(),
+});
+
+// Fungsi untuk menangani upload file menggunakan formidable (Promise-based)
+async function parseFormData(req: Request): Promise<{
+  fields: Record<string, string>;
+  files: Record<string, File | File[]>;
+}> {
+  return new Promise(async (resolve) => {
+    const formData = await req.formData();
+    const fields: Record<string, string> = {};
+    const files: Record<string, File | File[]> = {};
+
+    for (const [key, value] of formData.entries()) {
+      if (typeof value === "string") {
+        fields[key] = value;
+      } else if (value instanceof File) {
+        if (files[key]) {
+          if (!Array.isArray(files[key])) {
+            files[key] = [files[key]];
+          }
+          (files[key] as File[]).push(value);
+        } else {
+          files[key] = value;
+        }
+      }
+    }
+    resolve({ fields, files });
+  });
+}
+
+async function uploadImageToSupabase(file: File): Promise<string | null> {
+  const { data, error } = await supabase.storage
+    .from("cover-class-caberawit") // Ganti dengan nama bucket Anda
+    .upload(`${uuidv4()}-${file.name}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("Error uploading image to Supabase:", error);
+    return null;
+  }
+
+  return supabase.storage.from("cover-class-caberawit").getPublicUrl(data.path)
+    .data.publicUrl;
+}
 
 export async function GET() {
   const session = await auth();
@@ -15,13 +67,9 @@ export async function GET() {
   const email = session.user.email;
 
   try {
-    // const { data, error } = await supabase
-    //   .from("classroom")
-    //   .select("id, name, email, users (name)") // Menggunakan alias user:name untuk mengambil nama dari tabel user
-    //   .eq("email", email);
     const { data, error } = await supabase
       .from("classroom")
-      .select("id, name, email") // Menggunakan alias user:name untuk mengambil nama dari tabel user
+      .select("id, name, email, description, image_url") // Sertakan image_url
       .eq("email", email);
 
     if (error) {
@@ -35,15 +83,13 @@ export async function GET() {
 
     return NextResponse.json({ classes: data });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+    console.error("Error fetching classrooms:", error);
+    return NextResponse.json(
+      { error: "An error occurred while fetching classrooms" },
+      { status: 500 }
+    );
   }
 }
-
-// Skema validasi menggunakan Zod
-const classSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }).max(100),
-});
 
 export async function POST(req: Request) {
   const session = await auth();
@@ -58,40 +104,49 @@ export async function POST(req: Request) {
   const email = session.user.email;
 
   try {
-    if (req.headers.get("Content-Type") !== "application/json") {
-      return NextResponse.json(
-        { error: "Invalid Content-Type" },
-        { status: 400 }
-      );
+    const { fields, files } = await parseFormData(req);
+
+    // Validasi data teks menggunakan Zod
+    const validatedFields = classSchema.parse(fields);
+    const { name, description } = validatedFields;
+
+    let imageUrl: string | null = null;
+    if (files?.image) {
+      const imageFile = Array.isArray(files.image)
+        ? files.image[0]
+        : files.image;
+      imageUrl = await uploadImageToSupabase(imageFile);
+      if (!imageUrl) {
+        return NextResponse.json(
+          { error: "Failed to upload image" },
+          { status: 500 }
+        );
+      }
     }
-
-    const body = await req.json();
-
-    // Validasi menggunakan Zod
-    const validatedBody = classSchema.parse(body);
-
-    const { name } = validatedBody;
 
     const { data, error } = await supabase
       .from("classroom")
-      .insert([{ name, email }]);
+      .insert([{ name, email, description, image_url: imageUrl }]) // Simpan URL gambar
+      .select("*");
 
     if (error) {
-      console.error("Supabase error:", error);
+      console.error("Supabase error during class creation:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
     return NextResponse.json(
-      { message: "Class created successfully", data },
+      { message: "Class created successfully", data: data[0] },
       { status: 201 }
     );
   } catch (error) {
     if (error instanceof z.ZodError) {
-      // Penanganan error validasi Zod
-      console.log({ error: error.errors });
+      console.log("Zod validation error:", error.errors);
       return NextResponse.json({ error: error.errors }, { status: 400 });
     }
-    console.error("General error:", error);
-    return NextResponse.json({ error: "An error occurred" }, { status: 500 });
+    console.error("General error during class creation:", error);
+    return NextResponse.json(
+      { error: "An unexpected error occurred while creating the class" },
+      { status: 500 }
+    );
   }
 }

@@ -18,6 +18,7 @@ interface Class {
   name: string;
   email: string;
   membersCount: number;
+  image_url: string;
 }
 
 const ClassCard = ({ kelas }: { kelas: Class }) => (
@@ -28,8 +29,11 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
   >
     <div className="relative">
       <Image
-        alt="Classroom image"
-        src="https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/image-caberawit//coverclass.jpg"
+        alt={`cover image ${kelas.name}`}
+        src={
+          kelas.image_url ??
+          "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.jpg"
+        }
         className="w-full h-32 object-cover"
         width={500}
         height={500}

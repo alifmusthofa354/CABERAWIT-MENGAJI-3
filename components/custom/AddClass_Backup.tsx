@@ -18,27 +18,21 @@ import { Plus } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import Image from "next/image";
 
 // Fungsi untuk membuat kelas
 // Definisi tipe data untuk form input
-// interface CreateClassFormData {
-//   name: string;
-//   description?: string; // Menambahkan properti description yang opsional
-//   image?: File | null; // Menambahkan properti untuk file gambar
-// }
-const createClass = async (formData: FormData) => {
-  const response = await axios.post("/api/learning/classroom", formData, {
-    headers: { "Content-Type": "multipart/form-data" }, // Penting untuk mengirim file
-  });
+interface CreateClassFormData {
+  name: string;
+  description?: string; // Menambahkan properti description yang opsional
+}
+const createClass = async (formData: CreateClassFormData) => {
+  const response = await axios.post("/api/learning/classroom", formData);
   return response.data;
 };
 
 export default function AddClass({ mobile = false }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState(""); // State untuk input keterangan
-  const [image, setImage] = useState<File | null>(null); // State untuk menyimpan file gambar
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null); // Untuk menampilkan preview gambar
   const [open, setOpen] = useState(false); // State untuk mengontrol dialog
   const queryClient = useQueryClient();
 
@@ -49,8 +43,6 @@ export default function AddClass({ mobile = false }) {
       toast.success("Class created successfully!");
       setName(""); // Reset state nama
       setDescription(""); // Reset state keterangan
-      setImage(null);
-      setImagePreviewUrl(null);
       setOpen(false); // Tutup dialog
     },
     onError: (error: unknown) => {
@@ -84,34 +76,11 @@ export default function AddClass({ mobile = false }) {
     },
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      setImagePreviewUrl(URL.createObjectURL(file)); // Membuat URL sementara untuk preview
-    } else {
-      setImage(null);
-      setImagePreviewUrl(null);
-    }
-  };
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (name) {
-  //     // jika nama ada
-  //     mutation.mutate({ name, description }); // Kirim nama dan keterangan
-  //   }
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (name) {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("description", description);
-      if (image) {
-        formData.append("image", image); // Append file gambar ke FormData
-      }
-      mutation.mutate(formData);
+      // jika nama ada
+      mutation.mutate({ name, description }); // Kirim nama dan keterangan
     }
   };
 
@@ -174,32 +143,6 @@ export default function AddClass({ mobile = false }) {
                 className="col-span-3"
               />
             </div>
-
-            {/* Input untuk upload gambar */}
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="image" className="text-right">
-                Image (Optional)
-              </Label>
-              <Input
-                type="file"
-                id="image"
-                accept="image/*" // Menerima semua jenis file gambar
-                onChange={handleImageChange}
-                className="col-span-3"
-              />
-            </div>
-            {/* Preview gambar */}
-            {imagePreviewUrl && (
-              <div className="grid grid-cols-1 items-center ">
-                <Image
-                  src={imagePreviewUrl}
-                  alt="Image Preview"
-                  className="max-h-32 rounded-md"
-                  height={500}
-                  width={500}
-                />
-              </div>
-            )}
 
             <DialogFooter>
               <Button type="submit" disabled={mutation.isPending}>
