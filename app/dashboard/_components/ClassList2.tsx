@@ -23,7 +23,7 @@ interface Class {
 
 const ClassCard = ({ kelas }: { kelas: Class }) => (
   <Link
-    href={`/dashboard/kelas/${kelas.id}`}
+    href={`/dashboard/kelas/`}
     className="rounded-lg shadow-md overflow-hidden bg-amber-50"
     key={kelas.id}
   >
@@ -32,7 +32,7 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
         alt={`cover image ${kelas.name}`}
         src={
           kelas.image_url ??
-          "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.jpg"
+          "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
         }
         className="w-full h-32 object-cover"
         width={500}

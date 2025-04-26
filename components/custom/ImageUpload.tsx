@@ -99,8 +99,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       const targetMaxSizeMB = 200 / 1024; // Konversi 200 KB ke MB
       const options = {
         maxSizeMB: targetMaxSizeMB, // Target ukuran setelah kompresi (kurang dari 0.195 MB)
-        maxWidthOrHeight: maxWidth || maxHeight || 1080, // Resize berdasarkan lebar atau tinggi maksimum
+        maxWidthOrHeight: maxWidth || maxHeight || 500, // Resize berdasarkan lebar atau tinggi maksimum namun karena di props tidak ada maka yang diambil 500px
         useWebWorker: true,
+        fileType: "image/webp", // Convert to WebP format
+        initialQuality: 0.1, // Kualitas WebP (0-1, opsional)
       };
       const compressedFile = await imageCompression(file, options);
       console.log(

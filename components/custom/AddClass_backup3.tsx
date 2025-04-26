@@ -104,18 +104,14 @@ export default function AddClass({ mobile = false }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && description && image) {
-      // Memastikan name, description, dan image ada
+    if (name) {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
-      formData.append("image", image); // Append file gambar ke FormData
+      if (image) {
+        formData.append("image", image); // Append file gambar ke FormData
+      }
       mutation.mutate(formData);
-    } else {
-      // Handle kasus jika ada field yang kosong, misalnya menampilkan toast error
-      toast.error(
-        "Please fill in all required fields: Name, Description, and Image."
-      );
     }
   };
 
@@ -144,11 +140,11 @@ export default function AddClass({ mobile = false }) {
           </div>
         </DialogTrigger>
 
-        <DialogContent className="sm:max-w-[425px] max-h-[85vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Buat Kelas Baru</DialogTitle>
+            <DialogTitle>Create New Class</DialogTitle>
             <DialogDescription>
-              Masukan Nama, Keterangan dan gambar Kelas
+              Enter the class details and click save when you are done.
             </DialogDescription>
           </DialogHeader>
 
@@ -163,7 +159,6 @@ export default function AddClass({ mobile = false }) {
                 value={name}
                 onChange={(e) => setName(e.target.value)} // Menangani perubahan input
                 className="col-span-3"
-                required
               />
             </div>
             {/* Input untuk keterangan */}
@@ -185,8 +180,8 @@ export default function AddClass({ mobile = false }) {
                 onImageSelected={handleImageChange}
                 maxFileSizeMB={3}
                 allowedMimeTypes={["image/jpeg", "image/png", "image/webp"]}
-                // maxWidth={1920}
-                // maxHeight={1080}
+                maxWidth={1920}
+                maxHeight={1080}
               />
             </div>
             {/* Preview gambar */}
@@ -204,7 +199,7 @@ export default function AddClass({ mobile = false }) {
 
             <DialogFooter>
               <Button type="submit" disabled={mutation.isPending}>
-                {mutation.isPending ? "Buat..." : "Buat Kelas Baru"}
+                {mutation.isPending ? "Adding..." : "Add Class"}
               </Button>
             </DialogFooter>
           </form>
