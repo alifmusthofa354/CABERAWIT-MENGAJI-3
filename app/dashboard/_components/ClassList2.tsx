@@ -27,14 +27,14 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
     className="rounded-lg shadow-md overflow-hidden bg-amber-50"
     key={kelas.id}
   >
-    <div className="relative">
+    <div className="relative ">
       <Image
         alt={`cover image ${kelas.name}`}
         src={
           kelas.image_url ??
           "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
         }
-        className="w-full h-32 object-cover"
+        className="w-full h-32 md:min-h-48 object-cover"
         width={500}
         height={500}
       />
@@ -54,9 +54,7 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
       <div className="flex  justify-between items-center text-sm text-gray-700">
         <span className="flex items-center max-w-2/3 truncate whitespace-nowrap flex-grow ">
           <FaGithub className="mr-1" />
-          <p className="max-w-5/6 truncate">
-            {kelas.membersCount} NADIA ALIFA SALISA RAYA BATANA SAMA SAJA
-          </p>
+          <p className="max-w-5/6 truncate">{kelas.email}</p>
         </span>
         <span className="flex items-center whitespace-nowrap min-w-min">
           <FaUsers className="mr-1" />
