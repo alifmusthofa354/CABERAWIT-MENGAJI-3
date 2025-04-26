@@ -19,7 +19,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import ImageUpload from "./ImageUpload";
 
 // Fungsi untuk membuat kelas
 // Definisi tipe data untuk form input
@@ -85,7 +84,8 @@ export default function AddClass({ mobile = false }) {
     },
   });
 
-  const handleImageChange = (file: File | null) => {
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       setImage(file);
       setImagePreviewUrl(URL.createObjectURL(file)); // Membuat URL sementara untuk preview
@@ -176,12 +176,15 @@ export default function AddClass({ mobile = false }) {
 
             {/* Input untuk upload gambar */}
             <div className="grid grid-cols-4 items-center gap-4">
-              <ImageUpload
-                onImageSelected={handleImageChange}
-                maxFileSizeMB={3}
-                allowedMimeTypes={["image/jpeg", "image/png", "image/webp"]}
-                maxWidth={1920}
-                maxHeight={1080}
+              <Label htmlFor="image" className="text-right">
+                Image (Optional)
+              </Label>
+              <Input
+                type="file"
+                id="image"
+                accept="image/*" // Menerima semua jenis file gambar
+                onChange={handleImageChange}
+                className="col-span-3"
               />
             </div>
             {/* Preview gambar */}
