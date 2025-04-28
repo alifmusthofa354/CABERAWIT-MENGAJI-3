@@ -47,11 +47,11 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
       </div>
     </div>
     <div className="p-4">
-      <h3 className="text-lg font-semibold text-orange-600 mb-2 max-w-full truncate">
+      <h3 className="text-lg md:text-2xl font-semibold text-orange-600 mb-2 max-w-full truncate">
         {kelas.name}
       </h3>
 
-      <div className="flex  justify-between items-center text-sm text-gray-700">
+      <div className="flex  justify-between items-center text-sm md:text-xl text-gray-700">
         <span className="flex items-center max-w-2/3 truncate whitespace-nowrap flex-grow ">
           <FaGithub className="mr-1" />
           <p className="max-w-5/6 truncate">{kelas.email}</p>
