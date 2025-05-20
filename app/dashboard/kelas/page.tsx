@@ -1,20 +1,20 @@
+import DropDownMenu from "@/components/custom/generalClass/DropDownMenu";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import Image from "next/image";
 import {
-  FaEllipsisV,
   FaCheckCircle,
   FaCircle,
   FaWhatsapp,
   FaBookOpen,
-} from "react-icons/fa"; // Menambahkan ikon FaBookOpen
+} from "react-icons/fa";
 
 export default function Page() {
   const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
 
   return (
     <div className="min-h-svh bg-gray-50 @container">
-      <div className="bg-white shadow-md p-3">
+      <div className="bg-white shadow-md p-3 sticky top-0 z-50">
         <div className="container mx-auto flex items-center justify-between">
           <HeaderDashboard />
           <div className="pr-3">
@@ -49,7 +49,7 @@ export default function Page() {
               )}
             </div>
             <div className="absolute top-2 right-2 md:top-4 md:right-4 text-white">
-              <FaEllipsisV />
+              <DropDownMenu />
             </div>
           </div>
           <div className="p-4">
@@ -83,6 +83,7 @@ export default function Page() {
                 Grup WhatsApp
               </a>
             </div>
+            <div></div>
           </div>
         </div>
       </div>
