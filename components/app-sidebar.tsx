@@ -60,25 +60,21 @@ const sampledata = {
       canCollapse: true,
       items: [
         {
-          title: "History",
+          title: "Day",
           url: "/dashboard/histori",
         },
         {
-          title: "Team",
-          url: "#",
+          title: "Month",
+          url: "/dashboard/histori/month",
         },
         {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
+          title: "All",
+          url: "/dashboard/histori/all",
         },
       ],
     },
     {
-      title: "Kelas",
+      title: "Class",
       url: "#",
       icon: Bot,
       canCollapse: true,
@@ -88,12 +84,20 @@ const sampledata = {
           url: "/dashboard/kelas",
         },
         {
-          title: "Explorer",
-          url: "#",
+          title: "People",
+          url: "/dashboard/kelas/people",
         },
         {
-          title: "Quantum",
-          url: "#",
+          title: "Schedule",
+          url: "/dashboard/kelas/schedule",
+        },
+        {
+          title: "Template",
+          url: "/dashboard/kelas/template",
+        },
+        {
+          title: "Archieve",
+          url: "/dashboard/kelas/archieve",
         },
       ],
     },
