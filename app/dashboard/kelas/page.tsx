@@ -13,7 +13,7 @@ export default function Page() {
   const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
 
   return (
-    <div className="min-h-svh bg-gray-50 @container flex flex-col">
+    <div className="min-h-svh bg-gray-50 @container">
       <div className="bg-white shadow-md p-3">
         <div className="container mx-auto flex items-center justify-between">
           <HeaderDashboard />
@@ -22,8 +22,8 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="p-4 md:p-6 mt-1  flex-1">
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-full">
+      <div className=" mx-auto p-4 md:p-6 mt-1 min-h-max">
+        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max">
           <div className="relative">
             <Image
               alt={`cover image`}
