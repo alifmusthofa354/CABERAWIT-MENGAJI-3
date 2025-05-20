@@ -9,7 +9,7 @@ export default function Page() {
     <div className="flex flex-col min-h-svh relative">
       <header className="flex items-center justify-between sticky top-0 bg-white z-50">
         <HeaderDashboard />
-        <div className="p-3">
+        <div className="p-4">
           {/* Tombol Add Class untuk desktop */}
           <AddClass mobile={false} />
         </div>
