@@ -1,7 +1,13 @@
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import Image from "next/image";
-import { FaEllipsisV, FaCheckCircle, FaCircle } from "react-icons/fa";
+import {
+  FaEllipsisV,
+  FaCheckCircle,
+  FaCircle,
+  FaWhatsapp,
+  FaBookOpen,
+} from "react-icons/fa"; // Menambahkan ikon FaBookOpen
 
 export default function Page() {
   const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
@@ -16,8 +22,8 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className="container mx-auto p-4 md:p-6 mt-1">
-        <div className="bg-white rounded-md shadow-lg overflow-hidden">
+      <div className=" mx-auto p-4 md:p-6 mt-1 min-h-max">
+        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max">
           <div className="relative">
             <Image
               alt={`cover image`}
@@ -47,29 +53,36 @@ export default function Page() {
             </div>
           </div>
           <div className="p-4">
-            <h1 className="text-lg md:text-xl font-semibold text-gray-800">
-              Kelas 5
-            </h1>
-            <h6 className="text-sm md:text-base text-gray-600 mt-1">
-              Deskripsi:{" "}
-              <span className="text-gray-700 whitespace-normal">
+            {/* Nama Kelas yang Lebih Menarik */}
+            <div className="flex items-center mb-3">
+              <FaBookOpen className="text-blue-600 text-2xl md:text-3xl mr-2" />
+              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
+                Kelas 5
+              </h1>
+            </div>
+
+            {/* Deskripsi dengan Card Style */}
+            <div className="bg-gray-50 p-3 md:p-4 rounded-lg border border-gray-200 mb-4 shadow-sm">
+              <p className="text-gray-800 leading-relaxed text-sm md:text-base">
                 Kelas ini untuk PAUD 5 yang agak panjang jika mau dibahas disini
                 makanya harus dibuat secara terpisah. Kelas ini untuk PAUD 5
                 yang memiliki jumlah murid yang sangat banyak sehingga
-                membutuhkan perhatian lebih dari guru
-              </span>
-            </h6>
-            <h6 className="text-sm md:text-base text-gray-600 mt-1">
-              WA Grup:{" "}
+                membutuhkan perhatian lebih dari guru.
+              </p>
+            </div>
+
+            {/* Tombol WA Grup yang Lebih Menarik */}
+            <div className="mt-4">
               <a
                 href="https://chat.whatsapp.com/LBiP72yW4yaCsKVbjT5AVN?text=Halo%20saya%20ingin%20bergabung%20dengan%20grup%20kelas%205%20PAUD%20Ceria%20ini%20adalah%20pesan%20yang%20sangat%20panjang%20untuk%20menguji%20wrapping%20pada%20link"
-                className="text-blue-500 hover:underline whitespace-normal break-words"
+                className="inline-flex items-center justify-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                https://chat.whatsapp.com/LBiP72yW4yaCsKVbjT5AVN?text=Halo%20saya%20ingin%20bergabung%20dengan%20grup%20kelas%205%20PAUD%20Ceria%20ini%20adalah%20pesan%20yang%20sangat%20panjang%20untuk%20menguji%20wrapping%20pada%20link
+                <FaWhatsapp className="mr-2 text-xl" />
+                Grup WhatsApp
               </a>
-            </h6>
+            </div>
           </div>
         </div>
       </div>
