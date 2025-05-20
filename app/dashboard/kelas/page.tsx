@@ -8,10 +8,10 @@ export default function Page() {
 
   return (
     <div className="min-h-svh bg-gray-50">
-      <div className="bg-white shadow-md p-4">
+      <div className="bg-white shadow-md p-3">
         <div className="container mx-auto flex items-center justify-between">
           <HeaderDashboard />
-          <div className="p-2">
+          <div className="pr-2">
             <SelectClass />
           </div>
         </div>
