@@ -62,7 +62,7 @@ export default function Page() {
             <h6 className="text-sm md:text-base text-gray-600 mt-1">
               WA Grup:{" "}
               <a
-                href="https://chat.whatsapp.com/LBiP72yW4yaCsKVbjT5AVN"
+                href="https://chat.whatsapp.com/LBiP72yW4yaCsKVbjT5AVN?text=Halo%20saya%20ingin%20bergabung%20dengan%20grup%20kelas%205%20PAUD%20Ceria%20ini%20adalah%20pesan%20yang%20sangat%20panjang%20untuk%20menguji%20wrapping%20pada%20link"
                 className="text-blue-500 hover:underline whitespace-normal break-words"
                 target="_blank"
                 rel="noopener noreferrer"
