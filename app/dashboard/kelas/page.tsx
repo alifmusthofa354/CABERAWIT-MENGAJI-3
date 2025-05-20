@@ -11,12 +11,12 @@ export default function Page() {
       <div className="bg-white shadow-md p-3">
         <div className="container mx-auto flex items-center justify-between">
           <HeaderDashboard />
-          <div className="pr-2">
+          <div className="pr-3">
             <SelectClass />
           </div>
         </div>
       </div>
-      <div className="container mx-auto p-6 mt-4">
+      <div className="container mx-auto p-6 mt-1">
         <div className="bg-white rounded-md shadow-lg overflow-hidden">
           <div className="relative">
             <Image

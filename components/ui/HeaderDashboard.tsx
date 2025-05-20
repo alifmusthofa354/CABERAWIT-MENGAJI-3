@@ -4,8 +4,8 @@ export default function HeaderDashboard() {
     <>
       <header className="flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
         <div className="flex items-center px-4">
-          <SidebarTrigger className="-ml-1" />
-          <h3 className="text-base">Kelas</h3>
+          <SidebarTrigger className="-ml-2 text-xl" />
+          <h3 className="text-base">Classes</h3>
         </div>
       </header>
     </>
