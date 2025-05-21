@@ -9,92 +9,88 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"; // Hapus DialogTrigger
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
 import {
   FaShareAlt,
   FaEllipsisV,
   FaEdit,
   FaTrash,
   FaExchangeAlt,
+  FaArchive,
 } from "react-icons/fa";
 
-export default function DropDownMenu() {
-  const [open, setOpen] = useState(false);
+import ShareDialog from "./ShareDialog";
+import EditDialog from "./EditDialog";
+import StatusDialog from "./StatusDialog";
+import ArchieveDialog from "./ArchieveDialog";
+import DeleteDialog from "./DeleteDialog";
+
+export default function DropDownMenu({
+  idClass,
+  isActive,
+}: {
+  idClass: number;
+  isActive: boolean;
+}) {
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
+  const [isArchieveDialogOpen, setIsArchieveDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger>
           <FaEllipsisV />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onSelect={() => setOpen(true)}>
-            {" "}
-            {/* Tambahkan onSelect */}
-            <FaShareAlt className="mr-2 h-4 w-4" />
-            Share
+          <DropdownMenuItem onClick={() => setIsShareDialogOpen(true)}>
+            <FaShareAlt className="mr-2 h-4 w-4 " />
+            Shared
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
             <FaEdit className="mr-2 h-4 w-4" />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsStatusDialogOpen(true)}>
             <FaExchangeAlt className="mr-2 h-4 w-4" />
             Status
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <FaTrash className="mr-2 h-4 w-4" />
-            Delete
+          <DropdownMenuItem onClick={() => setIsArchieveDialogOpen(true)}>
+            <FaArchive className="mr-2 h-4 w-4" />
+            Archieve
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+            <FaTrash className="mr-2 h-4 w-4 text-red-500" />
+            <span className="text-red-500">Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        {/* Hapus DialogTrigger asChild */}
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Share Class</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you are done.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Name
-              </Label>
-              <Input
-                id="name"
-                defaultValue="Pedro Duarte"
-                className="col-span-3"
-              />
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
-              <Input
-                id="username"
-                defaultValue="@peduarte"
-                className="col-span-3"
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ShareDialog
+        open={isShareDialogOpen}
+        onOpenChange={() => setIsShareDialogOpen(false)}
+      />
+      <EditDialog
+        open={isEditDialogOpen}
+        onOpenChange={() => setIsEditDialogOpen(false)}
+      />
+      <StatusDialog
+        open={isStatusDialogOpen}
+        onOpenChange={() => setIsStatusDialogOpen(false)}
+        idClass={idClass}
+        isActive={isActive}
+      />
+      <ArchieveDialog
+        open={isArchieveDialogOpen}
+        onOpenChange={() => setIsArchieveDialogOpen(false)}
+        idClass={idClass}
+      />
+      <DeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={() => setIsDeleteDialogOpen(false)}
+        idClass={idClass}
+      />
     </>
   );
 }

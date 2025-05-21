@@ -11,7 +11,7 @@ import {
 
 export default function Page() {
   const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
-
+  const idClass = 3;
   return (
     <div className="min-h-svh bg-gray-50 @container">
       <div className="bg-white shadow-md p-3 sticky top-0 z-50">
@@ -42,14 +42,14 @@ export default function Page() {
                   Aktif
                 </div>
               ) : (
-                <div className="bg-red-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+                <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
                   <FaCircle className="mr-1" />
                   Tidak Aktif
                 </div>
               )}
             </div>
             <div className="absolute top-2 right-2 md:top-4 md:right-4 text-white">
-              <DropDownMenu />
+              <DropDownMenu idClass={idClass} isActive={isActive} />
             </div>
           </div>
           <div className="p-4">
