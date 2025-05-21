@@ -6,54 +6,51 @@ import { MoreVertical } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { FaBookOpen } from "react-icons/fa";
 
+// Data dengan properti status
 const owner = [
   {
-    name: "3383_Hernawan Wahyu Adji",
-    image:
-      "https://storage.googleapis.com/a1aa/image/0JT47OeluUqA1C_7p57eY932cGzcvu5nMwdJkuDPSpY.jpg",
-    status: "active", // Tambahkan status
+    name: "Muhammad Alif Musthofa",
+    image: "https://avatar.iran.liara.run/public/50",
+    status: "active",
   },
 ];
 
 const teachers = [
   {
-    name: "3383_Hernawan Wahyu Adji",
-    image:
-      "https://storage.googleapis.com/a1aa/image/0JT47OeluUqA1C_7p57eY932cGzcvu5nMwdJkuDPSpY.jpg",
-    status: "active", // Tambahkan status
+    name: "Fauzan Maulana Akbar",
+    image: "https://xsgames.co/randomusers/avatar.php?g=male",
+    status: "active",
   },
   {
-    name: "3383_Hernawan Wahyu Adji",
-    image:
-      "https://storage.googleapis.com/a1aa/image/0JT47OeluUqA1C_7p57eY932cGzcvu5nMwdJkuDPSpY.jpg",
-    status: "not active", // Tambahkan status
+    name: "3383_Hernawan Wahyu Adji Yang Namanya Cukup Panjang Sekali", // Contoh nama panjang
+    image: "https://avatar.iran.liara.run/public/37",
+    status: "not active",
   },
 ];
 
 const Students = [
   {
-    name: "3383_Hernawan Wahyu Adji",
-    image:
-      "https://storage.googleapis.com/a1aa/image/0JT47OeluUqA1C_7p57eY932cGzcvu5nMwdJkuDPSpY.jpg",
-    status: "active", // Tambahkan status
+    name: "Dea Putri Handayani",
+    image: "https://xsgames.co/randomusers/avatar.php?g=female",
+    status: "active",
   },
   {
-    name: "3403_Muhammad Fikri Ramadhan",
+    name: "3403_Muhammad Fikri Ramadhan Dengan Nama Yang Sangat Sangat Panjang Sekali", // Contoh nama sangat panjang
     image:
       "https://storage.googleapis.com/a1aa/image/6Qe0vx2TIe-YtC3TlAU_mq0Ifp4d4UCpR3HN1YIEJYA.jpg",
-    status: "active", // Tambahkan status
+    status: "active",
   },
   {
     name: "Almizt",
     image:
       "https://storage.googleapis.com/a1aa/image/a4hhBauqNORGAuMSbUsjENaYHm1qssEFeMsE7IRdhrs.jpg",
-    status: "not active", // Tambahkan status
+    status: "not active",
   },
   {
     name: "Divka",
     image:
       "https://storage.googleapis.com/a1aa/image/eDj5x9R8eBEm9gwWwz-YXE6H3Y1kuEjUzTesMy-nz4M.jpg",
-    status: "active", // Tambahkan status
+    status: "active",
   },
 ];
 
@@ -88,17 +85,20 @@ export default function Page() {
                         <AvatarImage src={person.image} alt={person.name} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <span className="ml-4">{person.name}</span>
-                      {/* Tampilkan status */}
-                      <span
-                        className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                          person.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {person.status}
-                      </span>
+                      {/* Flex container untuk nama dan status dengan flex-wrap */}
+                      <div className="flex flex-wrap items-center ml-4">
+                        <span className="mr-2 mb-1 sm:mb-0">{person.name}</span>{" "}
+                        {/* Nama */}
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            person.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {person.status}
+                        </span>
+                      </div>
                     </div>
                     <Button variant="outline" size="icon">
                       <MoreVertical />
@@ -129,17 +129,20 @@ export default function Page() {
                         <AvatarImage src={person.image} alt={person.name} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <span className="ml-4">{person.name}</span>
-                      {/* Tampilkan status */}
-                      <span
-                        className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold ${
-                          person.status === "active"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {person.status}
-                      </span>
+                      {/* Flex container untuk nama dan status dengan flex-wrap */}
+                      <div className="flex flex-wrap items-center ml-4">
+                        <span className="mr-2 mb-1 sm:mb-0">{person.name}</span>{" "}
+                        {/* Nama */}
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            person.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {person.status}
+                        </span>
+                      </div>
                     </div>
                     <Button variant="outline" size="icon">
                       <MoreVertical />
@@ -151,7 +154,7 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Student Active Section (Filtered by status: active) */}
+        {/* Student Active Section */}
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
@@ -171,13 +174,18 @@ export default function Page() {
                           <AvatarImage src={student.image} alt={student.name} />
                           <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        <span className="ml-4">{student.name}</span>
-                        {/* Tampilkan status */}
-                        <span
-                          className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800`}
-                        >
-                          {student.status}
-                        </span>
+                        {/* Flex container untuk nama dan status dengan flex-wrap */}
+                        <div className="flex flex-wrap items-center ml-4">
+                          <span className="mr-2 mb-1 sm:mb-0">
+                            {student.name}
+                          </span>{" "}
+                          {/* Nama */}
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800`}
+                          >
+                            {student.status}
+                          </span>
+                        </div>
                       </div>
                       <Button variant="outline" size="icon">
                         <MoreVertical />
@@ -190,7 +198,7 @@ export default function Page() {
           </div>
         </div>
 
-        {/* Student Not Active Section (Filtered by status: not active) */}
+        {/* Student Not Active Section */}
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
@@ -211,13 +219,18 @@ export default function Page() {
                         <AvatarImage src={student.image} alt={student.name} />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
-                      <span className="ml-4">{student.name}</span>
-                      {/* Tampilkan status */}
-                      <span
-                        className={`ml-2 px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800`}
-                      >
-                        {student.status}
-                      </span>
+                      {/* Flex container untuk nama dan status dengan flex-wrap */}
+                      <div className="flex flex-wrap items-center ml-4">
+                        <span className="mr-2 mb-1 sm:mb-0">
+                          {student.name}
+                        </span>{" "}
+                        {/* Nama */}
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800`}
+                        >
+                          {student.status}
+                        </span>
+                      </div>
                     </div>
                     <Button variant="outline" size="icon">
                       <MoreVertical />
