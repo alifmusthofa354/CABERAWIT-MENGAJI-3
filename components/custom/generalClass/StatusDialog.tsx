@@ -41,7 +41,11 @@ export default function StatusDialog({
               Cancel
             </Button>
           </DialogClose>
-          <Button type="button" variant={buttonVariant}>
+          <Button
+            type="button"
+            variant={buttonVariant}
+            className={isActive ? "bg-gray-300 hover:bg-gray-200" : ""}
+          >
             {buttonText}
           </Button>
         </DialogFooter>

@@ -70,10 +70,12 @@ export default function DropDownMenu({
       <ShareDialog
         open={isShareDialogOpen}
         onOpenChange={() => setIsShareDialogOpen(false)}
+        idClass={idClass}
       />
       <EditDialog
         open={isEditDialogOpen}
         onOpenChange={() => setIsEditDialogOpen(false)}
+        idClass={idClass}
       />
       <StatusDialog
         open={isStatusDialogOpen}

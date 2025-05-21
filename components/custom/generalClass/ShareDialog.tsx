@@ -3,7 +3,6 @@ import { Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -12,21 +11,46 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import toast from "react-hot-toast";
 
 export default function ShareDialog({
-  open, // Menerima prop 'open'
-  onOpenChange, // Menerima prop 'onOpenChange'
+  open,
+  onOpenChange,
+  idClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  idClass: number;
 }) {
+  const codeClass = "a2fad7aa-409f-4d70-93f0-a586d283dc54";
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(codeClass);
+      toast.success("Class code has been copied to clipboard.");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to copy link. Please try again.");
+    }
+  };
+  const copyLinkToClipboard = async () => {
+    const link = `https://caberawitmengajiv3.vercel.app/join/${codeClass}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success("Class Link has been copied to clipboard.");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to copy link. Please try again.");
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share link</DialogTitle>
+          <DialogTitle>Share Class {idClass}</DialogTitle>
           <DialogDescription>
-            Anyone who has this link will be able to view this.
+            Anyone who has this code will be able to join this class.
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center space-x-2">
@@ -34,23 +58,18 @@ export default function ShareDialog({
             <Label htmlFor="link" className="sr-only">
               Link
             </Label>
-            <Input
-              id="link"
-              defaultValue="https://ui.shadcn.com/docs/installation"
-              readOnly
-            />
+            <Input id="link" defaultValue={codeClass} readOnly />
           </div>
-          <Button type="submit" size="sm" className="px-3">
-            <span className="sr-only">Copy</span>
-            <Copy />
-          </Button>
         </div>
         <DialogFooter className="sm:justify-start">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Close
-            </Button>
-          </DialogClose>
+          <Button type="button" onClick={copyToClipboard}>
+            Copy
+            <Copy />
+          </Button>
+          <Button type="button" onClick={copyLinkToClipboard}>
+            Link
+            <Copy />
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
