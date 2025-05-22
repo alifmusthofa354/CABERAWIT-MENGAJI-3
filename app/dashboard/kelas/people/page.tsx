@@ -1,10 +1,10 @@
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { MoreVertical } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { FaGraduationCap, FaChalkboardTeacher, FaUsers } from "react-icons/fa";
+import DropDownMenuTeacher from "@/components/custom/peopleClass/Teachers/DropDownMenuTeacher";
+import DropDownMenuStudent from "@/components/custom/peopleClass/Students/DropDownMenuStudent";
 
 // Data dengan properti status
 const owner = [
@@ -100,9 +100,6 @@ export default function Page() {
                         </span>
                       </div>
                     </div>
-                    <Button variant="outline" size="icon">
-                      <MoreVertical />
-                    </Button>
                   </div>
                 </div>
               ))}
@@ -144,9 +141,7 @@ export default function Page() {
                         </span>
                       </div>
                     </div>
-                    <Button variant="outline" size="icon">
-                      <MoreVertical />
-                    </Button>
+                    <DropDownMenuTeacher idClass={index} isActive={true} />
                   </div>
                 </div>
               ))}
@@ -190,9 +185,7 @@ export default function Page() {
                         </span>
                       </div>
                     </div>
-                    <Button variant="outline" size="icon">
-                      <MoreVertical />
-                    </Button>
+                    <DropDownMenuStudent idClass={index} isActive={true} />
                   </div>
                 </div>
               ))}
