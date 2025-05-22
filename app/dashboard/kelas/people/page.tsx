@@ -5,6 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { FaGraduationCap, FaChalkboardTeacher, FaUsers } from "react-icons/fa";
 import DropDownMenuTeacher from "@/components/custom/peopleClass/Teachers/DropDownMenuTeacher";
 import DropDownMenuStudent from "@/components/custom/peopleClass/Students/DropDownMenuStudent";
+import AddStudent from "@/components/custom/peopleClass/Students/AddButtonStudent";
 
 // Data dengan properti status
 const owner = [
@@ -65,7 +66,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className=" mx-auto p-4 md:p-6 mt-1 min-h-max">
+      <div className=" mx-auto p-4 md:p-6 pb-18 md:pb-18  mt-1 min-h-max ">
         {/* Owner Section */}
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
@@ -191,6 +192,9 @@ export default function Page() {
               ))}
             </div>
           </div>
+        </div>
+        <div className="fixed bottom-4 right-4">
+          <AddStudent idClass={3} />
         </div>
       </div>
     </div>
