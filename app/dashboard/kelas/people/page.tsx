@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { FaBookOpen } from "react-icons/fa";
+import { FaGraduationCap, FaChalkboardTeacher, FaUsers } from "react-icons/fa";
 
 // Data dengan properti status
 const owner = [
@@ -17,7 +17,7 @@ const owner = [
 
 const teachers = [
   {
-    name: "Fauzan Maulana Akbar",
+    name: "KAIDO",
     image: "https://xsgames.co/randomusers/avatar.php?g=male",
     status: "active",
   },
@@ -70,9 +70,9 @@ export default function Page() {
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
-              <FaBookOpen className="text-blue-600 text-2xl md:text-3xl mr-2" />
+              <FaGraduationCap className="text-blue-600 text-2xl md:text-3xl mr-2" />
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Owner
+                HeadMaster
               </h1>
             </div>
             <div>
@@ -114,7 +114,7 @@ export default function Page() {
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
-              <FaBookOpen className="text-blue-600 text-2xl md:text-3xl mr-2" />
+              <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-2" />
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
                 Teacher
               </h1>
@@ -158,59 +158,13 @@ export default function Page() {
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
-              <FaBookOpen className="text-blue-600 text-2xl md:text-3xl mr-2" />
+              <FaUsers className="text-blue-600 text-2xl md:text-3xl mr-2" />
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Student Active
+                Students
               </h1>
             </div>
             <div>
-              {Students.filter((student) => student.status === "active").map(
-                (student, index) => (
-                  <div key={index}>
-                    <Separator className="my-2" />
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center">
-                        <Avatar>
-                          <AvatarImage src={student.image} alt={student.name} />
-                          <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
-                        {/* Flex container untuk nama dan status dengan flex-wrap */}
-                        <div className="flex flex-wrap items-center ml-4">
-                          <span className="mr-2 mb-1 sm:mb-0">
-                            {student.name}
-                          </span>{" "}
-                          {/* Nama */}
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800`}
-                          >
-                            {student.status}
-                          </span>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="icon">
-                        <MoreVertical />
-                      </Button>
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Student Not Active Section */}
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-          <div className="p-4">
-            <div className="flex items-center mb-3">
-              <FaBookOpen className="text-blue-600 text-2xl md:text-3xl mr-2" />
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Student Not Active
-              </h1>
-            </div>
-            <div>
-              {Students.filter(
-                (student) => student.status === "not active"
-              ).map((student, index) => (
+              {Students.map((student, index) => (
                 <div key={index}>
                   <Separator className="my-2" />
                   <div className="flex items-center justify-between">
@@ -226,7 +180,11 @@ export default function Page() {
                         </span>{" "}
                         {/* Nama */}
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800`}
+                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                            student.status === "active"
+                              ? "bg-green-100 text-green-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
                         >
                           {student.status}
                         </span>
