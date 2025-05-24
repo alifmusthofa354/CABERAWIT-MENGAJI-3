@@ -1,22 +1,44 @@
-import SelectClass from "@/components/custom/SelectClass";
-import HeaderDashboard from "@/components/ui/HeaderDashboard";
-import { Skeleton } from "@/components/ui/skeleton";
-export default function Page() {
+import AttedanceCode from "@/components/custom/absense/AttedanceCode";
+import { Attendance, columns } from "./columns";
+import { DataTable } from "./data-table";
+
+async function getData(): Promise<Attendance[]> {
+  // Fetch data from your API here.
+  return [
+    {
+      id: "728ed52f",
+      status: "P",
+      id_sudent: "1",
+      name: "alif musthofa",
+    },
+    {
+      id: "828ed52f",
+      status: "UA",
+      id_sudent: "2",
+      name: "fauzan minmah",
+    },
+    {
+      id: "928ed52f",
+      status: "P",
+      id_sudent: "3",
+      name: "zelda mezata uzumaki",
+    },
+    {
+      id: "a28ed52f",
+      status: "AWOL",
+      id_sudent: "4",
+      name: "budi budarsono",
+    },
+  ];
+}
+
+export default async function DemoPage() {
+  const data = await getData();
+
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <HeaderDashboard />
-        <div className="p-4">
-          <SelectClass />
-        </div>
-      </div>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0 bg-amber-100 ">
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3 md:mt-2">
-          <Skeleton className="aspect-video rounded-xl bg-muted/50 md:bg-red-700" />
-        </div>
-        <h1>Welcome to 1 Histori</h1>
-        <p>ini absensi</p>
-      </div>
-    </>
+    <div className="container mx-auto py-10">
+      <AttedanceCode />
+      <DataTable columns={columns} data={data} />
+    </div>
   );
 }

@@ -1,27 +1,32 @@
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { Separator } from "@/components/ui/separator";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaUserCheck } from "react-icons/fa";
 
 import AddButtonSchedule from "@/components/custom/scheduleClass/AddButtonSchedule";
 import DropDownMenuSchedule from "@/components/custom/scheduleClass/DropDownMenuSchedule";
 
 // Data dengan properti status
-const schedules = [
+const students = [
   {
-    name: "Class Pagi",
+    name: "Alif Musthofa",
+    status: "hadir",
   },
   {
-    name: "Class Siang",
+    name: "Fauzan Minmah",
+    status: "hadir",
   },
   {
-    name: "Class Sore",
+    name: "Zainab Zahro",
+    status: "hadir",
   },
   {
-    name: "Class Malam",
+    name: "Cakleg Ivan",
+    status: "hadir",
   },
   {
-    name: "Class Shubuh",
+    name: "Yazid Maulana",
+    status: "hadir",
   },
 ];
 
@@ -41,18 +46,18 @@ export default function Page() {
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
             <div className="flex items-center mb-3">
-              <FaCalendarAlt className="text-blue-600 text-2xl md:text-3xl mr-2" />
+              <FaUserCheck className="text-blue-600 text-2xl md:text-3xl mr-2" />
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Archieve
+                Attendance
               </h1>
             </div>
             <div>
-              {schedules.map((schedule, index) => (
+              {students.map((student, index) => (
                 <div key={index}>
                   <Separator className="my-2" />
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <h3>{schedule.name}</h3>
+                      <h3>{student.name}</h3>
                     </div>
                     <DropDownMenuSchedule idClass={index} />
                   </div>

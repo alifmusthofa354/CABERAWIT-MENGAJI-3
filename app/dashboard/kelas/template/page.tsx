@@ -95,7 +95,7 @@ export default function Page() {
             {/* Div untuk Textarea dan elemen di bawahnya, ini akan flex-1 juga untuk mendorong Button ke bawah */}
 
             <div className="px-4 pb-4 flex-1 flex flex-col">
-              <Tabs defaultValue="account" className="w-full h-full">
+              <Tabs defaultValue="template" className="w-full h-full">
                 <TabsList>
                   <TabsTrigger value="template">Template</TabsTrigger>
                   <TabsTrigger value="preview">Preview</TabsTrigger>
