@@ -16,6 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +37,18 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  const handlePrintSelected = () => {
+    // Mengambil semua baris yang dipilih
+    const selectedRows = table.getFilteredSelectedRowModel().rows;
+    // Ekstrak data asli dari baris yang dipilih
+    const selectedData = selectedRows.map((row) => row.original);
+    console.log("Data yang dipilih:", selectedData);
+  };
+  // --- FUNGSI BARU UNTUK MENCETAK SEMUA DATA ---
+  const handlePrintAllData = () => {
+    console.log("Semua data di tabel:", data);
+  };
 
   return (
     <>
@@ -92,6 +105,13 @@ export function DataTable<TData, TValue>({
       <div className="flex-1 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
+      </div>
+      {/* Tambahkan button untuk mencetak data yang dipilih */}
+      <div className="mt-4 gap-2">
+        <Button onClick={handlePrintSelected}>Cetak Data yang Dipilih</Button>
+        <Button onClick={handlePrintAllData} variant="outline">
+          Cetak Semua Data
+        </Button>
       </div>
     </>
   );
