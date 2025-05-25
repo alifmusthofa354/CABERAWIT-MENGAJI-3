@@ -15,8 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState, useMemo, useCallback } from "react";
+
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -63,7 +63,7 @@ export type Attendance = {
   name: string;
 };
 
-export default function DataTable() {
+export default function DataTableAbsense() {
   const [data, setData] = useState<Attendance[]>([]);
   const [rowSelection, setRowSelection] = useState({});
   // Menggunakan useEffect untuk memanggil getData saat komponen dimuat
@@ -76,66 +76,74 @@ export default function DataTable() {
   }, []);
 
   // Fungsi untuk menangani perubahan status
-  const handleStatusChange = (id: string, newStatus: Attendance["status"]) => {
-    setData((prevData) =>
-      prevData.map((row) =>
-        row.id === id ? { ...row, status: newStatus } : row
-      )
-    );
-  };
+  const handleStatusChange = useCallback(
+    (id: string, newStatus: Attendance["status"]) => {
+      setData((prevData) =>
+        prevData.map((row) =>
+          row.id === id ? { ...row, status: newStatus } : row
+        )
+      );
+    },
+    []
+  );
 
-  const columns: ColumnDef<Attendance>[] = [
-    {
-      id: "select",
-      header: ({ table }) => (
-        <Checkbox
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => (
-        <Select
-          defaultValue={row.getValue("status")}
-          onValueChange={(newValue: Attendance["status"]) =>
-            handleStatusChange(row.original.id, newValue)
-          }
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Choose a status" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectItem value="P">P</SelectItem>
-            <SelectItem value="UA">UA</SelectItem>
-            <SelectItem value="AWOL">AWOL</SelectItem>
-          </SelectContent>
-        </Select>
-      ),
-      enableSorting: false,
-      enableHiding: false,
-    },
-    {
-      accessorKey: "name",
-      header: "name",
-    },
-  ];
+  // Kolom tabel - di-memoize dengan useMemo
+  const columns: ColumnDef<Attendance>[] = useMemo(
+    () => [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => (
+          <Select
+            value={row.getValue("status")}
+            onValueChange={(newValue: Attendance["status"]) =>
+              handleStatusChange(row.original.id, newValue)
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Choose a status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="P">P</SelectItem>
+              <SelectItem value="UA">UA</SelectItem>
+              <SelectItem value="AWOL">AWOL</SelectItem>
+            </SelectContent>
+          </Select>
+        ),
+        enableSorting: false,
+        enableHiding: false,
+      },
+      {
+        accessorKey: "name",
+        header: "name",
+      },
+    ],
+    [handleStatusChange] // Dependensi untuk useMemo
+  );
 
   const table = useReactTable({
     data,
@@ -147,20 +155,46 @@ export default function DataTable() {
     },
   });
 
-  const handlePrintSelected = () => {
-    // Mengambil semua baris yang dipilih
-    const selectedRows = table.getFilteredSelectedRowModel().rows;
-    // Ekstrak data asli dari baris yang dipilih
-    const selectedData = selectedRows.map((row) => row.original);
-    console.log("Data yang dipilih:", selectedData);
-  };
-  // --- FUNGSI BARU UNTUK MENCETAK SEMUA DATA ---
-  const handlePrintAllData = () => {
-    console.log("Semua data di tabel:", data);
-  };
+  // --- Perbaikan pada fungsi handleChangeSelected ---
+  const handleChangeSelected = useCallback(
+    (value: Attendance["status"]) => {
+      const selectedRows = table.getFilteredSelectedRowModel().rows;
+      const selectedIds = new Set(selectedRows.map((row) => row.original.id)); // Gunakan Set untuk pencarian ID yang lebih efisien
+
+      // Memperbarui state `data`
+      setData((prevData) =>
+        prevData.map((row) =>
+          selectedIds.has(row.id) ? { ...row, status: value } : row
+        )
+      );
+
+      // Opsional: Kosongkan pilihan setelah aksi
+      table.toggleAllRowsSelected(false);
+    },
+    [table]
+  ); // Dependency `table` diperlukan karena kita menggunakan `table.getFilteredSelectedRowModel()`
 
   return (
     <>
+      {table.getSelectedRowModel().rows.length > 0 && (
+        <div className="flex gap-2 my-2">
+          <Select
+            onValueChange={(value: Attendance["status"]) =>
+              handleChangeSelected(value)
+            }
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Choose a status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="P">P</SelectItem>
+              <SelectItem value="UA">UA</SelectItem>
+              <SelectItem value="AWOL">AWOL</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -215,13 +249,7 @@ export default function DataTable() {
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
-      {/* Tambahkan button untuk mencetak data yang dipilih */}
-      <div className="mt-4 gap-2">
-        <Button onClick={handlePrintSelected}>Cetak Data yang Dipilih</Button>
-        <Button onClick={handlePrintAllData} variant="outline">
-          Cetak Semua Data
-        </Button>
-      </div>
+      <p className="text-sm">{JSON.stringify(data)}</p>
     </>
   );
 }
