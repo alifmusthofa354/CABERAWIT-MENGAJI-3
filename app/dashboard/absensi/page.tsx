@@ -222,6 +222,7 @@ export default function DataTable() {
           Cetak Semua Data
         </Button>
       </div>
+      <p className="text-sm">{JSON.stringify(data)}</p>
     </>
   );
 }
