@@ -28,32 +28,23 @@ import {
 } from "@/components/ui/select";
 
 async function getData(): Promise<Attendance[]> {
-  // Fetch data from your API here.
+  // Simulate fetching data from your API here.
+  // In a real application, you'd replace this with an actual API call (e.g., fetch('/api/attendance')).
   return [
-    {
-      id: "728ed52f",
-      status: "Hadir",
-      id_sudent: "1",
-      name: "alif musthofa",
-    },
-    {
-      id: "828ed52f",
-      status: "Ijin",
-      id_sudent: "2",
-      name: "fauzan minmah",
-    },
-    {
-      id: "928ed52f",
-      status: "Hadir",
-      id_sudent: "3",
-      name: "zelda mezata uzumaki",
-    },
-    {
-      id: "a28ed52f",
-      status: "Alfa",
-      id_sudent: "4",
-      name: "budi budarsono",
-    },
+    { id: "728ed52f", status: "Hadir", id_sudent: "1", name: "alif musthofa" },
+    { id: "828ed52f", status: "Ijin", id_sudent: "2", name: "fauzan minmah" },
+    { id: "828ed52a", status: "Ijin", id_sudent: "0", name: "Uzumaki Naruto" },
+    { id: "a28ed52f", status: "Alfa", id_sudent: "4", name: "budi budarsono" },
+    { id: "a28ed529", status: "Alfa", id_sudent: "5", name: "dewansyah" },
+    { id: "a28ed528", status: "Alfa", id_sudent: "6", name: "danang" },
+    { id: "a28ed521", status: "Alfa", id_sudent: "12", name: "schrono" },
+    { id: "a28ed522", status: "Alfa", id_sudent: "3", name: "wahyu" },
+    { id: "a28ed523", status: "Alfa", id_sudent: "11", name: "taha" },
+    { id: "a28ed524", status: "Alfa", id_sudent: "12", name: "zalfa" },
+    { id: "b1c2d3e4", status: "Hadir", id_sudent: "7", name: "siti hartinah" },
+    { id: "f5g6h7i8", status: "Ijin", id_sudent: "8", name: "agus kurniawan" },
+    { id: "j9k0l1m2", status: "Hadir", id_sudent: "9", name: "bunga lestari" },
+    { id: "n3o4p5q6", status: "Hadir", id_sudent: "10", name: "candra dewi" },
   ];
 }
 
