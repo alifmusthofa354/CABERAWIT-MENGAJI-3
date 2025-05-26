@@ -118,7 +118,6 @@ export default function DataTableAbsense() {
       {
         accessorKey: "status",
         header: "Status",
-        size: 50,
         cell: ({ row }) => (
           <Select
             value={row.getValue("status")}
@@ -126,7 +125,7 @@ export default function DataTableAbsense() {
               handleStatusChange(row.original.id, newValue)
             }
           >
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[120px] md:w-[180px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
