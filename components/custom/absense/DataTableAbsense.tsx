@@ -174,26 +174,31 @@ export default function DataTableAbsense() {
     [table]
   ); // Dependency `table` diperlukan karena kita menggunakan `table.getFilteredSelectedRowModel()`
 
+  const isAnyRowSelected =
+    table.getSelectedRowModel().rows.length > 0 ? true : false;
   return (
     <>
-      {table.getSelectedRowModel().rows.length > 0 && (
-        <div className="flex gap-2 my-2">
-          <Select
-            onValueChange={(value: Attendance["status"]) =>
-              handleChangeSelected(value)
-            }
+      <div className="flex gap-2 my-2">
+        <Select
+          value={""}
+          onValueChange={(value: Attendance["status"]) => {
+            handleChangeSelected(value);
+          }}
+        >
+          <SelectTrigger
+            className="w-[180px]"
+            disabled={!isAnyRowSelected}
+            isArrow={isAnyRowSelected}
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Choose a status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="P">P</SelectItem>
-              <SelectItem value="UA">UA</SelectItem>
-              <SelectItem value="AWOL">AWOL</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      )}
+            <SelectValue placeholder="Choose a status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="P">P</SelectItem>
+            <SelectItem value="UA">UA</SelectItem>
+            <SelectItem value="AWOL">AWOL</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
 
       <div className="rounded-md border">
         <Table>
