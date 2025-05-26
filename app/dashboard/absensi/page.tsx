@@ -14,7 +14,7 @@ export default function Page() {
           </div>
         </div>
       </div>
-      <div className=" mx-auto p-4 md:p-6 pb-18 md:pb-18  mt-1 min-h-max ">
+      <div className="p-4 md:p-6 mt-1 flex-1 flex flex-col">
         {/* Owner Section */}
         <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
           <div className="p-4">
