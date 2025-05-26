@@ -1,5 +1,6 @@
 "use client";
-
+import { FaCheckCircle, FaBan } from "react-icons/fa";
+import { MdInfo } from "react-icons/md";
 import {
   ColumnDef,
   flexRender,
@@ -31,25 +32,25 @@ async function getData(): Promise<Attendance[]> {
   return [
     {
       id: "728ed52f",
-      status: "P",
+      status: "Hadir",
       id_sudent: "1",
       name: "alif musthofa",
     },
     {
       id: "828ed52f",
-      status: "UA",
+      status: "Ijin",
       id_sudent: "2",
       name: "fauzan minmah",
     },
     {
       id: "928ed52f",
-      status: "P",
+      status: "Hadir",
       id_sudent: "3",
       name: "zelda mezata uzumaki",
     },
     {
       id: "a28ed52f",
-      status: "AWOL",
+      status: "Alfa",
       id_sudent: "4",
       name: "budi budarsono",
     },
@@ -58,7 +59,7 @@ async function getData(): Promise<Attendance[]> {
 
 export type Attendance = {
   id: string;
-  status: "P" | "UA" | "AWOL";
+  status: "Hadir" | "Ijin" | "Alfa";
   id_sudent: string;
   name: string;
 };
@@ -117,6 +118,7 @@ export default function DataTableAbsense() {
       {
         accessorKey: "status",
         header: "Status",
+        size: 50,
         cell: ({ row }) => (
           <Select
             value={row.getValue("status")}
@@ -124,13 +126,22 @@ export default function DataTableAbsense() {
               handleStatusChange(row.original.id, newValue)
             }
           >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Choose a status" />
+            <SelectTrigger className="w-[120px]">
+              <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="P">P</SelectItem>
-              <SelectItem value="UA">UA</SelectItem>
-              <SelectItem value="AWOL">AWOL</SelectItem>
+              <SelectItem value="Hadir">
+                <FaCheckCircle color="green" />
+                Hadir
+              </SelectItem>
+              <SelectItem value="Ijin">
+                <MdInfo color="gray" />
+                Ijin
+              </SelectItem>
+              <SelectItem value="Alfa">
+                <FaBan color="red" />
+                Alfa
+              </SelectItem>
             </SelectContent>
           </Select>
         ),
@@ -193,9 +204,18 @@ export default function DataTableAbsense() {
             <SelectValue placeholder="Choose a status" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="P">P</SelectItem>
-            <SelectItem value="UA">UA</SelectItem>
-            <SelectItem value="AWOL">AWOL</SelectItem>
+            <SelectItem value="Hadir">
+              <FaCheckCircle color="green" />
+              Hadir
+            </SelectItem>
+            <SelectItem value="Ijin">
+              <MdInfo color="gray" />
+              Ijin
+            </SelectItem>
+            <SelectItem value="Alfa">
+              <FaBan color="red" />
+              Alfa
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
