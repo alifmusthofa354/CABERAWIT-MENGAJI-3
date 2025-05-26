@@ -103,8 +103,8 @@ export default function Grafik() {
 
   const processedData = processAttendanceData(data);
   return (
-    <div className="w-full h-[400px] p-8">
-      <h1 className="text-2xl font-bold mb-4">Grafik Absensi</h1>
+    <div className="w-full min-h-[400px] p-8">
+      <h1 className="text-2xl font-bold mb-4 text-center">Grafik Absensi</h1>
       <ResponsiveContainer className={"w-full h-full"}>
         <PieChart className={"w-full h-full"}>
           <Pie
