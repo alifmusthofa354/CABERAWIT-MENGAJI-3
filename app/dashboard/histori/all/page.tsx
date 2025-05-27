@@ -24,7 +24,7 @@ export default function Page() {
             <div className="flex items-center mb-3">
               <FaUserCheck className="text-blue-600 text-2xl md:text-3xl mr-2" />
               <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                History Day
+                History Absensi All
               </h1>
             </div>
             <Grafik />
