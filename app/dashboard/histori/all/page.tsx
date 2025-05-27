@@ -1,7 +1,7 @@
 // app/absensi/page.tsx
 // import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
 
-import Grafik from "@/components/custom/allHistory/Grafik";
+import Grafik from "@/components/custom/HistoryAll/Grafik";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { FaUserCheck } from "react-icons/fa";

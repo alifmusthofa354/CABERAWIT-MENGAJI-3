@@ -1,4 +1,4 @@
-import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
+import Datatable from "@/components/custom/HistoryMonth/Datatable";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { FaUserCheck } from "react-icons/fa";
@@ -24,7 +24,7 @@ export default function Page() {
                 History Month
               </h1>
             </div>
-            <DataTableAbsense />
+            <Datatable />
           </div>
         </div>
       </div>
