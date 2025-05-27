@@ -5,6 +5,8 @@ import Grafik from "@/components/custom/HistoryAll/Grafik";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { FaUserCheck } from "react-icons/fa";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
 
 export default function Page() {
   return (
@@ -27,7 +29,18 @@ export default function Page() {
                 History Absensi All
               </h1>
             </div>
-            <Grafik />
+            <Tabs defaultValue="Details" className="w-full">
+              <TabsList className="z-50 w-full">
+                <TabsTrigger value="Grafik">Grafik</TabsTrigger>
+                <TabsTrigger value="Details">Details</TabsTrigger>
+              </TabsList>
+              <TabsContent value="Grafik">
+                <Grafik />
+              </TabsContent>
+              <TabsContent value="Details">
+                <DataTableAbsense />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
