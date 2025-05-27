@@ -105,7 +105,7 @@ export default function Grafik() {
   return (
     <div className="w-full min-h-[400px] p-8">
       <h1 className="text-2xl font-bold mb-4 text-center">Grafik Absensi</h1>
-      <ResponsiveContainer className={"w-full h-full"}>
+      <ResponsiveContainer className={"w-full min-h-[400px]"}>
         <PieChart className={"w-full h-full"}>
           <Pie
             data={processedData}
