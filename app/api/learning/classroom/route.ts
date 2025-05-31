@@ -71,10 +71,22 @@ export async function GET() {
   const email = session.user.email;
 
   try {
+    // const { data, error } = await supabase
+    //   .from("classroom")
+    //   .select("id, name, email, description, image_url") // Sertakan image_url
+    //   .eq("email", email);
     const { data, error } = await supabase
-      .from("classroom")
-      .select("id, name, email, description, image_url") // Sertakan image_url
-      .eq("email", email);
+      .from("user_classroom")
+      .select(
+        `id, id_class, email, isOwner, status, classroom(id, name, description, image_url,kode,link_wa,status)`
+      )
+      .eq("email", email)
+      .gte("status", 0) // Menambahkan kondisi untuk user_classroom.status = 0
+      .gte("classroom.status", 0)
+      .lt("classroom.status", 2)
+      .not("classroom", "is", null);
+
+    // console.log(data);
 
     if (error) {
       console.log({ error: error.message });
@@ -128,10 +140,18 @@ export async function POST(req: Request) {
       }
     }
 
-    const { data, error } = await supabase
-      .from("classroom")
-      .insert([{ name, email, description, image_url: imageUrl }]) // Simpan URL gambar
-      .select("*");
+    // const { data, error } = await supabase
+    //   .from("classroom")
+    //   .insert([{ name, description, image_url: imageUrl }]) // Simpan URL gambar
+    //   .select("*");
+
+    const { data, error } = await supabase.rpc("create_classroom", {
+      p_name: name,
+      p_description: description,
+      p_image_url: imageUrl,
+      p_link_wa: "https://wa.me/6281289999999",
+      p_email: email,
+    });
 
     if (error) {
       console.error("Supabase error during class creation:", error);

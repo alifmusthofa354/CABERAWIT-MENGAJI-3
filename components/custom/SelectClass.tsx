@@ -15,10 +15,20 @@ import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface Class {
-  id: number;
-  name: string;
+  id: string;
+  id_class: string;
   email: string;
-  membersCount: number;
+  isOwner: boolean;
+  status: number;
+  classroom: {
+    id: string;
+    name: string;
+    description: string;
+    image_url: string;
+    kode: string;
+    link_wa: string;
+    status: number;
+  };
 }
 
 export default function SelectClass() {
@@ -71,15 +81,18 @@ export default function SelectClass() {
 
   return (
     <>
-      <Select value={selectedClassName} onValueChange={updateSelectedClassName}>
+      <Select
+        value={selectedClassName ?? ""}
+        onValueChange={updateSelectedClassName}
+      >
         <SelectTrigger className="max-w-[200px] truncate">
           <SelectValue placeholder="Pilih Kelas" />
         </SelectTrigger>
         <SelectContent className="text-truncate">
           {classes && classes.length > 0 ? (
             classes.map((kelas) => (
-              <SelectItem key={kelas.id} value={kelas.name}>
-                {kelas.name}
+              <SelectItem key={kelas.id} value={kelas.id}>
+                {kelas.classroom.name}
               </SelectItem>
             ))
           ) : (

@@ -2,7 +2,12 @@
 
 "use client";
 
-import { FaUserCheck, FaEllipsisV, FaGithub, FaUsers } from "react-icons/fa";
+import {
+  FaUserCheck,
+  FaUserFriends,
+  FaCheckCircle,
+  FaCircle,
+} from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { fetchClasses } from "@/actions/ClassActions";
 import Image from "next/image";
@@ -14,11 +19,20 @@ import AddClass from "@/components/custom/AddClass";
 import Link from "next/link";
 
 interface Class {
-  id: number;
-  name: string;
+  id: string;
+  id_class: string;
   email: string;
-  membersCount: number;
-  image_url: string;
+  isOwner: boolean;
+  status: number;
+  classroom: {
+    id: string;
+    name: string;
+    description: string;
+    image_url: string;
+    kode: string;
+    link_wa: string;
+    status: number;
+  };
 }
 
 const ClassCard = ({ kelas }: { kelas: Class }) => (
@@ -29,9 +43,9 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
   >
     <div className="relative ">
       <Image
-        alt={`cover image ${kelas.name}`}
+        alt={`cover image ${kelas.classroom.name}`}
         src={
-          kelas.image_url ??
+          kelas.classroom.image_url ??
           "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
         }
         className="w-full h-32 md:min-h-48 object-cover"
@@ -39,28 +53,34 @@ const ClassCard = ({ kelas }: { kelas: Class }) => (
         height={500}
       />
       <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
-        <FaUserCheck className="mr-1" />
-        Members
+        {kelas.isOwner ? (
+          <FaUserCheck className="mr-1" /> // Ikon untuk Owner, misalnya centang
+        ) : (
+          <FaUserFriends className="mr-1" /> // Ikon untuk Member, misalnya grup pengguna
+        )}
+        {kelas.isOwner ? "Owner" : "Member"}
       </div>
       <div className="absolute top-2 right-2 text-white">
-        <FaEllipsisV />
+        {kelas.classroom.status == 1 ? (
+          <div className="bg-green-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+            <FaCheckCircle className="mr-1" />
+            Aktif
+          </div>
+        ) : (
+          <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+            <FaCircle className="mr-1" />
+            Tidak Aktif
+          </div>
+        )}
       </div>
     </div>
     <div className="p-4">
       <h3 className="text-lg md:text-2xl font-semibold text-orange-600 mb-2 max-w-full truncate">
-        {kelas.name}
+        {kelas.classroom.name}
       </h3>
-
-      <div className="flex  justify-between items-center text-sm md:text-xl text-gray-700">
-        <span className="flex items-center max-w-2/3 truncate whitespace-nowrap flex-grow ">
-          <FaGithub className="mr-1" />
-          <p className="max-w-5/6 truncate">{kelas.email}</p>
-        </span>
-        <span className="flex items-center whitespace-nowrap min-w-min">
-          <FaUsers className="mr-1" />
-          <p className="">{kelas.membersCount} 1000 Murid</p>
-        </span>
-      </div>
+      <p className="text-xs md:text-sm text-gray-700 truncate whitespace-nowrap">
+        {kelas.classroom.description}
+      </p>
     </div>
   </Link>
 );
