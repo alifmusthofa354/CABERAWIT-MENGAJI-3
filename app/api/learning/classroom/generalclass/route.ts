@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await query;
 
     if (error) {
-      console.log({ error: error.message });
+      console.error("Database Error : ", { error: error.message });
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
@@ -47,9 +47,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({ classes: data });
   } catch (error) {
-    console.error("Error fetching classrooms:", error);
+    console.error("System Error while fething general classrrom : ", error);
     return NextResponse.json(
-      { error: "An error occurred while fetching classrooms" },
+      { error: "System Error while fething general classrrom" },
       { status: 500 }
     );
   }
