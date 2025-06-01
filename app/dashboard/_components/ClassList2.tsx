@@ -95,6 +95,7 @@ export default function ClassList() {
   } = useQuery<Class[], Error>({
     queryKey: ["classroom"],
     queryFn: fetchClasses,
+    staleTime: Infinity,
   });
   const handleRetry = () => {
     refetch(); // Panggil refetch untuk memicu permintaan ulang

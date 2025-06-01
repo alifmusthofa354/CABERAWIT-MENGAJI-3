@@ -51,6 +51,8 @@ export default function Page() {
   } = useQuery<UserClassroom[], Error>({
     queryKey: ["userClasses", selectedClassName],
     queryFn: () => fetchUserClass(selectedClassName as string),
+    staleTime: Infinity, // Data akan terus ditampilkan dari cache sampai Anda secara manual memanggil
+    // cacheTime: Infinity, // Opsional: mempertahankan data di cache selamanya bahkan tanpa observer
     // enabled: !!selectedClassName,
   });
   const mainClass = userClasses[0];

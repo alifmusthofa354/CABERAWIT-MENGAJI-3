@@ -41,6 +41,7 @@ export default function SelectClass() {
   } = useQuery<Class[], Error>({
     queryKey: ["classroom"],
     queryFn: fetchClasses,
+    staleTime: Infinity,
   });
 
   const handleRetry = () => {
