@@ -63,7 +63,7 @@ export default function Page() {
         console.log("ini sama");
       } else {
         console.log("ini beda");
-
+        queryClient.setQueryData(["userClasses", mainClass.id], userClasses);
         updateSelectedClassName(mainClass.id);
       }
     }
