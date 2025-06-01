@@ -1,7 +1,8 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { fetchUserClass } from "@/actions/ClassActions";
 import useStore from "@/stores/useStoreClass";
+import { useEffect } from "react";
 
 import DropDownMenu from "@/components/custom/generalClass/DropDownMenu";
 import SelectClass from "@/components/custom/SelectClass";
@@ -38,8 +39,8 @@ type UserClassroom = {
 export default function Page() {
   const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
   const idClass = 3;
-
-  const { selectedClassName } = useStore();
+  const queryClient = useQueryClient();
+  const { selectedClassName, updateSelectedClassName } = useStore();
 
   const {
     data: userClasses = [],
@@ -50,15 +51,33 @@ export default function Page() {
   } = useQuery<UserClassroom[], Error>({
     queryKey: ["userClasses", selectedClassName],
     queryFn: () => fetchUserClass(selectedClassName as string),
-    enabled: !!selectedClassName,
+    // enabled: !!selectedClassName,
   });
   const mainClass = userClasses[0];
+
+  useEffect(() => {
+    console.log("ini use effect");
+    if (mainClass) {
+      console.log(mainClass.id);
+      if (mainClass.id === selectedClassName) {
+        console.log("ini sama");
+      } else {
+        console.log("ini beda");
+
+        updateSelectedClassName(mainClass.id);
+      }
+    }
+  }, [
+    mainClass,
+    updateSelectedClassName,
+    selectedClassName,
+    queryClient,
+    userClasses,
+  ]);
 
   const handleRetry = () => {
     refetch(); // Panggil refetch untuk memicu permintaan ulang
   };
-
-  console.log({ userClasses });
 
   if (isLoading)
     return (

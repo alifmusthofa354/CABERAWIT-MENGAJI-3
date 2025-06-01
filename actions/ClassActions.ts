@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL = "/api/learning/classroom"; // Ganti dengan URL API yang sesuai
-const API_URL_User = "/api/learning/classroom/id";
+const API_URL_GeneralClass = "/api/learning/classroom/generalclass";
 
 export const fetchClasses = async () => {
   try {
@@ -27,7 +27,8 @@ export const fetchClasses = async () => {
 
 export const fetchUserClass = async (id_user_classroom: string) => {
   try {
-    const response = await axios.get(API_URL_User, {
+    console.log("fetching data : ", id_user_classroom);
+    const response = await axios.get(API_URL_GeneralClass, {
       params: { id: id_user_classroom },
     });
     return response.data.classes; // Asumsikan API mengembalikan { classes: ... }

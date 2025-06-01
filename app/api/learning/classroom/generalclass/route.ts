@@ -14,27 +14,27 @@ export async function GET(request: NextRequest) {
   const email = session.user.email;
   const classroomId = request.nextUrl.searchParams.get("id");
 
-  if (!classroomId) {
-    return NextResponse.json(
-      { error: "Classroom ID not provided" },
-      { status: 400 }
-    );
-  }
+  console.log("ID Classroom : ", classroomId);
 
   try {
-    const { data, error } = await supabase
+    let query = supabase
       .from("user_classroom")
       .select(
         `id, id_class, email, isOwner, status, classroom(id, name, description, image_url,kode,link_wa,status)`
       )
       .eq("email", email)
-      .eq("id", classroomId)
-      .gte("status", 0) // Menambahkan kondisi untuk user_classroom.status = 0
+      .gte("status", 0) // Adding condition for user_classroom.status >= 0
       .gte("classroom.status", 0)
       .lt("classroom.status", 2)
       .not("classroom", "is", null);
 
-    // console.log(data);
+    if (classroomId) {
+      query = query.eq("id", classroomId);
+    } else {
+      query = query.order("created_at", { ascending: false }).limit(1);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.log({ error: error.message });
