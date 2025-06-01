@@ -82,6 +82,14 @@ export default function Page() {
   if (isLoading)
     return (
       <>
+        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
+          <div className="container mx-auto flex items-center justify-between">
+            <HeaderDashboard />
+            <div className="pr-3">
+              <SelectClass />
+            </div>
+          </div>
+        </div>
         <Button disabled>
           <Loader2 className="animate-spin" />
           Memuat Data Kelas...
@@ -93,8 +101,18 @@ export default function Page() {
     const noClassroom = error.message === "No classroom";
     return (
       <>
-        <h2>{noClassroom ? "No classroom" : error.message}</h2>
-        <Button onClick={handleRetry}>Retry</Button>
+        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
+          <div className="container mx-auto flex items-center justify-between">
+            <HeaderDashboard />
+            <div className="pr-3">
+              <SelectClass />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h2>{noClassroom ? "No classroom" : error.message}</h2>
+          <Button onClick={handleRetry}>Retry</Button>
+        </div>
       </>
     );
   }
