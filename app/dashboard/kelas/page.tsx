@@ -14,8 +14,10 @@ import {
   FaWhatsapp,
   FaBookOpen,
 } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+
+import LoadingClass from "@/components/custom/LoadingClass";
+import ErrorClass from "@/components/custom/ErrorClass";
+import NoClass from "@/components/custom/NoClass";
 
 type ClassroomDetails = {
   id: string;
@@ -56,7 +58,6 @@ export default function Page() {
     // enabled: !!selectedClassName,
   });
   const mainClass = userClasses[0];
-
   useEffect(() => {
     console.log("ini use effect");
     if (mainClass) {
@@ -81,68 +82,10 @@ export default function Page() {
     refetch(); // Panggil refetch untuk memicu permintaan ulang
   };
 
-  if (isLoading)
-    return (
-      <>
-        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
-          <div className="container mx-auto flex items-center justify-between">
-            <HeaderDashboard />
-            <div className="pr-3">
-              <SelectClass />
-            </div>
-          </div>
-        </div>
-        <Button disabled>
-          <Loader2 className="animate-spin" />
-          Memuat Data Kelas...
-        </Button>
-      </>
-    );
-
-  if (isError) {
-    const noClassroom = error.message === "No classroom";
-    return (
-      <>
-        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
-          <div className="container mx-auto flex items-center justify-between">
-            <HeaderDashboard />
-            <div className="pr-3">
-              <SelectClass />
-            </div>
-          </div>
-        </div>
-        <div>
-          <h2>{noClassroom ? "No classroom" : error.message}</h2>
-          <Button onClick={handleRetry}>Retry</Button>
-        </div>
-      </>
-    );
-  }
-
+  if (isLoading) return <LoadingClass />;
+  if (isError) return <ErrorClass error={error} handleRetry={handleRetry} />;
   // Tambahkan penanganan untuk kasus di mana userClasses kosong setelah loading selesai
-  if (!mainClass) {
-    return (
-      <div className="min-h-svh bg-gray-50 @container flex flex-col">
-        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
-          <div className="container mx-auto flex items-center justify-between">
-            <HeaderDashboard />
-            <div className="pr-3">
-              <SelectClass />
-            </div>
-          </div>
-        </div>
-        {/* Ini adalah div yang akan mengisi sisa ruang dan memusatkan kontennya */}
-        <div className="flex-grow flex justify-center items-center p-4 ">
-          <p className="text-gray-600 text-center">
-            Tidak ada kelas yang ditemukan atau dipilih. Silakan pilih kelas
-            dari dropdown di atas.
-          </p>
-          {/* Anda bisa menambahkan tombol untuk menambahkan kelas baru di sini jika perlu */}
-          {/* <Button onClick={handleRetry}>Coba Lagi</Button> */}
-        </div>
-      </div>
-    );
-  }
+  if (!mainClass) return <NoClass />;
 
   return (
     <div className="min-h-svh bg-gray-50 @container">

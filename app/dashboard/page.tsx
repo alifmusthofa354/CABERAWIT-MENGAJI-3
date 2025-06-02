@@ -19,7 +19,7 @@ export default function Page() {
       </div>
       {/* Tombol Add Class untuk mobile di pojok kanan bawah */}
       <div className="md:hidden fixed bottom-4 right-4">
-        <AddClass mobile={true} />
+        <AddClass mobile={true} circle={true} />
       </div>
     </div>
   );

@@ -35,7 +35,7 @@ const createClass = async (formData: FormData) => {
   return response.data;
 };
 
-export default function AddClass({ mobile = false }) {
+export default function AddClass({ mobile = false, circle = false }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState(""); // State untuk input keterangan
   const [image, setImage] = useState<File | null>(null); // State untuk menyimpan file gambar
@@ -124,21 +124,33 @@ export default function AddClass({ mobile = false }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <div>
-            {/* Tombol Add Class untuk desktop */}
-            <div className="hidden md:block">
-              <Button variant="outline">
-                <span>
-                  <Plus />
-                </span>
-                Add Class
-              </Button>
-            </div>
-            {/* Tombol Add Class untuk mobile */}
-            {mobile && ( // Tampilkan tombol mobile jika mobile bernilai true
-              <div className="md:hidden">
-                <button className="bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full w-16 h-16 flex items-center justify-center shadow-md">
-                  <Plus className="w-8 h-8" />
-                </button>
+            {mobile ? (
+              circle ? (
+                <div className="md:hidden">
+                  <button className="bg-gray-300 hover:bg-gray-400 text-black font-bold rounded-full w-16 h-16 flex items-center justify-center shadow-md">
+                    <Plus className="w-8 h-8" />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <Button variant="outline">
+                      <span>
+                        <Plus />
+                      </span>
+                      Add Class
+                    </Button>
+                  </div>
+                </>
+              )
+            ) : (
+              <div className="hidden md:block">
+                <Button variant="outline">
+                  <span>
+                    <Plus />
+                  </span>
+                  Add Class
+                </Button>
               </div>
             )}
           </div>

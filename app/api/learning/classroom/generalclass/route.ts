@@ -14,8 +14,6 @@ export async function GET(request: NextRequest) {
   const email = session.user.email;
   const classroomId = request.nextUrl.searchParams.get("id");
 
-  console.log("ID Classroom : ", classroomId);
-
   try {
     let query = supabase
       .from("user_classroom")
@@ -41,8 +39,27 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    console.log("Data : ", data);
+
+    // --- 6. Penanganan Data Tidak Ditemukan/Kosong ---
     if (!data || data.length === 0) {
-      return NextResponse.json({ message: "No classroom" }, { status: 404 });
+      if (classroomId) {
+        // Jika ada classroomId tapi tidak ada data, berarti ID tidak ditemukan
+        return NextResponse.json(
+          {
+            message: `Classroom with ID '${classroomId}' not found for this user, or it's not active.`,
+          },
+          { status: 404 }
+        );
+      } else {
+        // Jika tidak ada classroomId dan data kosong, berarti user belum punya kelas
+        // Ini adalah respons sukses (200 OK) tapi dengan data kosong
+
+        return NextResponse.json(
+          { classes: data },
+          { status: 200 } // Mengembalikan 200 OK karena permintaan berhasil diproses
+        );
+      }
     }
 
     return NextResponse.json({ classes: data });
