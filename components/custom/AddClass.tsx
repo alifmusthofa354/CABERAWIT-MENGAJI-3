@@ -29,9 +29,13 @@ import ImageUpload from "./ImageUpload";
 //   image?: File | null; // Menambahkan properti untuk file gambar
 // }
 const createClass = async (formData: FormData) => {
-  const response = await axios.post("/api/learning/classroom", formData, {
-    headers: { "Content-Type": "multipart/form-data" }, // Penting untuk mengirim file
-  });
+  const response = await axios.post(
+    "/api/learning/classroom/generalclass",
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" }, // Penting untuk mengirim file
+    }
+  );
   return response.data;
 };
 
