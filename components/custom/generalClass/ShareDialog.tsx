@@ -17,13 +17,15 @@ export default function ShareDialog({
   open,
   onOpenChange,
   idClass,
+  nameClass,
+  codeClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
+  idClass: string;
+  nameClass: string;
+  codeClass: string;
 }) {
-  const codeClass = "a2fad7aa-409f-4d70-93f0-a586d283dc54";
-
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(codeClass);
@@ -45,33 +47,36 @@ export default function ShareDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Share Class {idClass}</DialogTitle>
-          <DialogDescription>
-            Anyone who has this code will be able to join this class.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="flex items-center space-x-2">
-          <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
-              Link
-            </Label>
-            <Input id="link" defaultValue={codeClass} readOnly />
+    <>
+      <span hidden>{idClass}</span>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Share {nameClass}</DialogTitle>
+            <DialogDescription>
+              Anyone who has this code will be able to join this class.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center space-x-2">
+            <div className="grid flex-1 gap-2">
+              <Label htmlFor="link" className="sr-only">
+                Link
+              </Label>
+              <Input id="link" defaultValue={codeClass} readOnly />
+            </div>
           </div>
-        </div>
-        <DialogFooter className="sm:justify-start">
-          <Button type="button" onClick={copyToClipboard}>
-            Copy
-            <Copy />
-          </Button>
-          <Button type="button" onClick={copyLinkToClipboard}>
-            Link
-            <Copy />
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <DialogFooter className="sm:justify-start">
+            <Button type="button" onClick={copyToClipboard}>
+              Copy
+              <Copy />
+            </Button>
+            <Button type="button" onClick={copyLinkToClipboard}>
+              Link
+              <Copy />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

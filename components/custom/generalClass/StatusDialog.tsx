@@ -14,42 +14,49 @@ export default function StatusDialog({
   onOpenChange, // Menerima prop 'onOpenChange'
   idClass,
   isActive,
+  nameClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
+  idClass: string;
   isActive: boolean;
+  nameClass: string;
 }) {
-  const dialogTitle = isActive ? "Deactivate Class" : "Activate Class";
+  const dialogTitle = isActive
+    ? `Deactivate ${nameClass}`
+    : `Activate ${nameClass}`;
   const dialogDescription = isActive
-    ? `Are you sure you want to deactivate this class (ID: ${idClass})? It will no longer be active.`
-    : `Are you sure you want to activate this class (ID: ${idClass})? It will become active.`;
+    ? `Are you sure you want to deactivate ${nameClass}? It will no longer be active.`
+    : `Are you sure you want to activate ${nameClass})? It will become active.`;
   const buttonText = isActive ? "Deactivate" : "Activate";
   const buttonVariant = isActive ? "secondary" : "default";
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <DialogDescription>{dialogDescription}</DialogDescription>
-        </DialogHeader>
+    <>
+      <span hidden>{idClass}</span>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{dialogTitle}</DialogTitle>
+            <DialogDescription>{dialogDescription}</DialogDescription>
+          </DialogHeader>
 
-        <DialogFooter className="sm:justify-end">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Cancel
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              type="button"
+              variant={buttonVariant}
+              className={isActive ? "bg-gray-300 hover:bg-gray-200" : ""}
+            >
+              {buttonText}
             </Button>
-          </DialogClose>
-          <Button
-            type="button"
-            variant={buttonVariant}
-            className={isActive ? "bg-gray-300 hover:bg-gray-200" : ""}
-          >
-            {buttonText}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

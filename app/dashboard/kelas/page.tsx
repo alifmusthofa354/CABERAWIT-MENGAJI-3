@@ -26,7 +26,7 @@ type ClassroomDetails = {
   image_url: string;
   kode: string;
   link_wa: string;
-  status: number; // 0: non-aktif, 1: aktif, 2: arsip/terhapus (sesuaikan jika ada nilai lain)
+  status: number; // -1: delete0: non-aktif, 1: aktif, 2: arsip
 };
 
 type UserClassroom = {
@@ -34,13 +34,11 @@ type UserClassroom = {
   id_class: string; // foreign key ke classroom
   email: string;
   isOwner: boolean;
-  status: number; // status relasi user dengan classroom (misal: 0: pending, 1: joined)
+  status: number; // this for -2: banned from grup -1: kick from grup 0: non-aktif, 1: aktif
   classroom: ClassroomDetails; // 'classroom' tidak lagi bersifat opsional karena sudah difilter di backend
 };
 
 export default function Page() {
-  const isActive = true; // Contoh status aktif, bisa diganti dengan data dinamis
-  const idClass = 3;
   const queryClient = useQueryClient();
   const { selectedClassName, updateSelectedClassName } = useStore();
 
@@ -57,7 +55,10 @@ export default function Page() {
     // cacheTime: Infinity, // Opsional: mempertahankan data di cache selamanya bahkan tanpa observer
     // enabled: !!selectedClassName,
   });
+
   const mainClass = userClasses[0];
+  const isActive: boolean = mainClass?.classroom.status === 1;
+
   useEffect(() => {
     console.log("ini use effect");
     if (mainClass) {
@@ -125,7 +126,7 @@ export default function Page() {
               )}
             </div>
             <div className="absolute top-2 right-2 md:top-4 md:right-4 text-white">
-              <DropDownMenu idClass={idClass} isActive={isActive} />
+              <DropDownMenu mainClass={mainClass} />
             </div>
           </div>
           <div className="p-4">

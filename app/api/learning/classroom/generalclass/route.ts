@@ -39,8 +39,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    console.log("Data : ", data);
-
     // --- 6. Penanganan Data Tidak Ditemukan/Kosong ---
     if (!data || data.length === 0) {
       if (classroomId) {

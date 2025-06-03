@@ -24,12 +24,29 @@ import StatusDialog from "./StatusDialog";
 import ArchieveDialog from "./ArchieveDialog";
 import DeleteDialog from "./DeleteDialog";
 
+type ClassroomDetails = {
+  id: string;
+  name: string;
+  description: string;
+  image_url: string;
+  kode: string;
+  link_wa: string;
+  status: number; // -1: delete0: non-aktif, 1: aktif, 2: arsip
+};
+
+type UserClassroom = {
+  id: string; // id dari user_classroom
+  id_class: string; // foreign key ke classroom
+  email: string;
+  isOwner: boolean;
+  status: number; // this for -2: banned from grup -1: kick from grup 0: non-aktif, 1: aktif
+  classroom: ClassroomDetails; // 'classroom' tidak lagi bersifat opsional karena sudah difilter di backend
+};
+
 export default function DropDownMenu({
-  idClass,
-  isActive,
+  mainClass,
 }: {
-  idClass: number;
-  isActive: boolean;
+  mainClass: UserClassroom;
 }) {
   const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -70,28 +87,37 @@ export default function DropDownMenu({
       <ShareDialog
         open={isShareDialogOpen}
         onOpenChange={() => setIsShareDialogOpen(false)}
-        idClass={idClass}
+        idClass={mainClass?.classroom.id || ""}
+        nameClass={mainClass?.classroom.name || ""}
+        codeClass={mainClass?.classroom.kode || ""}
       />
       <EditDialog
         open={isEditDialogOpen}
         onOpenChange={() => setIsEditDialogOpen(false)}
-        idClass={idClass}
+        idClass={mainClass?.classroom.id || ""}
+        nameClass={mainClass?.classroom.name || ""}
+        descriptionClass={mainClass?.classroom.description || ""}
+        image_url={mainClass?.classroom.image_url || ""}
+        link_wa={mainClass?.classroom.link_wa || ""}
       />
       <StatusDialog
         open={isStatusDialogOpen}
         onOpenChange={() => setIsStatusDialogOpen(false)}
-        idClass={idClass}
-        isActive={isActive}
+        idClass={mainClass?.classroom.id || ""}
+        isActive={mainClass?.classroom.status === 1}
+        nameClass={mainClass?.classroom.name || ""}
       />
       <ArchieveDialog
         open={isArchieveDialogOpen}
         onOpenChange={() => setIsArchieveDialogOpen(false)}
-        idClass={idClass}
+        idClass={mainClass?.classroom.id || ""}
+        nameClass={mainClass?.classroom.name || ""}
       />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idClass={idClass}
+        idClass={mainClass?.classroom.id || ""}
+        nameClass={mainClass?.classroom.name || ""}
       />
     </>
   );
