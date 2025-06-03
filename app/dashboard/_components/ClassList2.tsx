@@ -8,6 +8,7 @@ import {
   FaCheckCircle,
   FaCircle,
 } from "react-icons/fa";
+import useStore from "@/stores/useStoreClass";
 import { useQuery } from "@tanstack/react-query";
 import { fetchClasses } from "@/actions/ClassActions";
 import Image from "next/image";
@@ -35,55 +36,62 @@ interface Class {
   };
 }
 
-const ClassCard = ({ kelas }: { kelas: Class }) => (
-  <Link
-    href={`/dashboard/kelas/`}
-    className="rounded-lg shadow-md overflow-hidden bg-amber-50"
-    key={kelas.id}
-  >
-    <div className="relative ">
-      <Image
-        alt={`cover image ${kelas.classroom.name}`}
-        src={
-          kelas.classroom.image_url ??
-          "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
-        }
-        className="w-full h-32 md:min-h-48 object-cover"
-        width={500}
-        height={500}
-      />
-      <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
-        {kelas.isOwner ? (
-          <FaUserCheck className="mr-1" /> // Ikon untuk Owner, misalnya centang
-        ) : (
-          <FaUserFriends className="mr-1" /> // Ikon untuk Member, misalnya grup pengguna
-        )}
-        {kelas.isOwner ? "Owner" : "Member"}
+const ClassCard = ({ kelas }: { kelas: Class }) => {
+  const { updateSelectedClassName } = useStore();
+  const handleClick = () => {
+    updateSelectedClassName(kelas.id);
+  };
+  return (
+    <Link
+      href={`/dashboard/kelas/`}
+      className="rounded-lg shadow-md overflow-hidden bg-amber-50"
+      key={kelas.id}
+      onClick={handleClick}
+    >
+      <div className="relative ">
+        <Image
+          alt={`cover image ${kelas.classroom.name}`}
+          src={
+            kelas.classroom.image_url ??
+            "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
+          }
+          className="w-full h-32 md:min-h-48 object-cover"
+          width={500}
+          height={500}
+        />
+        <div className="absolute top-2 left-2 bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+          {kelas.isOwner ? (
+            <FaUserCheck className="mr-1" /> // Ikon untuk Owner, misalnya centang
+          ) : (
+            <FaUserFriends className="mr-1" /> // Ikon untuk Member, misalnya grup pengguna
+          )}
+          {kelas.isOwner ? "Owner" : "Member"}
+        </div>
+        <div className="absolute top-2 right-2 text-white">
+          {kelas.classroom.status == 1 ? (
+            <div className="bg-green-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+              <FaCheckCircle className="mr-1" />
+              Aktif
+            </div>
+          ) : (
+            <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+              <FaCircle className="mr-1" />
+              Tidak Aktif
+            </div>
+          )}
+        </div>
       </div>
-      <div className="absolute top-2 right-2 text-white">
-        {kelas.classroom.status == 1 ? (
-          <div className="bg-green-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
-            <FaCheckCircle className="mr-1" />
-            Aktif
-          </div>
-        ) : (
-          <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
-            <FaCircle className="mr-1" />
-            Tidak Aktif
-          </div>
-        )}
+      <div className="p-4">
+        <h3 className="text-lg md:text-2xl font-semibold text-orange-600 mb-2 max-w-full truncate">
+          {kelas.classroom.name}
+        </h3>
+        <p className="text-xs md:text-sm text-gray-700 truncate whitespace-nowrap">
+          {kelas.classroom.description}
+        </p>
       </div>
-    </div>
-    <div className="p-4">
-      <h3 className="text-lg md:text-2xl font-semibold text-orange-600 mb-2 max-w-full truncate">
-        {kelas.classroom.name}
-      </h3>
-      <p className="text-xs md:text-sm text-gray-700 truncate whitespace-nowrap">
-        {kelas.classroom.description}
-      </p>
-    </div>
-  </Link>
-);
+    </Link>
+  );
+};
 
 export default function ClassList() {
   const {
