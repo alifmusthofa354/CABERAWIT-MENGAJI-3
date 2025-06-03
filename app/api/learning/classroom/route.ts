@@ -12,6 +12,7 @@ const classSchema = z.object({
     .min(1, { message: "descriptionn is required" })
     .max(255, { message: "description max 255" })
     .optional(),
+  waGrup: z.string().min(1, { message: "waGrup is required" }).optional(),
 });
 
 // Fungsi untuk menangani upload file menggunakan formidable (Promise-based)
@@ -124,7 +125,7 @@ export async function POST(req: Request) {
 
     // Validasi data teks menggunakan Zod
     const validatedFields = classSchema.parse(fields);
-    const { name, description } = validatedFields;
+    const { name, description, waGrup } = validatedFields;
 
     let imageUrl: string | null = null;
     if (files?.image) {
@@ -149,7 +150,7 @@ export async function POST(req: Request) {
       p_name: name,
       p_description: description,
       p_image_url: imageUrl,
-      p_link_wa: "https://wa.me/6281289999999",
+      p_link_wa: waGrup,
       p_email: email,
     });
 

@@ -38,6 +38,7 @@ const createClass = async (formData: FormData) => {
 export default function AddClass({ mobile = false, circle = false }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState(""); // State untuk input keterangan
+  const [waGrup, setwaGrup] = useState("");
   const [image, setImage] = useState<File | null>(null); // State untuk menyimpan file gambar
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null); // Untuk menampilkan preview gambar
   const [open, setOpen] = useState(false); // State untuk mengontrol dialog
@@ -50,6 +51,7 @@ export default function AddClass({ mobile = false, circle = false }) {
       toast.success("Class created successfully!");
       setName(""); // Reset state nama
       setDescription(""); // Reset state keterangan
+      setwaGrup("");
       setImage(null);
       setImagePreviewUrl(null);
       setOpen(false); // Tutup dialog
@@ -104,17 +106,25 @@ export default function AddClass({ mobile = false, circle = false }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && description && image) {
+    if (name && description && waGrup && image) {
       // Memastikan name, description, dan image ada
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
+      formData.append("waGrup", waGrup);
       formData.append("image", image); // Append file gambar ke FormData
       mutation.mutate(formData);
     } else {
       // Handle kasus jika ada field yang kosong, misalnya menampilkan toast error
+      let missingFields = "";
+      if (!name) missingFields += "Name, ";
+      if (!description) missingFields += "Description, ";
+      if (!waGrup) missingFields += "waGrup, ";
+      if (!image) missingFields += "Image, ";
       toast.error(
-        "Please fill in all required fields: Name, Description, and Image."
+        "Please fill in all required fields: " +
+          missingFields.slice(0, -2) +
+          "."
       );
     }
   };
@@ -187,6 +197,19 @@ export default function AddClass({ mobile = false, circle = false }) {
                 id="description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)} // Menangani perubahan input keterangan
+                className="col-span-3"
+              />
+            </div>
+            {/* Input untuk Link */}
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="waGrup" className="text-right">
+                WA Grup
+              </Label>
+              <Input
+                id="waGrup"
+                value={waGrup}
+                type="url"
+                onChange={(e) => setwaGrup(e.target.value)} // Menangani perubahan input keterangan
                 className="col-span-3"
               />
             </div>
