@@ -1,5 +1,5 @@
 "use client";
-
+import useStore from "@/stores/useStoreClass";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -40,6 +40,7 @@ const createClass = async (formData: FormData) => {
 };
 
 export default function AddClass({ mobile = false, circle = false }) {
+  const { updateSelectedClassName } = useStore();
   const [name, setName] = useState("");
   const [description, setDescription] = useState(""); // State untuk input keterangan
   const [waGrup, setwaGrup] = useState("");
@@ -50,7 +51,7 @@ export default function AddClass({ mobile = false, circle = false }) {
 
   const mutation = useMutation({
     mutationFn: createClass,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["classroom"] });
       toast.success("Class created successfully!");
       setName(""); // Reset state nama
@@ -59,6 +60,7 @@ export default function AddClass({ mobile = false, circle = false }) {
       setImage(null);
       setImagePreviewUrl(null);
       setOpen(false); // Tutup dialog
+      updateSelectedClassName(data.id);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {

@@ -14,15 +14,9 @@ export async function GET() {
   const email = session.user.email;
 
   try {
-    // const { data, error } = await supabase
-    //   .from("classroom")
-    //   .select("id, name, email, description, image_url") // Sertakan image_url
-    //   .eq("email", email);
     const { data, error } = await supabase
       .from("user_classroom")
-      .select(
-        `id, id_class, email, isOwner, status, classroom(id, name, description, image_url,kode,link_wa,status)`
-      )
+      .select(`id, isOwner, classroom( name, description, image_url,status)`)
       .eq("email", email)
       .gte("status", 0) // Menambahkan kondisi untuk user_classroom.status = 0
       .gte("classroom.status", 0)

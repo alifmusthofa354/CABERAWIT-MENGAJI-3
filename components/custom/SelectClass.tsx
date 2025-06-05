@@ -16,18 +16,8 @@ import { Button } from "@/components/ui/button";
 
 interface Class {
   id: string;
-  id_class: string;
-  email: string;
-  isOwner: boolean;
-  status: number;
   classroom: {
-    id: string;
     name: string;
-    description: string;
-    image_url: string;
-    kode: string;
-    link_wa: string;
-    status: number;
   };
 }
 

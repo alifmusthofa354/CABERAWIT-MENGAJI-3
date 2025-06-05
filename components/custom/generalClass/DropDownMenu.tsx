@@ -25,7 +25,6 @@ import ArchieveDialog from "./ArchieveDialog";
 import DeleteDialog from "./DeleteDialog";
 
 type ClassroomDetails = {
-  id: string;
   name: string;
   description: string;
   image_url: string;
@@ -36,10 +35,7 @@ type ClassroomDetails = {
 
 type UserClassroom = {
   id: string; // id dari user_classroom
-  id_class: string; // foreign key ke classroom
-  email: string;
   isOwner: boolean;
-  status: number; // this for -2: banned from grup -1: kick from grup 0: non-aktif, 1: aktif
   classroom: ClassroomDetails; // 'classroom' tidak lagi bersifat opsional karena sudah difilter di backend
 };
 
@@ -87,14 +83,14 @@ export default function DropDownMenu({
       <ShareDialog
         open={isShareDialogOpen}
         onOpenChange={() => setIsShareDialogOpen(false)}
-        idClass={mainClass?.classroom.id || ""}
+        idUserClassroom={mainClass?.id || ""}
         nameClass={mainClass?.classroom.name || ""}
         codeClass={mainClass?.classroom.kode || ""}
       />
       <EditDialog
         open={isEditDialogOpen}
         onOpenChange={() => setIsEditDialogOpen(false)}
-        idClass={mainClass?.classroom.id || ""}
+        idUserClassroom={mainClass?.id || ""}
         nameClass={mainClass?.classroom.name || ""}
         descriptionClass={mainClass?.classroom.description || ""}
         image_url={mainClass?.classroom.image_url || ""}
@@ -103,20 +99,20 @@ export default function DropDownMenu({
       <StatusDialog
         open={isStatusDialogOpen}
         onOpenChange={() => setIsStatusDialogOpen(false)}
-        idClass={mainClass?.classroom.id || ""}
+        idUserClassroom={mainClass?.id || ""}
         isActive={mainClass?.classroom.status === 1}
         nameClass={mainClass?.classroom.name || ""}
       />
       <ArchieveDialog
         open={isArchieveDialogOpen}
         onOpenChange={() => setIsArchieveDialogOpen(false)}
-        idClass={mainClass?.classroom.id || ""}
+        idUserClassroom={mainClass?.id || ""}
         nameClass={mainClass?.classroom.name || ""}
       />
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idClass={mainClass?.classroom.id || ""}
+        idUserClassroom={mainClass?.id || ""}
         nameClass={mainClass?.classroom.name || ""}
       />
     </>

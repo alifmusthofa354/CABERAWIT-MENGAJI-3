@@ -16,13 +16,13 @@ import toast from "react-hot-toast";
 export default function ShareDialog({
   open,
   onOpenChange,
-  idClass,
+  idUserClassroom,
   nameClass,
   codeClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: string;
+  idUserClassroom: string;
   nameClass: string;
   codeClass: string;
 }) {
@@ -48,7 +48,7 @@ export default function ShareDialog({
 
   return (
     <>
-      <span hidden>{idClass}</span>
+      <span hidden>{idUserClassroom}</span>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

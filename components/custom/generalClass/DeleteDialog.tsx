@@ -1,3 +1,7 @@
+import { changeStatusClass } from "@/actions/GeneralClass";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useStore from "@/stores/useStoreClass";
+import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,17 +16,52 @@ import {
 export default function DeleteDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
+  idUserClassroom,
   nameClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: string;
+  idUserClassroom: string;
   nameClass: string;
 }) {
+  const { updateSelectedClassName } = useStore();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({
+      idUserClassroom,
+      status,
+    }: {
+      idUserClassroom: string;
+      status: string;
+    }) => changeStatusClass(idUserClassroom, status),
+    onSuccess: () => {
+      toast.success("Class deleted successfully!");
+      onOpenChange(false);
+      queryClient.removeQueries({ queryKey: ["classroom"] });
+      queryClient.removeQueries({
+        queryKey: ["userClasses", idUserClassroom],
+      });
+      queryClient.removeQueries({
+        queryKey: ["userClasses", null],
+      });
+      updateSelectedClassName(null);
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error("An unexpected network error occurred.");
+    },
+  });
+
+  // Handler untuk tombol "Archive Class"
+  const handleDeleteClass = () => {
+    // Panggil mutasi dengan idUserClassroom dan nilai status arsip
+    mutation.mutate({ idUserClassroom: idUserClassroom, status: "DELETE" });
+  };
+
   return (
     <>
-      <span hidden>{idClass}</span>
+      <span hidden>{idUserClassroom}</span>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -35,15 +74,21 @@ export default function DeleteDialog({
           </DialogHeader>
           <DialogFooter className="sm:justify-end">
             <DialogClose asChild>
-              <Button type="button" variant="secondary">
+              <Button
+                type="button"
+                variant="secondary"
+                disabled={mutation.isPending} // Nonaktifkan tombol saat mutasi berjalan
+              >
                 Cancel
               </Button>
             </DialogClose>
             <Button
               type="button"
-              variant="destructive" // Warna merah untuk aksi delete
+              variant="destructive" // Tetap menggunakan warna merah karena ini adalah tindakan "penghapusan" (meskipun soft)
+              onClick={handleDeleteClass} // Panggil handler mutasi
+              disabled={mutation.isPending} // Nonaktifkan tombol saat mutasi berjalan
             >
-              Delete
+              {mutation.isPending ? "Deleting..." : "Delete Class"}
             </Button>
           </DialogFooter>
         </DialogContent>

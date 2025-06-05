@@ -1,6 +1,6 @@
 "use client";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { fetchUserClass } from "@/actions/ClassActions";
+import { fetchUserClass } from "@/actions/GeneralClass";
 import useStore from "@/stores/useStoreClass";
 import { useEffect } from "react";
 
@@ -20,7 +20,6 @@ import ErrorClass from "@/components/custom/ErrorClass";
 import NoClass from "@/components/custom/NoClass";
 
 type ClassroomDetails = {
-  id: string;
   name: string;
   description: string;
   image_url: string;
@@ -31,10 +30,7 @@ type ClassroomDetails = {
 
 type UserClassroom = {
   id: string; // id dari user_classroom
-  id_class: string; // foreign key ke classroom
-  email: string;
   isOwner: boolean;
-  status: number; // this for -2: banned from grup -1: kick from grup 0: non-aktif, 1: aktif
   classroom: ClassroomDetails; // 'classroom' tidak lagi bersifat opsional karena sudah difilter di backend
 };
 

@@ -16,7 +16,7 @@ import Image from "next/image";
 export default function EditDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
+  idUserClassroom,
   nameClass,
   descriptionClass,
   link_wa,
@@ -24,7 +24,7 @@ export default function EditDialog({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: string;
+  idUserClassroom: string;
   nameClass: string;
   descriptionClass: string;
   link_wa: string;
@@ -32,7 +32,7 @@ export default function EditDialog({
 }) {
   return (
     <>
-      <span hidden>{idClass}</span>
+      <span hidden>{idUserClassroom}</span>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
