@@ -12,7 +12,7 @@ interface PatchRequestBody {
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   let idClassCurrent: string | null = null;
   const session = await auth();
@@ -27,8 +27,8 @@ export async function PATCH(
 
   try {
     // Ambil ID Kelas dari Path Parameter
-    const { id } = await params;
-    const classroomId = id;
+
+    const classroomId = (await params).id;
     // Validasi classroomId
     if (!classroomId) {
       return NextResponse.json(
@@ -101,7 +101,7 @@ export async function PATCH(
       await supabase
         .from("user_classroom")
         .select("id_class") // Select the id_class column which links to the classroom table
-        .eq("id", id) // Filter by the user_classroom record ID
+        .eq("id", classroomId) // Filter by the user_classroom record ID
         .eq("email", email) // Filter by the authenticated user's email
         .eq("isOwner", true) // Assume 'owner' is a boolean column and the user must be the owner
         .single(); // Expect only one record
