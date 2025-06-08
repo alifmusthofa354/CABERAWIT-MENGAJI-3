@@ -55,7 +55,7 @@ export default function StatusDialog({
     : `Activate ${nameClass}`;
   const dialogDescription = isActive
     ? `Are you sure you want to deactivate ${nameClass}? It will no longer be active.`
-    : `Are you sure you want to activate ${nameClass})? It will become active.`;
+    : `Are you sure you want to activate ${nameClass}? It will become active.`;
   const buttonText = isActive ? "Deactivate Class" : "Activate Class";
   const buttonTextPending = isActive ? "Deactivating ..." : "Activating ...";
   const buttonVariant = isActive ? "secondary" : "default";

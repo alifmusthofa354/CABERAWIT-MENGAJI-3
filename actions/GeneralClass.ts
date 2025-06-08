@@ -58,8 +58,6 @@ export const changeStatusClass = async (
   status: string
 ) => {
   try {
-    console.log("class id : ", id_user_classroom);
-    console.log("change status : ", status);
     const URL = `${API_URL_GeneralClass_Status}/${id_user_classroom}`;
     const response = await axios.patch(URL, {
       status: status,
@@ -74,5 +72,47 @@ export const changeStatusClass = async (
 
     console.error("Error changing class status:", error);
     throw new Error(errorMessage); // Lempar error dengan pesan yang lebih informatif
+  }
+};
+
+export const DeleteStatusClass = async (id_user_classroom: string) => {
+  try {
+    const URL = `${API_URL_GeneralClass_Status}/${id_user_classroom}`;
+    const response = await axios.delete(URL);
+    return response.data;
+  } catch (error) {
+    // Penanganan error yang lebih baik dari respons Axios
+    const errorMessage =
+      //   error.response?.data?.error || // Ambil pesan error dari backend jika ada
+      //   error.message || // Pesan error standar Axios
+      "Failed to change class status. Please try again.";
+
+    console.error("Error changing class status:", error);
+    throw new Error(errorMessage); // Lempar error dengan pesan yang lebih informatif
+  }
+};
+
+export const updateGeneralClassID = async (
+  id_user_classroom: string,
+  formData: FormData,
+  isPut = false
+) => {
+  try {
+    const URL = `${API_URL_GeneralClass}/${id_user_classroom}`;
+    if (isPut) {
+      const response = await axios.put(URL, formData, {
+        headers: { "Content-Type": "multipart/form-data" }, // Penting untuk mengirim file
+      });
+      return response.data;
+    } else {
+      const response = await axios.patch(URL, formData, {
+        headers: { "Content-Type": "multipart/form-data" }, // Penting untuk mengirim file
+      });
+      return response.data;
+    }
+  } catch (error) {
+    const errorMessage = "Failed to change class status. Please try again.";
+    console.error("Error changing class status:", error);
+    throw new Error(errorMessage);
   }
 };

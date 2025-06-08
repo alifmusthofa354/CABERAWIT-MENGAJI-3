@@ -1,4 +1,4 @@
-import { changeStatusClass } from "@/actions/GeneralClass";
+import { DeleteStatusClass } from "@/actions/GeneralClass";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useStore from "@/stores/useStoreClass";
 import toast from "react-hot-toast";
@@ -28,13 +28,8 @@ export default function DeleteDialog({
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: ({
-      idUserClassroom,
-      status,
-    }: {
-      idUserClassroom: string;
-      status: string;
-    }) => changeStatusClass(idUserClassroom, status),
+    mutationFn: ({ idUserClassroom }: { idUserClassroom: string }) =>
+      DeleteStatusClass(idUserClassroom),
     onSuccess: () => {
       toast.success("Class deleted successfully!");
       onOpenChange(false);
@@ -56,7 +51,7 @@ export default function DeleteDialog({
   // Handler untuk tombol "Archive Class"
   const handleDeleteClass = () => {
     // Panggil mutasi dengan idUserClassroom dan nilai status arsip
-    mutation.mutate({ idUserClassroom: idUserClassroom, status: "DELETE" });
+    mutation.mutate({ idUserClassroom: idUserClassroom });
   };
 
   return (
