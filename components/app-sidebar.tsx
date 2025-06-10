@@ -5,14 +5,18 @@ import * as React from "react";
 import {
   // AudioWaveform,
   // BookOpen,
-  Bot,
+  // Bot,
   // Command,
   Frame,
   // GalleryVerticalEnd,
   Map,
   PieChart,
-  Settings2,
-  SquareTerminal,
+  // Settings2,
+  // SquareTerminal,
+  HomeIcon,
+  BookOpenIcon,
+  ClipboardListIcon,
+  ClockIcon,
 } from "lucide-react";
 // import { NavMainMenu } from "@/components/nav-mainmenu";
 // import { NavMain } from "@/components/nav-main";
@@ -40,7 +44,7 @@ const sampledata = {
     {
       title: "Home",
       url: "/dashboard",
-      icon: SquareTerminal,
+      icon: HomeIcon,
       isActive: true,
       canCollapse: false,
       items: [],
@@ -48,7 +52,7 @@ const sampledata = {
     {
       title: "Absensi",
       url: "/dashboard/absensi",
-      icon: SquareTerminal,
+      icon: ClipboardListIcon,
       isActive: true,
       canCollapse: false,
       items: [],
@@ -56,7 +60,7 @@ const sampledata = {
     {
       title: "History",
       url: "#",
-      icon: Settings2,
+      icon: ClockIcon,
       canCollapse: true,
       items: [
         {
@@ -76,7 +80,7 @@ const sampledata = {
     {
       title: "Class",
       url: "#",
-      icon: Bot,
+      icon: BookOpenIcon,
       canCollapse: true,
       items: [
         {
