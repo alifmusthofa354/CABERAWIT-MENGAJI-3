@@ -22,8 +22,6 @@ export async function GET() {
       .eq("classroom.status", 2)
       .not("classroom", "is", null);
 
-    console.log("data archieve : ", data);
-
     if (error) {
       console.log({ error: error.message });
       return NextResponse.json({ error: error.message }, { status: 500 });
