@@ -3,6 +3,7 @@ import axios from "axios";
 const API_URL_GeneralClass = "/api/learning/classroom/generalclass";
 const API_URL_GeneralClass_Status =
   "/api/learning/classroom/generalclass/status";
+const API_URL_GeneralClass_Join = "/api/learning/classroom/generalclass/join";
 
 export const fetchUserClass = async (id_user_classroom: string) => {
   try {
@@ -111,8 +112,36 @@ export const updateGeneralClassID = async (
       return response.data;
     }
   } catch (error) {
-    const errorMessage = "Failed to change class status. Please try again.";
-    console.error("Error changing class status:", error);
-    throw new Error(errorMessage);
+    if (axios.isAxiosError(error)) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to update class. Please try again.";
+      throw new Error(message);
+    } else {
+      throw new Error("Failed to update class. Please try again.");
+    }
+  }
+};
+
+export const joinGeneralClassID = async (codeClass: string) => {
+  try {
+    const response = await axios.post(API_URL_GeneralClass_Join, {
+      codeClass: codeClass,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error joining class:", error);
+    if (axios.isAxiosError(error)) {
+      console.error("Error joining class:", error);
+      const message =
+        error.response?.data?.details?.[0]?.message ||
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed to join class. Please try again.";
+      throw new Error(message);
+    } else {
+      throw new Error("Failed to join class. Please try again.");
+    }
   }
 };

@@ -134,7 +134,7 @@ export async function PATCH(
       .from("classroom") // Your classroom table name
       .update({ status: numericalStatus }) // Update the 'status' column with the numerical value
       .eq("id", classroomIdToUpdate) // Update based on the actual class ID
-      .gte("status", 0)
+      .in("status", [0, 1, 2])
       .select();
 
     if (error) {
@@ -256,7 +256,7 @@ export async function DELETE(
       .from("classroom") // Your classroom table name
       .update({ status: -1 }) // Update the 'status' to -1 / delete
       .eq("id", classroomIdToUpdate) // Update based on the actual class ID
-      .gte("status", 0)
+      .in("status", [0, 1, 2])
       .select();
 
     if (error) {
