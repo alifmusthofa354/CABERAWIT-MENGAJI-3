@@ -38,7 +38,7 @@ const ClassCard = ({ kelas }: { kelas: Class }) => {
   return (
     <Link
       href={`/dashboard/kelas/`}
-      className="rounded-lg shadow-md overflow-hidden bg-amber-50"
+      className="rounded-lg shadow-md overflow-hidden bg-white hover:bg-gray-100 cursor-pointer"
       key={kelas.id}
       onClick={handleClick}
     >
