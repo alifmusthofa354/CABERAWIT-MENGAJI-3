@@ -12,6 +12,19 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+type classroomType = {
+  id: string;
+  isOwner: boolean;
+  classroom: {
+    name: string;
+    description: string;
+    image_url: string;
+    status: number;
+    kode: string;
+    link_wa: string;
+  };
+};
+
 export default function StatusDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
@@ -36,13 +49,66 @@ export default function StatusDialog({
       status: string;
     }) => changeStatusClass(idUserClassroom, status),
     onSuccess: () => {
+      // Update cache secara manual (tanpa refetch / invalidateQueries)
+
+      // queryClient.invalidateQueries({ queryKey: ["classroom"] });
+      queryClient.setQueryData(
+        ["classroom"],
+        (oldData: Array<classroomType> | undefined) => {
+          // oldData bisa undefined jika belum ada di cache
+          if (!oldData) return oldData; // Jika data tidak ada, kembalikan saja
+
+          // Tentukan status baru dalam bentuk numerik yang Anda inginkan
+          const newStatusNumeric = isActive ? 0 : 1;
+
+          // Gunakan map untuk membuat array baru dengan objek yang diperbarui
+          const updatedData = oldData.map((userclassroom) => {
+            if (userclassroom.id === idUserClassroom) {
+              // Jika ID cocok, kembalikan objek baru
+              // dengan properti 'classroom.status' yang telah diubah.
+              // Penting: Gunakan spread operator (...) untuk membuat salinan objek
+              // agar tidak memutasi objek asli di dalam array.
+              return {
+                ...userclassroom,
+                classroom: {
+                  ...userclassroom.classroom, // Salin juga objek 'classroom'
+                  status: newStatusNumeric, // Ubah hanya properti 'status'
+                },
+              };
+            }
+            // Jika ID tidak cocok, kembalikan objek userclassroom tanpa perubahan
+            return userclassroom;
+          });
+
+          return updatedData; // Mengembalikan array yang benar-benar baru
+        }
+      );
+
+      // queryClient.invalidateQueries({
+      //   queryKey: ["userClasses", idUserClassroom],
+      // });
+      queryClient.setQueryData(
+        ["userClasses", idUserClassroom],
+        (oldData: Array<classroomType> | undefined) => {
+          if (!oldData) return oldData;
+          const updatedData = oldData.map((userclassroom) => {
+            if (userclassroom.id === idUserClassroom) {
+              return {
+                ...userclassroom,
+                classroom: {
+                  ...userclassroom.classroom,
+                  status: isActive ? 0 : 1,
+                },
+              };
+            }
+            return userclassroom;
+          });
+          return updatedData;
+        }
+      );
       const valueStatus = isActive ? "non active" : "active";
       toast.success(`Class ${nameClass} ${valueStatus} successfully!`);
       onOpenChange(false);
-      queryClient.invalidateQueries({ queryKey: ["classroom"] });
-      queryClient.invalidateQueries({
-        queryKey: ["userClasses", idUserClassroom],
-      });
     },
     onError: (error: Error) => {
       console.error(error);
