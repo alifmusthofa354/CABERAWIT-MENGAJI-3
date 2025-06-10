@@ -34,6 +34,7 @@ export default function DeleteDialog({
       toast.success("Class deleted successfully!");
       onOpenChange(false);
       queryClient.removeQueries({ queryKey: ["classroom"] });
+      queryClient.removeQueries({ queryKey: ["archieveclassroom"] });
       queryClient.removeQueries({
         queryKey: ["userClasses", idUserClassroom],
       });

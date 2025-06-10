@@ -45,7 +45,6 @@ export async function PATCH(
     // Validasi status
     // 4. Validasi status (sekarang sebagai string literal)
     const allowedStatuses: AllowedStatus[] = [
-      "DELETE",
       "ACTIVE",
       "NON ACTIVE",
       "ARCHIVE",
@@ -64,9 +63,6 @@ export async function PATCH(
     // 5. Ubah status string menjadi nilai numerik
     let numericalStatus: number;
     switch (status) {
-      case "DELETE":
-        numericalStatus = -1;
-        break;
       case "NON ACTIVE":
         numericalStatus = 0;
         break;
@@ -134,7 +130,7 @@ export async function PATCH(
       .from("classroom") // Your classroom table name
       .update({ status: numericalStatus }) // Update the 'status' column with the numerical value
       .eq("id", classroomIdToUpdate) // Update based on the actual class ID
-      .in("status", [0, 1, 2])
+      .in("status", [0, 1])
       .select();
 
     if (error) {

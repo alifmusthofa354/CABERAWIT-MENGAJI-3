@@ -19,10 +19,10 @@ export async function GET() {
       .select(`id, isOwner, classroom( name, description, image_url,status)`)
       .eq("email", email)
       .gte("status", 0) // Menambahkan kondisi untuk user_classroom.status = 0
-      .in("classroom.status", [0, 1])
+      .eq("classroom.status", 2)
       .not("classroom", "is", null);
 
-    // console.log(data);
+    console.log("data archieve : ", data);
 
     if (error) {
       console.log({ error: error.message });
@@ -30,7 +30,10 @@ export async function GET() {
     }
 
     if (!data || data.length === 0) {
-      return NextResponse.json({ message: "No classroom" }, { status: 404 });
+      return NextResponse.json(
+        { message: "No Archieve Class" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ classes: data });

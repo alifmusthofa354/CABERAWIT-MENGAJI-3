@@ -16,6 +16,7 @@ import {
   FaTrash,
   FaExchangeAlt,
   FaArchive,
+  FaUserFriends,
 } from "react-icons/fa";
 
 import ShareDialog from "./ShareDialog";
@@ -52,69 +53,96 @@ export default function DropDownMenu({
 
   return (
     <>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger>
-          <FaEllipsisV />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => setIsShareDialogOpen(true)}>
-            <FaShareAlt className="mr-2 h-4 w-4 " />
-            Shared
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
-            <FaEdit className="mr-2 h-4 w-4" />
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsStatusDialogOpen(true)}>
-            <FaExchangeAlt className="mr-2 h-4 w-4" />
-            Status
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsArchieveDialogOpen(true)}>
-            <FaArchive className="mr-2 h-4 w-4" />
-            Archieve
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
-            <FaTrash className="mr-2 h-4 w-4 text-red-500" />
-            <span className="text-red-500">Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {mainClass.isOwner ? (
+        <>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger>
+              <FaEllipsisV />
+            </DropdownMenuTrigger>
 
-      <ShareDialog
-        open={isShareDialogOpen}
-        onOpenChange={() => setIsShareDialogOpen(false)}
-        idUserClassroom={mainClass?.id || ""}
-        nameClass={mainClass?.classroom.name || ""}
-        codeClass={mainClass?.classroom.kode || ""}
-      />
-      <EditDialog
-        open={isEditDialogOpen}
-        onOpenChange={() => setIsEditDialogOpen(false)}
-        idUserClassroom={mainClass?.id || ""}
-        nameClass={mainClass?.classroom.name || ""}
-        descriptionClass={mainClass?.classroom.description || ""}
-        image_url={mainClass?.classroom.image_url || ""}
-        link_wa={mainClass?.classroom.link_wa || ""}
-      />
-      <StatusDialog
-        open={isStatusDialogOpen}
-        onOpenChange={() => setIsStatusDialogOpen(false)}
-        idUserClassroom={mainClass?.id || ""}
-        isActive={mainClass?.classroom.status === 1}
-        nameClass={mainClass?.classroom.name || ""}
-      />
-      <ArchieveDialog
-        open={isArchieveDialogOpen}
-        onOpenChange={() => setIsArchieveDialogOpen(false)}
-        idUserClassroom={mainClass?.id || ""}
-        nameClass={mainClass?.classroom.name || ""}
-      />
-      <DeleteDialog
-        open={isDeleteDialogOpen}
-        onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idUserClassroom={mainClass?.id || ""}
-        nameClass={mainClass?.classroom.name || ""}
-      />
+            {mainClass.classroom.status !== 2 ? (
+              <>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setIsShareDialogOpen(true)}>
+                    <FaShareAlt className="mr-2 h-4 w-4 " />
+                    Shared
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
+                    <FaEdit className="mr-2 h-4 w-4" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsStatusDialogOpen(true)}>
+                    <FaExchangeAlt className="mr-2 h-4 w-4" />
+                    Status
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setIsArchieveDialogOpen(true)}
+                  >
+                    <FaArchive className="mr-2 h-4 w-4" />
+                    Archieve
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+                    <FaTrash className="mr-2 h-4 w-4 text-red-500" />
+                    <span className="text-red-500">Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </>
+            ) : (
+              <>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
+                    <FaTrash className="mr-2 h-4 w-4 text-red-500" />
+                    <span className="text-red-500">Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </>
+            )}
+          </DropdownMenu>
+
+          <ShareDialog
+            open={isShareDialogOpen}
+            onOpenChange={() => setIsShareDialogOpen(false)}
+            idUserClassroom={mainClass?.id || ""}
+            nameClass={mainClass?.classroom.name || ""}
+            codeClass={mainClass?.classroom.kode || ""}
+          />
+          <EditDialog
+            open={isEditDialogOpen}
+            onOpenChange={() => setIsEditDialogOpen(false)}
+            idUserClassroom={mainClass?.id || ""}
+            nameClass={mainClass?.classroom.name || ""}
+            descriptionClass={mainClass?.classroom.description || ""}
+            image_url={mainClass?.classroom.image_url || ""}
+            link_wa={mainClass?.classroom.link_wa || ""}
+          />
+          <StatusDialog
+            open={isStatusDialogOpen}
+            onOpenChange={() => setIsStatusDialogOpen(false)}
+            idUserClassroom={mainClass?.id || ""}
+            isActive={mainClass?.classroom.status === 1}
+            nameClass={mainClass?.classroom.name || ""}
+          />
+          <ArchieveDialog
+            open={isArchieveDialogOpen}
+            onOpenChange={() => setIsArchieveDialogOpen(false)}
+            idUserClassroom={mainClass?.id || ""}
+            nameClass={mainClass?.classroom.name || ""}
+          />
+          <DeleteDialog
+            open={isDeleteDialogOpen}
+            onOpenChange={() => setIsDeleteDialogOpen(false)}
+            idUserClassroom={mainClass?.id || ""}
+            nameClass={mainClass?.classroom.name || ""}
+          />
+        </>
+      ) : (
+        <>
+          <span className=" bg-white text-green-600 text-xs font-semibold px-2 py-1 rounded-full flex items-center">
+            <FaUserFriends className="mr-1" />
+            {"Member"}
+          </span>
+        </>
+      )}
     </>
   );
 }

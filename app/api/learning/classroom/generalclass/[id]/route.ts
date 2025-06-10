@@ -152,7 +152,7 @@ export async function PUT(
       .from("classroom") // Your classroom table name
       .update({ name, description, link_wa: waGrup, image_url: imageUrl }) // Update the 'status' column with the numerical value
       .eq("id", classroomIdToUpdate) // Update based on the actual class ID
-      .gte("status", 0)
+      .in("status", [0, 1])
       .select();
 
     if (error) {
@@ -342,7 +342,7 @@ export async function PATCH(
       .from("classroom") // Nama tabel classroom Anda
       .update(validatedFields) // Langsung gunakan validatedFields karena sudah bersih
       .eq("id", classroomIdToUpdate) // Update berdasarkan ID kelas aktual
-      .gte("status", 0) // Pastikan status lebih besar atau sama dengan 0
+      .in("status", [0, 1])
       .select();
 
     if (error) {

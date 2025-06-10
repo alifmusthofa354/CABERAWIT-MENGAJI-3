@@ -80,8 +80,7 @@ export async function GET(request: NextRequest) {
       )
       .eq("email", email)
       .gte("status", 0) // Adding condition for user_classroom.status >= 0
-      .gte("classroom.status", 0)
-      .lt("classroom.status", 2)
+      .in("status", [0, 1, 2])
       .not("classroom", "is", null);
 
     if (idUserClassroom) {

@@ -13,6 +13,7 @@ import {
   FaCircle,
   FaWhatsapp,
   FaBookOpen,
+  FaFolder,
 } from "react-icons/fa";
 
 import LoadingClass from "@/components/custom/LoadingClass";
@@ -53,7 +54,6 @@ export default function Page() {
   });
 
   const mainClass = userClasses[0];
-  const isActive: boolean = mainClass?.classroom.status === 1;
 
   useEffect(() => {
     console.log("ini use effect");
@@ -109,15 +109,22 @@ export default function Page() {
               priority // Tambahkan priority jika ini adalah gambar utama di above-the-fold
             />
             <div className="absolute top-2 left-2 md:top-4 md:left-4">
-              {isActive ? (
+              {mainClass.classroom.status === 1 && (
                 <div className="bg-green-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
                   <FaCheckCircle className="mr-1" />
                   Aktif
                 </div>
-              ) : (
+              )}
+              {mainClass.classroom.status === 0 && (
                 <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
                   <FaCircle className="mr-1" />
                   Tidak Aktif
+                </div>
+              )}
+              {mainClass.classroom.status === 2 && (
+                <div className="bg-gray-500 text-white text-xs md:text-sm font-semibold px-2 py-1 rounded-full flex items-center">
+                  <FaFolder className="mr-1" />
+                  Archieved
                 </div>
               )}
             </div>
