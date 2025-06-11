@@ -19,7 +19,7 @@ export default function DropDownMenuTeacher({
   idClass,
   isActive,
 }: {
-  idClass: number;
+  idClass: string;
   isActive: boolean;
 }) {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);

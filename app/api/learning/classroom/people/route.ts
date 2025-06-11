@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     // Update the `classroom` table using the obtained `classroomIdToUpdate`
     const { data, error } = await supabase
       .from("user_classroom")
-      .select("id, isOwner,status,users(name, photo)") // Select the id_class column which links to the classroom table
+      .select("id, isOwner,status,email,users(name, photo)") // Select the id_class column which links to the classroom table
       .eq("id_class", IDClass) // Filter by the user_classroom record ID
       .in("status", [0, 1]); // Filter by status 0 or 1
 

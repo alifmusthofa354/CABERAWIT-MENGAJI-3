@@ -1,16 +1,21 @@
 "use client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useStore from "@/stores/useStoreClass";
+import { useEffect } from "react";
 import { fechingPeople } from "@/actions/PeopleClassAction";
 
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { FaGraduationCap, FaChalkboardTeacher, FaUsers } from "react-icons/fa";
-import DropDownMenuTeacher from "@/components/custom/peopleClass/Teachers/DropDownMenuTeacher";
+import { FaUsers } from "react-icons/fa";
+import { toast, Toaster } from "sonner";
+import { useSession } from "next-auth/react";
+
 import DropDownMenuStudent from "@/components/custom/peopleClass/Students/DropDownMenuStudent";
 import AddStudent from "@/components/custom/peopleClass/Students/AddButtonStudent";
+import TeacherList from "@/components/custom/peopleClass/TeacherList";
+import OwnerList from "@/components/custom/peopleClass/OwnerList";
 
 const Students = [
   {
@@ -41,6 +46,7 @@ type PeopleType = {
   id: string;
   isOwner: boolean;
   status: number;
+  email: string;
   users: {
     name: string;
     photo: string;
@@ -48,171 +54,131 @@ type PeopleType = {
 };
 
 export default function Page() {
-  const { selectedClassName } = useStore();
+  const queryClient = useQueryClient();
+  const { selectedClassName, updateSelectedClassName } = useStore();
+  const { data: session } = useSession();
 
-  const { data: people = [] } = useQuery<PeopleType[], Error>({
+  const {
+    data: people = [],
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery<PeopleType[], Error>({
     queryKey: ["people", selectedClassName],
     queryFn: () => fechingPeople(selectedClassName as string),
-    staleTime: Infinity, // Data akan terus ditampilkan dari cache sampai Anda secara manual memanggil
-    // cacheTime: Infinity, // Opsional: mempertahankan data di cache selamanya bahkan tanpa observer
-    // enabled: !!selectedClassName,
+    staleTime: Infinity,
   });
 
-  console.log(people);
+  console.log("people : ", people);
+
+  const owner: PeopleType[] = people.filter(
+    (person) => person.isOwner === true
+  );
+  const teacher: PeopleType[] = people.filter(
+    (person) => person.isOwner === false
+  );
+  const isCanEdit = owner[0]?.id === selectedClassName;
+
+  const email = session?.user?.email || "No emails";
+  const userID = people.find((person) => person.email === email)?.id;
+
+  useEffect(() => {
+    if (userID) {
+      if (userID !== selectedClassName) {
+        queryClient.setQueryData(["people", userID], people);
+        updateSelectedClassName(userID);
+      }
+    }
+  }, [userID, selectedClassName, people, queryClient, updateSelectedClassName]);
+
+  useEffect(() => {
+    if (isError) {
+      console.log(error);
+      toast.error("Terjadi Error Saat Mengambil Data People", {
+        description: (error as Error).message,
+        action: {
+          label: "Refresh",
+          onClick: () => refetch(),
+        },
+        duration: Infinity,
+      });
+    }
+  }, [isError, error, refetch]); // Pastikan efek hanya berjalan saat isError atau error berubah
 
   return (
-    <div className="min-h-svh bg-gray-50 @container">
-      <div className="bg-white shadow-md p-3 sticky top-0 z-50">
-        <div className="container mx-auto flex items-center justify-between">
-          <HeaderDashboard />
-          <div className="pr-3">
-            <SelectClass />
+    <>
+      <div className="min-h-svh bg-gray-50 @container">
+        <div className="bg-white shadow-md p-3 sticky top-0 z-50">
+          <div className="container mx-auto flex items-center justify-between">
+            <HeaderDashboard />
+            <div className="pr-3">
+              <SelectClass />
+            </div>
+          </div>
+        </div>
+        <div className=" mx-auto p-4 md:p-6 pb-18 md:pb-18  mt-1 min-h-max ">
+          {/* Owner Section */}
+          <OwnerList owner={owner} isLoading={isLoading} />
+          {/* Teacher Section */}
+          <TeacherList
+            teacher={teacher}
+            isCanEdit={isCanEdit}
+            isLoading={isLoading}
+          />
+
+          {/* Student Active Section */}
+          <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
+            <div className="p-4">
+              <div className="flex items-center mb-3">
+                <FaUsers className="text-blue-600 text-2xl md:text-3xl mr-2" />
+                <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
+                  Students
+                </h1>
+              </div>
+              <div>
+                {Students.map((student, index) => (
+                  <div key={index}>
+                    <Separator className="my-2" />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <Avatar>
+                          <AvatarImage src={student.image} alt={student.name} />
+                          <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                        {/* Flex container untuk nama dan status dengan flex-wrap */}
+                        <div className="flex flex-wrap items-center ml-4">
+                          <span className="mr-2 mb-1 sm:mb-0">
+                            {student.name}
+                          </span>{" "}
+                          {/* Nama */}
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              student.status === "active"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {student.status}
+                          </span>
+                        </div>
+                      </div>
+                      {isCanEdit && (
+                        <DropDownMenuStudent idClass={index} isActive={true} />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          {/* Add student Section */}
+          <div className="fixed bottom-4 right-4">
+            <AddStudent idClass={3} />
           </div>
         </div>
       </div>
-      <div className=" mx-auto p-4 md:p-6 pb-18 md:pb-18  mt-1 min-h-max ">
-        {/* Owner Section */}
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-          <div className="p-4">
-            <div className="flex items-center mb-3">
-              <FaGraduationCap className="text-blue-600 text-2xl md:text-3xl mr-2" />
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                HeadMaster
-              </h1>
-            </div>
-            <div>
-              {people.map((person, index) => (
-                <div key={index}>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Avatar>
-                        <AvatarImage
-                          src={person.users.photo}
-                          alt={person.users.name}
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-
-                      {/* Flex container untuk nama dan status dengan flex-wrap */}
-                      <div className="flex flex-wrap items-center ml-4">
-                        <span className="mr-2 mb-1 sm:mb-0">
-                          {person.users.name}
-                        </span>{" "}
-                        {/* Nama */}
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            person.status === 1
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {person.status === 1 ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Teacher Section */}
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-          <div className="p-4">
-            <div className="flex items-center mb-3">
-              <FaChalkboardTeacher className="text-blue-600 text-2xl md:text-3xl mr-2" />
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Teacher
-              </h1>
-            </div>
-            <div>
-              {people.map((person, index) => (
-                <div key={index}>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Avatar>
-                        <AvatarImage
-                          src={person.users.photo}
-                          alt={person.users.name}
-                        />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      {/* Flex container untuk nama dan status dengan flex-wrap */}
-                      <div className="flex flex-wrap items-center ml-4">
-                        <span className="mr-2 mb-1 sm:mb-0">
-                          {person.users.name}
-                        </span>{" "}
-                        {/* Nama */}
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            person.status === 1
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {person.status === 1 ? "Active" : "Inactive"}
-                        </span>
-                      </div>
-                    </div>
-                    <DropDownMenuTeacher idClass={index} isActive={true} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Student Active Section */}
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-          <div className="p-4">
-            <div className="flex items-center mb-3">
-              <FaUsers className="text-blue-600 text-2xl md:text-3xl mr-2" />
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Students
-              </h1>
-            </div>
-            <div>
-              {Students.map((student, index) => (
-                <div key={index}>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Avatar>
-                        <AvatarImage src={student.image} alt={student.name} />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      {/* Flex container untuk nama dan status dengan flex-wrap */}
-                      <div className="flex flex-wrap items-center ml-4">
-                        <span className="mr-2 mb-1 sm:mb-0">
-                          {student.name}
-                        </span>{" "}
-                        {/* Nama */}
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            student.status === "active"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {student.status}
-                        </span>
-                      </div>
-                    </div>
-                    <DropDownMenuStudent idClass={index} isActive={true} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        {/* Add student Section */}
-        <div className="fixed bottom-4 right-4">
-          <AddStudent idClass={3} />
-        </div>
-      </div>
-    </div>
+      <Toaster />
+    </>
   );
 }

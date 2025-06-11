@@ -16,7 +16,7 @@ export default function DeleteDialog({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
+  idClass: string;
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

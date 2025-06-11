@@ -17,7 +17,7 @@ export default function StatusDialog({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
+  idClass: string;
   isActive: boolean;
 }) {
   const dialogTitle = isActive ? "Deactivate Teacher" : "Activate Teacher";
