@@ -7,14 +7,11 @@ import { fechingPeople } from "@/actions/PeopleClassAction";
 import { useSession } from "next-auth/react";
 import { toast, Toaster } from "sonner";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
-import { FaUsers } from "react-icons/fa";
-
-import DropDownMenuStudent from "@/components/custom/peopleClass/Students/DropDownMenuStudent";
 import AddStudent from "@/components/custom/peopleClass/Students/AddButtonStudent";
 import TeacherList from "@/components/custom/peopleClass/TeacherList";
 import OwnerList from "@/components/custom/peopleClass/OwnerList";
+import AddClass from "../AddClass";
+import StudentList from "./StudentList";
 
 type PeopleType = {
   id: string;
@@ -26,32 +23,6 @@ type PeopleType = {
     photo: string;
   };
 };
-
-const Students = [
-  {
-    name: "Dea Putri Handayani",
-    image: "https://xsgames.co/randomusers/avatar.php?g=female",
-    status: "active",
-  },
-  {
-    name: "3403_Muhammad Fikri Ramadhan Dengan Nama Yang Sangat Sangat Panjang Sekali", // Contoh nama sangat panjang
-    image:
-      "https://storage.googleapis.com/a1aa/image/6Qe0vx2TIe-YtC3TlAU_mq0Ifp4d4UCpR3HN1YIEJYA.jpg",
-    status: "active",
-  },
-  {
-    name: "Almizt",
-    image:
-      "https://storage.googleapis.com/a1aa/image/a4hhBauqNORGAuMSbUsjENaYHm1qssEFeMsE7IRdhrs.jpg",
-    status: "not active",
-  },
-  {
-    name: "Divka",
-    image:
-      "https://storage.googleapis.com/a1aa/image/eDj5x9R8eBEm9gwWwz-YXE6H3Y1kuEjUzTesMy-nz4M.jpg",
-    status: "active",
-  },
-];
 
 export default function PeopleList() {
   const queryClient = useQueryClient();
@@ -103,9 +74,22 @@ export default function PeopleList() {
     }
   }, [isError, error, refetch]); // Pastikan efek hanya berjalan saat isError atau error berubah
 
+  if (people.length === 0 && !isLoading) {
+    return (
+      <>
+        <div className="flex justify-center items-center flex-col flex-1">
+          <p className="text-gray-600 text-center">
+            Tidak ada kelas yang ditemukan. Silakan Buat kelas terlebih dahulu.
+          </p>
+          <AddClass mobile={true} />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <div className="mx-auto p-4 md:p-6 pb-18 md:pb-18 mt-1 min-h-max ">
+      <div className="p-4 md:p-6 pb-18 md:pb-18 mt-2 min-h-max">
         {/* Owner Section */}
         <OwnerList
           owner={owner}
@@ -122,50 +106,8 @@ export default function PeopleList() {
         />
 
         {/* Student Active Section */}
-        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-          <div className="p-4">
-            <div className="flex items-center mb-3">
-              <FaUsers className="text-blue-600 text-2xl md:text-3xl mr-2" />
-              <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                Students
-              </h1>
-            </div>
-            <div>
-              {Students.map((student, index) => (
-                <div key={index}>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <Avatar>
-                        <AvatarImage src={student.image} alt={student.name} />
-                        <AvatarFallback>CN</AvatarFallback>
-                      </Avatar>
-                      {/* Flex container untuk nama dan status dengan flex-wrap */}
-                      <div className="flex flex-wrap items-center ml-4">
-                        <span className="mr-2 mb-1 sm:mb-0">
-                          {student.name}
-                        </span>
-                        {/* Nama */}
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            student.status === "active"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {student.status}
-                        </span>
-                      </div>
-                    </div>
-                    {isCanEdit && (
-                      <DropDownMenuStudent idClass={index} isActive={true} />
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <StudentList isCanEdit={isCanEdit} />
+
         {/* Add student Section */}
         <div className="fixed bottom-4 right-4">
           <AddStudent idClass={3} />
