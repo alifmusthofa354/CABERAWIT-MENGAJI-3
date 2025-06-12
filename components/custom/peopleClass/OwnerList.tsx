@@ -2,6 +2,7 @@ import { FaGraduationCap } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import PeopleSkeleton from "./PeopleSkeleton";
+import { Button } from "@/components/ui/button";
 
 type PeopleType = {
   id: string;
@@ -17,10 +18,31 @@ type PeopleType = {
 export default function OwnerList({
   owner,
   isLoading,
+  isError,
+  refetch,
 }: {
   owner: PeopleType[];
   isLoading: boolean;
+  isError: boolean;
+  refetch: () => void;
 }) {
+  if (isError) {
+    return (
+      <>
+        <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
+          <div className="p-4">
+            <div className="flex flex-1 justify-center items-center flex-col gap-3">
+              <p className="text-gray-600 text-center">
+                Terjadi Error Saat Mengambil Data People, Silakan Coba Kembali!
+              </p>
+              <Button onClick={() => refetch()}>Refresh</Button>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">

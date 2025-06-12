@@ -1,3 +1,8 @@
+import { PatchPeople } from "@/actions/PeopleClassAction";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useStore from "@/stores/useStoreClass";
+import toast from "react-hot-toast";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,22 +17,59 @@ import {
 export default function DeleteDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
+  idPeople,
+  namePeople,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: string;
+  idPeople: string;
+  namePeople: string;
 }) {
+  const { selectedClassName } = useStore();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({
+      idUserClassroom,
+      status,
+      idPeopleUpdate,
+    }: {
+      idUserClassroom: string;
+      status: string;
+      idPeopleUpdate: string;
+    }) => PatchPeople(idUserClassroom, status, idPeopleUpdate),
+    onSuccess: () => {
+      toast.success(`Remove teacher successfully!`);
+      onOpenChange(false);
+      queryClient.invalidateQueries({
+        queryKey: ["people", selectedClassName],
+      });
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error("An unexpected network error occurred.");
+    },
+  });
+
+  const handleRemovePeople = () => {
+    // Panggil mutasi dengan idUserClassroom dan nilai status arsip
+    mutation.mutate({
+      idUserClassroom: selectedClassName as string,
+      status: "REMOVE",
+      idPeopleUpdate: idPeople,
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Remove Teacher {idClass}</DialogTitle>
+          <DialogTitle>Remove Teacher {namePeople}</DialogTitle>
           <DialogDescription>
             Are you sure you want to{" "}
-            <span className="font-bold">Remove This Teacher {idClass}</span>?
-            This action cannot be undone. Removing this teacher will permanently
-            delete their access from this class.
+            <span className="font-bold">Remove {namePeople}</span>? This action
+            cannot be undone. Removing this teacher will permanently delete
+            their access from this class.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="sm:justify-end">
@@ -38,9 +80,11 @@ export default function DeleteDialog({
           </DialogClose>
           <Button
             type="button"
-            variant="destructive" // Warna merah untuk aksi delete
+            variant="destructive" // Tetap menggunakan warna merah karena ini adalah tindakan "penghapusan" (meskipun soft)
+            onClick={handleRemovePeople} // Panggil handler mutasi
+            disabled={mutation.isPending} // Nonaktifkan tombol saat mutasi berjalan
           >
-            Remove
+            {mutation.isPending ? "Removing..." : "Remove Teacher"}
           </Button>
         </DialogFooter>
       </DialogContent>

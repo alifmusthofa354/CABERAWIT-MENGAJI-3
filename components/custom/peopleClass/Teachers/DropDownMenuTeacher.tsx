@@ -16,11 +16,13 @@ import BannedDialog from "./BannedDialog";
 import DeleteDialog from "./DeleteDialog";
 
 export default function DropDownMenuTeacher({
-  idClass,
+  idPeople,
   isActive,
+  namePeople,
 }: {
-  idClass: string;
+  idPeople: string;
   isActive: boolean;
+  namePeople: string;
 }) {
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
@@ -51,19 +53,22 @@ export default function DropDownMenuTeacher({
       <StatusDialog
         open={isStatusDialogOpen}
         onOpenChange={() => setIsStatusDialogOpen(false)}
-        idClass={idClass}
+        idPeople={idPeople}
         isActive={isActive}
+        namePeople={namePeople}
       />
 
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idClass={idClass}
+        idPeople={idPeople}
+        namePeople={namePeople}
       />
       <BannedDialog
         open={isBannedDialogOpen}
         onOpenChange={() => setIsBannedDialogOpen(false)}
-        idClass={idClass}
+        idPeople={idPeople}
+        namePeople={namePeople}
       />
     </>
   );

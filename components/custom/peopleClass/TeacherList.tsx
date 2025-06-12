@@ -19,11 +19,17 @@ export default function TeacherList({
   teacher,
   isCanEdit,
   isLoading,
+  isError,
 }: {
   teacher: PeopleType[];
   isCanEdit: boolean;
   isLoading: boolean;
+  isError: boolean;
 }) {
+  if (isError) {
+    return <></>;
+  }
+
   return (
     <>
       <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
@@ -68,14 +74,15 @@ export default function TeacherList({
                                 : "bg-red-100 text-red-800"
                             }`}
                           >
-                            {person.status === 1 ? "Active" : "Inactive"}
+                            {person.status === 1 ? "Active" : "Not Active"}
                           </span>
                         </div>
                       </div>
                       {isCanEdit && (
                         <DropDownMenuTeacher
-                          idClass={person.id}
+                          idPeople={person.id}
                           isActive={person.status === 1}
+                          namePeople={person.users.name}
                         />
                       )}
                     </div>

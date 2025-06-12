@@ -48,16 +48,21 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!userClassroomData) {
-      // If no record is found, it means the user_classroom ID doesn't exist,
-      // or the authenticated user is not the owner, or the email doesn't match.
-      return NextResponse.json(
-        {
-          message:
-            "User classroom record not found or user not authorized/owner.",
-        },
-        { status: 404 } // Or 403 Forbidden if record exists but user is not owner
-      );
+    if (!userClassroomData || userClassroomData.length === 0) {
+      if (classroomId) {
+        return NextResponse.json(
+          {
+            message:
+              "User classroom record not found or user not authorized/owner.",
+          },
+          { status: 404 } // Or 403 Forbidden if record exists but user is not owner
+        );
+      } else {
+        return NextResponse.json(
+          { people: [] },
+          { status: 200 } // Mengembalikan 200 OK karena permintaan berhasil diproses
+        );
+      }
     }
 
     const IDClass = userClassroomData[0].id_class; // This is the actual class ID in the 'classroom' table
