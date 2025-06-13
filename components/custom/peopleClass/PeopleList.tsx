@@ -1,7 +1,6 @@
 "use client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import useStore from "@/stores/useStoreClass";
-
 import { useEffect } from "react";
 import { fechingPeople } from "@/actions/PeopleClassAction";
 import { useSession } from "next-auth/react";
@@ -41,8 +40,6 @@ export default function PeopleList() {
     queryFn: () => fechingPeople(selectedClassName as string),
     staleTime: Infinity,
   });
-
-  console.log("people : ", people);
 
   const owner: PeopleType[] = people.filter(
     (person) => person.isOwner === true
@@ -110,7 +107,7 @@ export default function PeopleList() {
 
         {/* Add student Section */}
         <div className="fixed bottom-4 right-4">
-          <AddStudent idClass={3} />
+          <AddStudent />
         </div>
       </div>
       <Toaster />

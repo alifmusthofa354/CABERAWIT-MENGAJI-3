@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import AddDialog from "./AddDialog";
 
-export default function AddStudent({ idClass }: { idClass: number }) {
+export default function AddStudent() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
@@ -21,7 +21,6 @@ export default function AddStudent({ idClass }: { idClass: number }) {
       <AddDialog
         open={isAddDialogOpen}
         onOpenChange={() => setIsAddDialogOpen(false)}
-        idClass={idClass}
       />
     </>
   );

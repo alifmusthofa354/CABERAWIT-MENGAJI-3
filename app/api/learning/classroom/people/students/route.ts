@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { auth } from "@/auth";
+import { z } from "zod";
 
 export async function GET(request: NextRequest) {
   let idClassCurrent: string | null = null;
@@ -17,6 +18,14 @@ export async function GET(request: NextRequest) {
     // Ambil ID Kelas dari Path Parameter
 
     const classroomId = request.nextUrl.searchParams.get("id");
+    if (classroomId) {
+      if (!z.string().uuid().safeParse(classroomId).success) {
+        return NextResponse.json(
+          { error: "Invalid ID Classroom" },
+          { status: 400 }
+        );
+      }
+    }
 
     idClassCurrent = classroomId;
     const email = session.user.email;
@@ -59,7 +68,7 @@ export async function GET(request: NextRequest) {
         );
       } else {
         return NextResponse.json(
-          { people: [] },
+          { students: [] },
           { status: 200 } // Mengembalikan 200 OK karena permintaan berhasil diproses
         );
       }
@@ -69,8 +78,8 @@ export async function GET(request: NextRequest) {
 
     // Update the `classroom` table using the obtained `classroomIdToUpdate`
     const { data, error } = await supabase
-      .from("user_classroom")
-      .select("id, isOwner,status,email,users(name, photo)") // Select the id_class column which links to the classroom table
+      .from("students")
+      .select("id, name, photo, status") // Select the id_class column which links to the classroom table
       .eq("id_class", IDClass) // Filter by the user_classroom record ID
       .in("status", [0, 1]) // Filter by status 0 or 1
       .order("created_at", { ascending: true });
@@ -87,17 +96,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (!data || data.length === 0) {
-      // This case might occur if classroomIdToUpdate was valid but the classroom record itself
-      // was deleted between the two queries, or some other issue.
-      return NextResponse.json(
-        { message: "Classroom record or classroom not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ students: [] }, { status: 200 });
     }
 
     // Success Response
 
-    return NextResponse.json({ people: data });
+    return NextResponse.json({ students: data });
   } catch (error) {
     // Penanganan kesalahan jika body bukan JSON yang valid
     if (error instanceof SyntaxError && error.message.includes("JSON")) {

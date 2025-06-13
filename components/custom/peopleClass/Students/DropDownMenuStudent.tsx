@@ -16,11 +16,15 @@ import StatusDialog from "./StatusDialog";
 import DeleteDialog from "./DeleteDialog";
 
 export default function DropDownMenuTeacher({
-  idClass,
+  idStudent,
+  name,
   isActive,
+  photo,
 }: {
-  idClass: number;
+  idStudent: string;
+  name: string;
   isActive: boolean;
+  photo: string;
 }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
@@ -51,19 +55,23 @@ export default function DropDownMenuTeacher({
       <EditDialog
         open={isEditDialogOpen}
         onOpenChange={() => setIsEditDialogOpen(false)}
-        idClass={idClass}
+        idStudent={idStudent}
+        defaultName={name}
+        photo={photo}
       />
       <StatusDialog
         open={isStatusDialogOpen}
         onOpenChange={() => setIsStatusDialogOpen(false)}
-        idClass={idClass}
+        idStudent={idStudent}
         isActive={isActive}
+        name={name}
       />
 
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idClass={idClass}
+        idStudent={idStudent}
+        name={name}
       />
     </>
   );
