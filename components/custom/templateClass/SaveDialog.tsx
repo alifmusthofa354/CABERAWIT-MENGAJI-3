@@ -1,3 +1,8 @@
+import { patchTemplate } from "@/actions/TemplateClassAction";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useStore from "@/stores/useStoreClass";
+import toast from "react-hot-toast";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,17 +17,49 @@ import {
 export default function SaveDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
+  content,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
+  content: string;
 }) {
+  const { selectedClassName } = useStore();
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: ({
+      idUserClassroom,
+      content,
+    }: {
+      idUserClassroom: string;
+      content: string;
+    }) => patchTemplate(idUserClassroom, content),
+    onSuccess: () => {
+      toast.success("Template Update successfully!");
+      onOpenChange(false);
+      queryClient.invalidateQueries({
+        queryKey: ["template", selectedClassName],
+      });
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error("An unexpected network error occurred.");
+    },
+  });
+
+  // Handler untuk tombol "Archive Class"
+  const handleUopdateTemplate = () => {
+    mutation.mutate({
+      idUserClassroom: selectedClassName as string,
+      content: content,
+    });
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Save Template Mesaage OF Class {idClass}</DialogTitle>
+          <DialogTitle>Save Template</DialogTitle>
           <DialogDescription>
             Are you sure you want to Save this Template Mesaage?.
           </DialogDescription>
@@ -36,8 +73,10 @@ export default function SaveDialog({
           <Button
             type="button"
             variant="default" // Warna merah untuk aksi delete
+            onClick={handleUopdateTemplate} // Panggil handler mutasi
+            disabled={mutation.isPending}
           >
-            Save
+            {mutation.isPending ? "Saving..." : "Save Template"}
           </Button>
         </DialogFooter>
       </DialogContent>

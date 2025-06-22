@@ -18,7 +18,7 @@ export async function GET() {
       .from("user_classroom")
       .select(`id, isOwner, classroom( name, description, image_url,status)`)
       .eq("email", email)
-      .gte("status", 0) // Menambahkan kondisi untuk user_classroom.status = 0
+      .in("status", [0, 1])
       .in("classroom.status", [0, 1])
       .not("classroom", "is", null);
 

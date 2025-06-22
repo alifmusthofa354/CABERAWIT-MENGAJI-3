@@ -69,7 +69,7 @@ export default function PeopleList() {
         description: (error as Error).message,
       });
     }
-  }, [isError, error, refetch]); // Pastikan efek hanya berjalan saat isError atau error berubah
+  }, [isError, error, refetch]);
 
   if (people.length === 0 && !isLoading) {
     return (
