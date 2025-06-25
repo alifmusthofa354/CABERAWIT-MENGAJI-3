@@ -49,6 +49,13 @@ export async function PATCH(
       );
     }
 
+    if (!z.string().uuid().safeParse(classroomId).success) {
+      return NextResponse.json(
+        { error: "Invalid ID Classroom" },
+        { status: 400 }
+      );
+    }
+
     idClassCurrent = classroomId;
     const email = session.user.email;
 
