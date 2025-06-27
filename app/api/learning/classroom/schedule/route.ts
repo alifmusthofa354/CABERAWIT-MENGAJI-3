@@ -104,14 +104,14 @@ export async function GET(request: NextRequest) {
 
     if (!data || data.length === 0) {
       return NextResponse.json(
-        { schedule: [], idClassCurrent },
+        { schedules: [], idClassCurrent },
         { status: 200 }
       );
     }
 
     // Success Response
     return NextResponse.json(
-      { schedule: data, idClassCurrent },
+      { schedules: data, idClassCurrent },
       { status: 200 }
     );
   } catch (error) {

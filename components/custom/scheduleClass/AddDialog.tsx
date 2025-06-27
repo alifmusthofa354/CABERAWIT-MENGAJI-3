@@ -1,3 +1,10 @@
+"use client";
+import { addSchedule } from "@/actions/ScheduleClassAction";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { useState } from "react";
+import useStore from "@/stores/useStoreClass";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,52 +21,84 @@ import { Label } from "@/components/ui/label";
 export default function AddDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: number;
 }) {
+  const { selectedClassName } = useStore();
+  const [name, setName] = useState("");
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({
+      idUserClassroom,
+      name,
+    }: {
+      idUserClassroom: string;
+      name: string;
+    }) => addSchedule(idUserClassroom, name),
+    onSuccess: () => {
+      toast.success(`Update schedule successfully!`);
+      onOpenChange(false);
+      queryClient.invalidateQueries({
+        queryKey: ["schedule", selectedClassName],
+      });
+      setName("");
+    },
+    onError: (error: Error) => {
+      console.error(error);
+      toast.error("An unexpected network error occurred.");
+    },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (name) {
+      const idUserClassroom = selectedClassName as string;
+      mutation.mutate({ idUserClassroom, name });
+    } else {
+      toast.error("Tolong isi nama jadwal");
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add Schedule</DialogTitle>
           <DialogDescription>
-            Create Schedule in class {idClass} here. Click save when you are
-            done.
+            Create Schedule here. Click save when you are done.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
+        <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
               Name
             </Label>
             <Input
               id="name"
-              defaultValue="Pedro Duarte"
+              value={name}
+              onChange={(e) => setName(e.target.value)} // Menangani perubahan input
               className="col-span-3"
+              required
             />
           </div>
 
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="Image" className="text-right">
-              Image
-            </Label>
-            <input id="Image" type="file" className="col-span-3" />
-          </div>
-        </div>
-
-        <DialogFooter className="sm:justify-end">
-          <DialogClose asChild>
-            <Button type="button" variant="secondary">
-              Cancel
+          <DialogFooter className="sm:justify-end">
+            <DialogClose asChild>
+              <Button type="button" variant="secondary">
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button
+              type="submit"
+              variant={"default"}
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending ? "Adding..." : "Add Schedule"}
             </Button>
-          </DialogClose>
-          <Button type="button" variant="default">
-            Save
-          </Button>
-        </DialogFooter>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

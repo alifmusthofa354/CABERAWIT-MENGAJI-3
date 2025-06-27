@@ -368,16 +368,16 @@ export async function DELETE(
     idClassCurrent = classroomId;
     const email = session.user.email;
 
-    const { idScheduleUpdate } = await request.json();
+    const { idSchedule } = await request.json();
 
-    if (!z.string().uuid().safeParse(idScheduleUpdate).success) {
+    if (!z.string().uuid().safeParse(idSchedule).success) {
       return NextResponse.json(
         { error: "Invalid ID Classroom" },
         { status: 400 }
       );
     }
 
-    if (!idScheduleUpdate)
+    if (!idSchedule)
       return NextResponse.json(
         {
           error:
@@ -430,7 +430,7 @@ export async function DELETE(
       .from("schedule")
       .update({ status: -2 })
       .eq("id_class", classroomIdToUpdate)
-      .eq("id", idScheduleUpdate)
+      .eq("id", idSchedule)
       .in("status", [1])
       .select();
 

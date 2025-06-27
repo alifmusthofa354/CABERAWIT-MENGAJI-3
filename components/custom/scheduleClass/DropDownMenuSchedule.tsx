@@ -14,7 +14,13 @@ import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 import EditDialog from "./EditDialog";
 import DeleteDialog from "./DeleteDialog";
 
-export default function DropDownMenuSchedule({ idClass }: { idClass: number }) {
+export default function DropDownMenuSchedule({
+  idClass,
+  defaultname,
+}: {
+  idClass: string;
+  defaultname: string;
+}) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
@@ -40,12 +46,14 @@ export default function DropDownMenuSchedule({ idClass }: { idClass: number }) {
         open={isEditDialogOpen}
         onOpenChange={() => setIsEditDialogOpen(false)}
         idClass={idClass}
+        defaultname={defaultname}
       />
 
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
         idClass={idClass}
+        defaultname={defaultname}
       />
     </>
   );
