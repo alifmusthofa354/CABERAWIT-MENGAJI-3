@@ -106,7 +106,7 @@ export default function Page() {
                   <p className="text-base md:text-xl md:font-semibold">
                     Guru:{" "}
                     <span className="font-normal text-purple-800">
-                      {session?.user?.name || "Guru Tamu"}
+                      {session?.user?.name || "Anynomous"}
                     </span>
                   </p>
                 </div>
