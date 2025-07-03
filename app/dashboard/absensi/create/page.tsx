@@ -70,7 +70,7 @@ export default function Page() {
                 onClick={() => router.push("/dashboard/absensi")}
               >
                 <FaChevronLeft className="group-hover:-translate-x-1 transition-transform duration-200" />
-                Kembali ke Daftar Absensi
+                Kembali
               </Button>
             </div>
           </div>
@@ -78,14 +78,14 @@ export default function Page() {
 
         {/* Konten Utama dengan Tata Letak Modern */}
         <main className="p-4 md:p-8 mt-4 flex-1 flex flex-col items-center">
-          <div className="w-full max-w-4xl bg-white rounded-xl shadow-2xl overflow-hidden min-h-max mb-6 transform transition-transform duration-300 hover:scale-[1.005]">
+          <div className="w-full bg-white rounded-xl shadow-2xl overflow-hidden min-h-max mb-6 transform transition-transform duration-300 hover:scale-[1.005]">
             <div className="p-5 md:p-6">
               {/* Bagian Judul yang Menarik */}
               <div className="flex items-center mb-6 border-b pb-4 border-gray-200">
                 <FaUserCheck className="text-blue-700 text-3xl md:text-4xl mr-3 animate-bounce-in" />
                 <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
-                    Rekam Absensi Baru
+                    Buat Absensi
                   </span>
                 </h1>
               </div>
@@ -94,7 +94,7 @@ export default function Page() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-8 text-lg text-gray-700">
                 <div className="flex items-center bg-blue-50 p-3 rounded-lg shadow-sm">
                   <FaChalkboardTeacher className="text-blue-500 text-xl mr-3" />
-                  <p className="font-semibold">
+                  <p className="text-base md:text-xl md:font-semibold">
                     Kelas:{" "}
                     <span className="font-normal text-blue-800">
                       {ClassSelected}
@@ -103,7 +103,7 @@ export default function Page() {
                 </div>
                 <div className="flex items-center bg-purple-50 p-3 rounded-lg shadow-sm">
                   <FaUserCheck className="text-purple-500 text-xl mr-3" />
-                  <p className="font-semibold">
+                  <p className="text-base md:text-xl md:font-semibold">
                     Guru:{" "}
                     <span className="font-normal text-purple-800">
                       {session?.user?.name || "Guru Tamu"}
@@ -126,7 +126,7 @@ export default function Page() {
                   <SelectSchedule />
                 </div>
 
-                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-inner">
+                <div className="bg-white pt-2 border-t border-gray-200">
                   <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
                     Daftar Absensi Siswa:
                   </h3>

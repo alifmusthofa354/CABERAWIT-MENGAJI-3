@@ -16,7 +16,6 @@ export default function ClientDate() {
         day: "numeric", // Must be 'numeric' or '2-digit'
         hour: "2-digit", // Must be 'numeric' or '2-digit'
         minute: "2-digit", // Must be 'numeric' or '2-digit'
-        second: "2-digit", // Must be 'numeric' or '2-digit'
         hour12: false,
         timeZone: "Asia/Jakarta",
       };
@@ -41,7 +40,7 @@ export default function ClientDate() {
 
   return (
     <>
-      <p className="font-semibold">Tanggal Hari Ini: {currentDate}</p>
+      <p className=" text-base md:text-xl">{currentDate}</p>
     </>
   );
 }

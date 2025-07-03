@@ -14,7 +14,6 @@ import {
 } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 
 // --- Definisi Tipe ---
 type ScheduleType = {
@@ -135,12 +134,11 @@ export default function SelectSchedule() {
       <>
         <div className="grid grid-cols-1  gap-4 mb-4">
           <div>
-            <Label htmlFor="namaKegiatan">Nama Kegiatan</Label>
             <Select
               value={selectedScheduleName || ""}
               onValueChange={updateSelectedScheduleName}
             >
-              <SelectTrigger className="min-w-full truncate">
+              <SelectTrigger className="min-w-full truncate min-h-15 text-xl">
                 <SelectValue placeholder="Pilih Kegiatan" />
               </SelectTrigger>
               <SelectContent className="text-truncate">
