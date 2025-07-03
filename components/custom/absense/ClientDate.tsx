@@ -7,7 +7,7 @@ export default function ClientDate() {
   useEffect(() => {
     // Fungsi untuk memformat tanggal
     const formatCurrentDate = () => {
-      const dateObject = new Date();
+      const today = new Date();
 
       const options: Intl.DateTimeFormatOptions = {
         weekday: "long", // Must be 'long', 'short', or 'narrow'
@@ -16,14 +16,15 @@ export default function ClientDate() {
         day: "numeric", // Must be 'numeric' or '2-digit'
         hour: "2-digit", // Must be 'numeric' or '2-digit'
         minute: "2-digit", // Must be 'numeric' or '2-digit'
+        second: "2-digit",
         hour12: false,
         timeZone: "Asia/Jakarta",
       };
 
       const formattedDate = new Intl.DateTimeFormat("id-ID", options).format(
-        dateObject
+        today
       );
-      return `${formattedDate} WIB`;
+      return `${formattedDate}`;
     };
 
     // Set tanggal awal

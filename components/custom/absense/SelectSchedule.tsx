@@ -138,7 +138,7 @@ export default function SelectSchedule() {
               value={selectedScheduleName || ""}
               onValueChange={updateSelectedScheduleName}
             >
-              <SelectTrigger className="min-w-full truncate min-h-15 text-xl">
+              <SelectTrigger className="min-w-full truncate min-h-11 text-lg">
                 <SelectValue placeholder="Pilih Kegiatan" />
               </SelectTrigger>
               <SelectContent className="text-truncate">

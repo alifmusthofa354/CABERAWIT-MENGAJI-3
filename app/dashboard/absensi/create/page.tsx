@@ -95,7 +95,6 @@ export default function Page() {
                 <div className="flex items-center bg-blue-50 p-3 rounded-lg shadow-sm">
                   <FaChalkboardTeacher className="text-blue-500 text-xl mr-3" />
                   <p className="text-base md:text-xl md:font-semibold">
-                    Kelas:{" "}
                     <span className="font-normal text-blue-800">
                       {ClassSelected}
                     </span>
@@ -104,9 +103,8 @@ export default function Page() {
                 <div className="flex items-center bg-purple-50 p-3 rounded-lg shadow-sm">
                   <FaUserCheck className="text-purple-500 text-xl mr-3" />
                   <p className="text-base md:text-xl md:font-semibold">
-                    Guru:{" "}
                     <span className="font-normal text-purple-800">
-                      {session?.user?.name || "Anynomous"}
+                      {session?.user?.name || "Guru Anonymous"}
                     </span>
                   </p>
                 </div>
