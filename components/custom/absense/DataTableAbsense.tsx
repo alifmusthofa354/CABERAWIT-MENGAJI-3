@@ -81,7 +81,7 @@ function processAttendanceData(
   return finalChartData;
 }
 
-export default function DataTableAbsense() {
+export default function DataTableAbsense({ ishidden = false }) {
   const [data, setData] = useState<Attendance[]>([]);
   const [rowSelection, setRowSelection] = useState({});
   // Menggunakan useEffect untuk memanggil getData saat komponen dimuat
@@ -210,128 +210,142 @@ export default function DataTableAbsense() {
     processedData.find((item) => item.name === name)?.value || 0;
   return (
     <>
-      <div className="flex gap-2 my-2">
-        <Select
-          value={""}
-          onValueChange={(value: Attendance["status"]) => {
-            handleChangeSelected(value);
-          }}
-        >
-          <SelectTrigger
-            className="w-[180px]"
-            disabled={!isAnyRowSelected}
-            isArrow={isAnyRowSelected}
-          >
-            <SelectValue placeholder="Choose a status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="Hadir">
-              <FaCheckCircle color="green" />
-              Hadir
-            </SelectItem>
-            <SelectItem value="Ijin">
-              <MdInfo color="gray" />
-              Ijin
-            </SelectItem>
-            <SelectItem value="Alfa">
-              <FaBan color="red" />
-              Alfa
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {!ishidden && (
+        <>
+          <div className="flex gap-2 my-2">
+            <Select
+              value={""}
+              onValueChange={(value: Attendance["status"]) => {
+                handleChangeSelected(value);
+              }}
+            >
+              <SelectTrigger
+                className="w-[180px]"
+                disabled={!isAnyRowSelected}
+                isArrow={isAnyRowSelected}
+              >
+                <SelectValue placeholder="Choose a status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Hadir">
+                  <FaCheckCircle color="green" />
+                  Hadir
+                </SelectItem>
+                <SelectItem value="Ijin">
+                  <MdInfo color="gray" />
+                  Ijin
+                </SelectItem>
+                <SelectItem value="Alfa">
+                  <FaBan color="red" />
+                  Alfa
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                        <TableHead key={header.id}>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody>
+                {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      data-state={row.getIsSelected() && "selected"}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
                           )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell
+                      colSpan={columns.length}
+                      className="h-24 text-center"
+                    >
+                      No results.
                     </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-      <div className="text-sm text-muted-foreground">
-        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
-      {/* Kontainer baru untuk legend dan total */}
-      <div className="flex flex-col items-center justify-center mt-2">
-        {" "}
-        {/* Tambahkan flex-col, items-center, justify-center */}
-        {/* Kontainer untuk Hadir, Ijin, Alfa agar bisa di tengah */}
-        <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-          {" "}
-          {/* Menggunakan flex-wrap untuk responsivitas */}
-          <p className="flex items-center text-sm" style={{ color: COLORS[0] }}>
-            <span
-              className={`w-3 h-3 rounded-full mr-2`}
-              style={{ backgroundColor: COLORS[0] }}
-            ></span>
-            Hadir: {getValue("Hadir")}
-          </p>
-          <p className="flex items-center text-sm" style={{ color: COLORS[1] }}>
-            <span
-              className={`w-3 h-3 rounded-full mr-2`}
-              style={{ backgroundColor: COLORS[1] }}
-            ></span>
-            Ijin: {getValue("Ijin")}
-          </p>
-          <p className="flex items-center text-sm" style={{ color: COLORS[2] }}>
-            <span
-              className={`w-3 h-3 rounded-full mr-2`}
-              style={{ backgroundColor: COLORS[2] }}
-            ></span>
-            Alfa: {getValue("Alfa")}
-          </p>
-        </div>
-        {/* Total Jumlah */}
-        <p className="text-center font-bold text-lg text-[#5e42ff]">
-          Jumlah: {processedData.reduce((total, item) => total + item.value, 0)}
-        </p>
-      </div>
-      <p className="text-sm">{JSON.stringify(data)}</p>
+          <div className="text-sm text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length} dari{" "}
+            {table.getFilteredRowModel().rows.length} baris telah dipilih.
+          </div>
+          {/* Kontainer baru untuk legend dan total */}
+          <div className="flex flex-col items-center justify-center mt-2">
+            {" "}
+            {/* Tambahkan flex-col, items-center, justify-center */}
+            {/* Kontainer untuk Hadir, Ijin, Alfa agar bisa di tengah */}
+            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+              {" "}
+              {/* Menggunakan flex-wrap untuk responsivitas */}
+              <p
+                className="flex items-center text-sm"
+                style={{ color: COLORS[0] }}
+              >
+                <span
+                  className={`w-3 h-3 rounded-full mr-2`}
+                  style={{ backgroundColor: COLORS[0] }}
+                ></span>
+                Hadir: {getValue("Hadir")}
+              </p>
+              <p
+                className="flex items-center text-sm"
+                style={{ color: COLORS[1] }}
+              >
+                <span
+                  className={`w-3 h-3 rounded-full mr-2`}
+                  style={{ backgroundColor: COLORS[1] }}
+                ></span>
+                Ijin: {getValue("Ijin")}
+              </p>
+              <p
+                className="flex items-center text-sm"
+                style={{ color: COLORS[2] }}
+              >
+                <span
+                  className={`w-3 h-3 rounded-full mr-2`}
+                  style={{ backgroundColor: COLORS[2] }}
+                ></span>
+                Alfa: {getValue("Alfa")}
+              </p>
+            </div>
+            {/* Total Jumlah */}
+            <p className="text-center font-bold text-lg text-[#5e42ff]">
+              Jumlah:{" "}
+              {processedData.reduce((total, item) => total + item.value, 0)}
+            </p>
+          </div>
+          {/* <p className="text-sm">{JSON.stringify(data)}</p> */}
+        </>
+      )}
     </>
   );
 }

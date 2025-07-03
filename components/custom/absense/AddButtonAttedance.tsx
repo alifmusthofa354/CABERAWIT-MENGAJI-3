@@ -8,11 +8,7 @@ export default function AddButtonAttedance() {
   const router = useRouter(); // Inisialisasi hook useRouter
 
   const handleButtonClick = () => {
-    // Anda bisa melakukan logika lain di sini sebelum navigasi
-    console.log("Tombol tambah absensi diklik!");
-
-    // Navigasi ke halaman /absensi/create
-    router.push("/dashboard/histori");
+    router.push("/dashboard/absensi/create");
   };
   return (
     <>
