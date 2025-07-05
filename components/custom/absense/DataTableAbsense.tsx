@@ -17,6 +17,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useEffect, useState, useMemo, useCallback } from "react";
+import { useQuery } from "@tanstack/react-query";
+import useStore from "@/stores/useStoreClass";
+import useScheduleStore from "@/stores/useStoreSchedule";
+import { fechingStudents } from "@/actions/PeopleClassAction";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -26,41 +32,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import SubmitAttedance from "./SubmitAttedance";
 
 const COLORS = ["#00C49F", "#958888", "#ff4242"];
 
-async function getData(): Promise<Attendance[]> {
-  // Simulate fetching data from your API here.
-  // In a real application, you'd replace this with an actual API call (e.g., fetch('/api/attendance')).
-  return [
-    { id: "728ed52f", status: "Hadir", id_sudent: "1", name: "alif musthofa" },
-    { id: "828ed52f", status: "Ijin", id_sudent: "2", name: "fauzan minmah" },
-    { id: "828ed52a", status: "Ijin", id_sudent: "0", name: "Uzumaki Naruto" },
-    { id: "a28ed52f", status: "Alfa", id_sudent: "4", name: "budi budarsono" },
-    { id: "a28ed529", status: "Alfa", id_sudent: "5", name: "dewansyah" },
-    { id: "a28ed528", status: "Alfa", id_sudent: "6", name: "danang" },
-    { id: "a28ed521", status: "Alfa", id_sudent: "12", name: "schrono" },
-    { id: "a28ed522", status: "Alfa", id_sudent: "3", name: "wahyu" },
-    { id: "a28ed523", status: "Alfa", id_sudent: "11", name: "taha" },
-    { id: "a28ed524", status: "Alfa", id_sudent: "12", name: "zalfa" },
-    { id: "b1c2d3e4", status: "Hadir", id_sudent: "7", name: "siti hartinah" },
-    { id: "f5g6h7i8", status: "Ijin", id_sudent: "8", name: "agus kurniawan" },
-    { id: "j9k0l1m2", status: "Hadir", id_sudent: "9", name: "bunga lestari" },
-    { id: "n3o4p5q6", status: "Hadir", id_sudent: "10", name: "candra dewi" },
-  ];
-}
-
 export type Attendance = {
   id: string;
-  status: "Hadir" | "Ijin" | "Alfa";
-  id_sudent: string;
   name: string;
+  status: "Hadir" | "Ijin" | "Alfa";
 };
 
 interface ChartDataEntry {
   name: string;
   value: number;
 }
+
+type StudentsType = {
+  id: string;
+  name: string;
+  status: number;
+};
 
 // Function to process raw attendance data into chart-friendly format
 function processAttendanceData(
@@ -82,21 +74,43 @@ function processAttendanceData(
 }
 
 export default function DataTableAbsense({ ishidden = false }) {
-  const [data, setData] = useState<Attendance[]>([]);
+  const { selectedClassName } = useStore();
+  const { selectedScheduleName } = useScheduleStore();
+  const router = useRouter();
+  const {
+    data: StudentsData = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery<StudentsType[], Error>({
+    queryKey: ["students", selectedClassName],
+    queryFn: () => fechingStudents(selectedClassName as string),
+    staleTime: Infinity,
+  });
+
+  const [recordData, setRecordData] = useState<Attendance[]>([]);
   const [rowSelection, setRowSelection] = useState({});
-  // Menggunakan useEffect untuk memanggil getData saat komponen dimuat
+  // Efek samping untuk memproses data students saat studentsData berubah
   useEffect(() => {
-    async function fetchData() {
-      const fetchedData = await getData();
-      setData(fetchedData);
+    if (StudentsData.length > 0) {
+      // Filter students yang memiliki status 1
+      const activeStudents = StudentsData.filter(
+        (student) => student.status === 1
+      );
+      // Peta (map) data students menjadi format Attendance
+      const initialAttendance: Attendance[] = activeStudents.map((student) => ({
+        id: student.id,
+        name: student.name,
+        status: "Hadir", // Set status default menjadi 'Hadir' untuk setiap siswa
+      }));
+      setRecordData(initialAttendance);
     }
-    fetchData();
-  }, []);
+  }, [StudentsData]);
 
   // Fungsi untuk menangani perubahan status
   const handleStatusChange = useCallback(
     (id: string, newStatus: Attendance["status"]) => {
-      setData((prevData) =>
+      setRecordData((prevData) =>
         prevData.map((row) =>
           row.id === id ? { ...row, status: newStatus } : row
         )
@@ -173,7 +187,7 @@ export default function DataTableAbsense({ ishidden = false }) {
   );
 
   const table = useReactTable({
-    data,
+    data: recordData,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
@@ -189,7 +203,7 @@ export default function DataTableAbsense({ ishidden = false }) {
       const selectedIds = new Set(selectedRows.map((row) => row.original.id)); // Gunakan Set untuk pencarian ID yang lebih efisien
 
       // Memperbarui state `data`
-      setData((prevData) =>
+      setRecordData((prevData) =>
         prevData.map((row) =>
           selectedIds.has(row.id) ? { ...row, status: value } : row
         )
@@ -204,10 +218,53 @@ export default function DataTableAbsense({ ishidden = false }) {
   const isAnyRowSelected =
     table.getSelectedRowModel().rows.length > 0 ? true : false;
 
-  const processedData = processAttendanceData(data);
+  const processedData = processAttendanceData(recordData);
 
   const getValue = (name: string) =>
     processedData.find((item) => item.name === name)?.value || 0;
+
+  if (isLoading && selectedScheduleName) {
+    return (
+      <span className="text-center text-white mt-4 p-4 bg-gray-400 rounded-md border border-gray-500 flex items-center justify-center gap-2 ">
+        <Loader2 className="animate-spin" />
+        Sedang memuat data siswa
+      </span>
+    );
+  }
+
+  if (isError && selectedScheduleName) {
+    return (
+      <div className="text-center text-gray-600 mt-4 p-4 bg-red-100 rounded-md border border-red-200 min-w-full gap-3">
+        <p>Maaf, terjadi kesalahan saat memuat data siswa</p>
+        <Button variant="destructive" onClick={() => refetch()}>
+          Refresh
+        </Button>
+      </div>
+    );
+  }
+
+  if (
+    !isLoading &&
+    selectedScheduleName &&
+    StudentsData &&
+    StudentsData.length === 0
+  ) {
+    return (
+      <div className="text-center text-blue-700 mt-4 p-4 bg-blue-50 rounded-md border border-blue-200 min-w-full gap-3">
+        <p className="mb-3">
+          Data siswa belum tersedia. Silakan tambahkan data siswa untuk
+          melanjutkan.
+        </p>
+        <Button
+          variant="default"
+          onClick={() => router.push("/dashboard/kelas/people")}
+        >
+          Tambah Siswa Baru
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <>
       {!ishidden && (
@@ -343,7 +400,8 @@ export default function DataTableAbsense({ ishidden = false }) {
               {processedData.reduce((total, item) => total + item.value, 0)}
             </p>
           </div>
-          {/* <p className="text-sm">{JSON.stringify(data)}</p> */}
+
+          <SubmitAttedance recordData={recordData} />
         </>
       )}
     </>

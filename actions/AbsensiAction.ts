@@ -1,4 +1,9 @@
 import axios from "axios";
+export type Attendance = {
+  id: string;
+  name: string;
+  status: "Hadir" | "Ijin" | "Alfa";
+};
 
 const API_URL = "/api/learning/attedance";
 
@@ -20,6 +25,35 @@ export const fechingAttedance = async (userID: string) => {
       throw new Error(
         "Unpected error, Failed to fething attedance. Please try again."
       );
+    }
+  }
+};
+
+export const addAttedance = async (
+  userID: string,
+  schedule: string,
+  attedance: Attendance[]
+) => {
+  try {
+    const URL = `${API_URL}/${userID}`;
+    const response = await axios.post(URL, {
+      schedule: schedule,
+      attedance: attedance,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log("custom error axios : ", error);
+      const message =
+        error.response?.data?.details?.[0]?.message ||
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed schdeule. Please try again.";
+      throw new Error(message);
+    } else {
+      throw new Error("Unpected error, Add schdeule. Please try again.");
     }
   }
 };

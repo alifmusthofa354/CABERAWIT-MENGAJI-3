@@ -26,12 +26,17 @@ type kelastype = {
 };
 
 export default function Page() {
-  const { selectedScheduleName } = useScheduleStore();
+  const { selectedScheduleName, updateSelectedScheduleName } =
+    useScheduleStore();
   const queryClient = useQueryClient();
   const { selectedClassName } = useStore();
-  const [ClassSelected, setClassSelected] = useState("");
+  const [ClassSelected, setClassSelected] = useState("belum ada kelas");
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    updateSelectedScheduleName(null);
+  }, [updateSelectedScheduleName]);
 
   useEffect(() => {
     if (selectedClassName) {
@@ -55,6 +60,12 @@ export default function Page() {
       setClassSelected("belum ada kelas");
     }
   }, [selectedClassName, queryClient]);
+
+  const shouldShowTable =
+    ClassSelected !== "belum ada kelas" &&
+    ClassSelected !== null &&
+    ClassSelected !== "" &&
+    session?.user?.name !== null;
 
   return (
     <>
@@ -117,19 +128,34 @@ export default function Page() {
 
               {/* Bagian Pilih Jadwal dan Tabel Absensi */}
               <div className="space-y-6">
-                <div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-                    Pilih Jadwal Mengajar Anda:
-                  </h3>
-                  <SelectSchedule />
-                </div>
+                {!shouldShowTable && (
+                  <div>
+                    <p className="text-center text-gray-500 mt-4 p-4 bg-yellow-50 rounded-md border border-yellow-200">
+                      Kelas atau nama pengguna belum teridentifikasi. Mohon
+                      kembali untuk memilih kelas.
+                    </p>
+                  </div>
+                )}
+                {shouldShowTable && (
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                      Pilih Jadwal Mengajar Anda:
+                    </h3>
+                    <SelectSchedule />
+                  </div>
+                )}
 
                 <div className="bg-white pt-2 border-t border-gray-200">
-                  <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
-                    Daftar Absensi Siswa:
-                  </h3>
-                  <DataTableAbsense ishidden={selectedScheduleName === null} />
-                  {selectedScheduleName === null && (
+                  {shouldShowTable && (
+                    <h3 className="text-xl font-bold text-gray-800 mb-3 flex items-center">
+                      Daftar Absensi Siswa:
+                    </h3>
+                  )}
+
+                  <DataTableAbsense
+                    ishidden={selectedScheduleName === null || !shouldShowTable}
+                  />
+                  {selectedScheduleName === null && shouldShowTable && (
                     <p className="text-center text-gray-500 mt-4 p-4 bg-yellow-50 rounded-md border border-yellow-200">
                       Silakan pilih jadwal terlebih dahulu untuk menampilkan
                       daftar absensi.

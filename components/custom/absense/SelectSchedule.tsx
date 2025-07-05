@@ -69,7 +69,7 @@ export default function SelectSchedule() {
       <>
         <Button disabled className="min-w-full">
           <Loader2 className="animate-spin" />
-          Please wait
+          Sedang memuat jadwal
         </Button>
       </>
     );

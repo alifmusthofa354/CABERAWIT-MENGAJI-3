@@ -4,7 +4,7 @@ import useStore from "@/stores/useStoreClass";
 import { useEffect } from "react";
 import { fechingAttedance } from "@/actions/AbsensiAction";
 
-import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
+//import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 import { FaUserCheck } from "react-icons/fa";
@@ -183,7 +183,7 @@ export default function Page() {
                     </p>
                   </div>
                 </div>
-                <DataTableAbsense />
+                {/* <DataTableAbsense /> */}
               </div>
             </div>
           </div>
