@@ -34,7 +34,7 @@ const attendanceItemSchema = z.object({
 });
 
 // Schema utama untuk seluruh payload data
-export const PostAttedanceValidationSchema = z.object({
+const PostAttedanceValidationSchema = z.object({
   schedule: z.string().uuid("Schedule ID harus berupa UUID yang valid."), // Memastikan schedule ID adalah UUID
   attedance: z
     .array(attendanceItemSchema)
