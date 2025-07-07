@@ -13,6 +13,7 @@ import AddButtonAttedance from "@/components/custom/absense/AddButtonAttedance";
 import NoClass from "@/components/custom/NoClass";
 import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
+import EmptyAttedance from "@/components/custom/absense/EmptyAttedance";
 
 // --- Definisi Tipe ---
 
@@ -95,26 +96,7 @@ export default function Page() {
   if (apiResponse && apiResponse.attedance === null) {
     return (
       <>
-        <div className="min-h-svh bg-gray-50 @container flex flex-col">
-          <div className="bg-white shadow-md p-3 sticky top-0 z-50">
-            <div className="container mx-auto flex items-center justify-between">
-              <HeaderDashboard />
-              <div className="pr-3">
-                <SelectClass />
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-1 justify-center items-center">
-            <div className="flex flex-col text-center justify-center items-center">
-              <p className="text-gray-600 text-center text-2xl">
-                Hari ini belum ada absensi
-              </p>
-              <div className="fixed bottom-4 right-4">
-                <AddButtonAttedance />
-              </div>
-            </div>
-          </div>
-        </div>
+        <EmptyAttedance />
       </>
     );
   }
