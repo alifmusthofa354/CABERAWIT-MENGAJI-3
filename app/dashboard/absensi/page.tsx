@@ -4,10 +4,8 @@ import useStore from "@/stores/useStoreClass";
 import { useEffect } from "react";
 import { fechingAttedance } from "@/actions/AbsensiAction";
 
-//import DataTableAbsense from "@/components/custom/absense/DataTableAbsense";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
-import { FaUserCheck } from "react-icons/fa";
 
 import AddButtonAttedance from "@/components/custom/absense/AddButtonAttedance";
 import NoClass from "@/components/custom/NoClass";
@@ -15,12 +13,15 @@ import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
 import EmptyAttedance from "@/components/custom/absense/EmptyAttedance";
 
+import AttedanceDetail from "@/components/custom/absense/AttedanceDetail";
+import AbsensiDetails from "@/components/custom/absense/AbsensiDetails";
+
 // --- Definisi Tipe ---
 
 type AbsensiDetails = {
   id: string;
   name: string;
-  status: number;
+  status: 0 | 1 | 2;
   id_student: string;
 };
 
@@ -109,27 +110,7 @@ export default function Page() {
     apiResponse.attedance.AttendanceDetails &&
     apiResponse.attedance.AbsensiDetails.length > 0
   ) {
-    const formatFriendlyDate = (dateString: string | null) => {
-      if (!dateString) return "Tanggal tidak tersedia"; // Handle kasus jika data belum ada
-
-      const dateObject = new Date(dateString);
-
-      const options: Intl.DateTimeFormatOptions = {
-        weekday: "long", // Must be 'long', 'short', or 'narrow'
-        year: "numeric", // Must be 'numeric' or '2-digit'
-        month: "long", // Must be 'numeric', '2-digit', 'long', 'short', or 'narrow'
-        day: "numeric", // Must be 'numeric' or '2-digit'
-        hour: "2-digit", // Must be 'numeric' or '2-digit'
-        minute: "2-digit", // Must be 'numeric' or '2-digit'
-        hour12: false,
-        timeZone: "Asia/Jakarta",
-      };
-
-      const formattedDate = new Intl.DateTimeFormat("id-ID", options).format(
-        dateObject
-      );
-      return `${formattedDate} WIB`;
-    };
+    const AttendanceDetails = apiResponse.attedance.AttendanceDetails;
 
     return (
       <>
@@ -142,32 +123,13 @@ export default function Page() {
               </div>
             </div>
           </div>
-          <div className="p-4 md:p-6 mt-1 flex-1 flex flex-col">
-            {/* Owner Section */}
-            <div className="bg-white rounded-md shadow-lg overflow-hidden min-h-max mb-3">
-              <div className="p-4">
-                <div className="flex items-center mb-3">
-                  <FaUserCheck className="text-blue-600 text-2xl md:text-3xl mr-2" />
-                  <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-tight">
-                    Absensi
-                  </h1>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <div>
-                    <p>Kelas: {apiResponse.attedance.AttendanceDetails.name}</p>
-                    <p>
-                      Absenser: {apiResponse.attedance.AttendanceDetails.email}
-                    </p>
-                    <p>
-                      {formatFriendlyDate(
-                        apiResponse.attedance.AttendanceDetails.created_at
-                      )}
-                    </p>
-                  </div>
-                </div>
-                {/* <DataTableAbsense /> */}
-              </div>
-            </div>
+          {/* Konten Utama */}
+          <div className="p-4 md:p-6 mt-1 flex-1 flex flex-col gap-4">
+            <AttedanceDetail AttendanceDetails={AttendanceDetails} />
+            {/* Daftar Absensi Siswa - Card per siswa */}
+            <AbsensiDetails
+              AbsensiDetails={apiResponse.attedance.AbsensiDetails}
+            />
           </div>
           <div className="fixed bottom-4 right-4">
             <AddButtonAttedance />
