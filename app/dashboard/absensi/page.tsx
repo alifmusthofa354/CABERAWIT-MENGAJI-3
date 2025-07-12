@@ -7,7 +7,7 @@ import { fechingAttedance } from "@/actions/AbsensiAction";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 
-import AddButtonAttedance from "@/components/custom/absense/AddButtonAttedance";
+// import AddButtonAttedance from "@/components/custom/absense/AddButtonAttedance";
 import NoClass from "@/components/custom/NoClass";
 import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
@@ -15,6 +15,7 @@ import EmptyAttedance from "@/components/custom/absense/EmptyAttedance";
 
 import AttedanceDetail from "@/components/custom/absense/AttedanceDetail";
 import AbsensiDetails from "@/components/custom/absense/AbsensiDetails";
+import AbsensiTable from "@/components/custom/absense/AbsensiTable";
 
 // --- Definisi Tipe ---
 
@@ -126,14 +127,13 @@ export default function Page() {
           {/* Konten Utama */}
           <div className="p-4 md:p-6 mt-1 flex-1 flex flex-col gap-4">
             <AttedanceDetail AttendanceDetails={AttendanceDetails} />
-            {/* Daftar Absensi Siswa - Card per siswa */}
-            <AbsensiDetails
+            <AbsensiTable
               AbsensiDetails={apiResponse.attedance.AbsensiDetails}
             />
           </div>
-          <div className="fixed bottom-4 right-4">
+          {/* <div className="fixed bottom-4 right-4">
             <AddButtonAttedance />
-          </div>
+          </div> */}
         </div>
       </>
     );
