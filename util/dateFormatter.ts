@@ -23,6 +23,32 @@ export const formatFriendlyDate = (dateString: string | null): string => {
   }
 };
 
+export const formatNumberDate = (dateString: string | null): string => {
+  if (!dateString) return "Tanggal tidak tersedia";
+
+  try {
+    const dateObject = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Asia/Jakarta",
+    };
+    // Menggunakan 'en-GB' untuk mendapatkan format DD/MM/YYYY secara default, lalu memodifikasi jam
+    const formattedDate = new Intl.DateTimeFormat("en-GB", options).format(
+      dateObject
+    );
+    // Mengganti koma dengan spasi jika ada, dan menambahkan spasi sebelum waktu
+    return formattedDate.replace(",", "");
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return "Format tanggal salah";
+  }
+};
+
 export const formatCurrentDate = () => {
   const today = new Date();
 
