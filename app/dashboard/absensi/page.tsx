@@ -7,7 +7,6 @@ import { fechingAttedance } from "@/actions/AbsensiAction";
 import SelectClass from "@/components/custom/SelectClass";
 import HeaderDashboard from "@/components/ui/HeaderDashboard";
 
-// import AddButtonAttedance from "@/components/custom/absense/AddButtonAttedance";
 import NoClass from "@/components/custom/NoClass";
 import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
@@ -131,9 +130,6 @@ export default function Page() {
               AbsensiDetails={apiResponse.attedance.AbsensiDetails}
             />
           </div>
-          {/* <div className="fixed bottom-4 right-4">
-            <AddButtonAttedance />
-          </div> */}
         </div>
       </>
     );
