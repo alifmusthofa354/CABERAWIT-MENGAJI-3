@@ -6,9 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import DropDownMenuSchedule from "@/components/custom/scheduleClass/DropDownMenuSchedule";
 import { FaCheckCircle, FaBan } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
+
+import DropdownMenuAbsensiDetail from "@/components/custom/absense/DropdownMenuAbsensiDetail";
+import DisplayLegend from "@/components/custom/absense/DisplayLegend";
 
 type AbsensiDetails = {
   id: string;
@@ -90,9 +92,10 @@ export default function AbsensiTable({
                     </span>
                   </TableCell>
                   <TableCell className="text-right whitespace-nowrap w-1  py-4">
-                    <DropDownMenuSchedule
-                      idClass={attedance.id}
+                    <DropdownMenuAbsensiDetail
+                      idAbsensi={attedance.id}
                       defaultname={attedance.name}
+                      Status={attedance.status}
                     />
                   </TableCell>
                 </TableRow>
@@ -101,6 +104,7 @@ export default function AbsensiTable({
           </TableBody>
         </Table>
       </div>
+      <DisplayLegend AbsensiDetails={AbsensiDetails} />
     </div>
   );
 }

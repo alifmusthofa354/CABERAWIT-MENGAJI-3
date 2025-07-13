@@ -34,8 +34,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import SubmitAttedance from "./SubmitAttedance";
-
-const COLORS = ["#00C49F", "#958888", "#ff4242"];
+import LegendAbsensi from "./LegendAbsensi";
 
 export type Attendance = {
   id: string;
@@ -43,35 +42,11 @@ export type Attendance = {
   status: "Hadir" | "Ijin" | "Alfa";
 };
 
-interface ChartDataEntry {
-  name: string;
-  value: number;
-}
-
 type StudentsType = {
   id: string;
   name: string;
   status: number;
 };
-
-// Function to process raw attendance data into chart-friendly format
-function processAttendanceData(
-  attendanceRecords: Attendance[]
-): ChartDataEntry[] {
-  const statusCounts: { [key: string]: number } = {};
-
-  attendanceRecords.forEach((record) => {
-    statusCounts[record.status] = (statusCounts[record.status] || 0) + 1;
-  });
-
-  const orderedStatuses = ["Hadir", "Ijin", "Alfa"]; // Define preferred order
-  const finalChartData: ChartDataEntry[] = orderedStatuses.map((status) => ({
-    name: status,
-    value: statusCounts[status] || 0, // Use 0 if status is not present
-  }));
-
-  return finalChartData;
-}
 
 export default function DataTableAbsense({ ishidden = false }) {
   const { selectedClassName } = useStore();
@@ -218,11 +193,6 @@ export default function DataTableAbsense({ ishidden = false }) {
   const isAnyRowSelected =
     table.getSelectedRowModel().rows.length > 0 ? true : false;
 
-  const processedData = processAttendanceData(recordData);
-
-  const getValue = (name: string) =>
-    processedData.find((item) => item.name === name)?.value || 0;
-
   if (isLoading && selectedScheduleName) {
     return (
       <span className="text-center text-white mt-4 p-4 bg-gray-400 rounded-md border border-gray-500 flex items-center justify-center gap-2 ">
@@ -355,51 +325,8 @@ export default function DataTableAbsense({ ishidden = false }) {
             {table.getFilteredSelectedRowModel().rows.length} dari{" "}
             {table.getFilteredRowModel().rows.length} baris telah dipilih.
           </div>
-          {/* Kontainer baru untuk legend dan total */}
-          <div className="flex flex-col items-center justify-center mt-2">
-            {" "}
-            {/* Tambahkan flex-col, items-center, justify-center */}
-            {/* Kontainer untuk Hadir, Ijin, Alfa agar bisa di tengah */}
-            <div className="flex flex-wrap justify-center gap-x-4 gap-y-2">
-              {" "}
-              {/* Menggunakan flex-wrap untuk responsivitas */}
-              <p
-                className="flex items-center text-sm"
-                style={{ color: COLORS[0] }}
-              >
-                <span
-                  className={`w-3 h-3 rounded-full mr-2`}
-                  style={{ backgroundColor: COLORS[0] }}
-                ></span>
-                Hadir: {getValue("Hadir")}
-              </p>
-              <p
-                className="flex items-center text-sm"
-                style={{ color: COLORS[1] }}
-              >
-                <span
-                  className={`w-3 h-3 rounded-full mr-2`}
-                  style={{ backgroundColor: COLORS[1] }}
-                ></span>
-                Ijin: {getValue("Ijin")}
-              </p>
-              <p
-                className="flex items-center text-sm"
-                style={{ color: COLORS[2] }}
-              >
-                <span
-                  className={`w-3 h-3 rounded-full mr-2`}
-                  style={{ backgroundColor: COLORS[2] }}
-                ></span>
-                Alfa: {getValue("Alfa")}
-              </p>
-            </div>
-            {/* Total Jumlah */}
-            <p className="text-center font-bold text-lg text-[#5e42ff]">
-              Jumlah:{" "}
-              {processedData.reduce((total, item) => total + item.value, 0)}
-            </p>
-          </div>
+
+          <LegendAbsensi record={recordData} />
 
           <SubmitAttedance recordData={recordData} />
         </>
