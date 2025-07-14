@@ -85,3 +85,32 @@ export const deleteAttedance = async (
     }
   }
 };
+
+
+export const updateAbsensi = async (
+  userID: string,
+  idAbsensi: string,
+  Status:number,
+) => {
+  try {
+    const URL = `${API_URL}/${userID}/Absensi/${idAbsensi}`;
+    const response = await axios.patch(URL, {
+      Status: Status,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log("custom error axios : ", error);
+      const message =
+        error.response?.data?.details?.[0]?.message ||
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed schdeule. Please try again.";
+      throw new Error(message);
+    } else {
+      throw new Error("Unpected error, Add schdeule. Please try again.");
+    }
+  }
+};
