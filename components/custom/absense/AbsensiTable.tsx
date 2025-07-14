@@ -1,3 +1,5 @@
+import { useSession } from "next-auth/react";
+
 import {
   Table,
   TableBody,
@@ -51,9 +53,13 @@ const getStatusDisplay = (statusCode: number) => {
 
 export default function AbsensiTable({
   AbsensiDetails,
+  emailAbsenser,
 }: {
   AbsensiDetails: AbsensiDetails[];
+  emailAbsenser: string;
 }) {
+  const { data: session } = useSession();
+  const email = session?.user?.email;
   return (
     <div className="w-full p-6 md:p-8 bg-white rounded-lg shadow-xl border border-gray-100">
       <h3 className="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 flex items-center gap-3">
@@ -91,12 +97,15 @@ export default function AbsensiTable({
                       <span>{statusDisplay.text}</span>
                     </span>
                   </TableCell>
+
                   <TableCell className="text-right whitespace-nowrap w-1  py-4">
-                    <DropdownMenuAbsensiDetail
-                      idAbsensi={attedance.id}
-                      defaultname={attedance.name}
-                      Status={attedance.status}
-                    />
+                    {email === emailAbsenser && (
+                      <DropdownMenuAbsensiDetail
+                        idAbsensi={attedance.id}
+                        defaultname={attedance.name}
+                        Status={attedance.status}
+                      />
+                    )}
                   </TableCell>
                 </TableRow>
               );

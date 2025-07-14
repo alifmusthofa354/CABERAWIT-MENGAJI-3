@@ -128,6 +128,7 @@ export default function Page() {
             <AttedanceDetail AttendanceDetails={AttendanceDetails} />
             <AbsensiTable
               AbsensiDetails={apiResponse.attedance.AbsensiDetails}
+              emailAbsenser={AttendanceDetails.email}
             />
           </div>
         </div>
