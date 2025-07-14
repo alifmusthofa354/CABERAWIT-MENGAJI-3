@@ -77,7 +77,7 @@ export default function ButtonSendWa({ handleCopy }: ButtonSendWaProps) {
           </Button>
         </a>
       ) : (
-        <Button variant={"destructive"} disabled className="w-full">
+        <Button variant={"destructive"} disabled className="w-full md:flex-1">
           <FaWhatsapp />
           <span>Link Invalid</span>
         </Button>

@@ -4,6 +4,7 @@ import useStore from "@/stores/useStoreClass";
 import { useEffect } from "react";
 import { fechingStudents } from "@/actions/PeopleClassAction";
 import { fechingPeople } from "@/actions/PeopleClassAction";
+import { fechingAttedance } from "@/actions/AbsensiAction";
 
 import { FaCopy } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,24 @@ type PeopleType = {
   };
 };
 
+type AbsensiDetails = {
+  id: string;
+  name: string;
+  status: 0 | 1 | 2;
+  id_student: string;
+};
+type AttedanceType = {
+  attedance: {
+    AttendanceDetails: {
+      id: string;
+      name: string;
+      email: string;
+      created_at: string;
+    };
+    AbsensiDetails: AbsensiDetails[];
+  };
+};
+
 // Fungsi pembantu untuk menghasilkan daftar siswa dalam format teks
 const generateStudentListString = (students: StudentsType[]) => {
   if (!students || students.length === 0) {
@@ -47,8 +66,43 @@ const generateTeacherListString = (teachers: PeopleType[]) => {
     .join("\n");
 };
 
+const generateAbsensiStudentListString = (
+  Attedance: AttedanceType | null,
+  status: number
+) => {
+  if (
+    !Attedance ||
+    !Attedance.attedance ||
+    Attedance.attedance?.AbsensiDetails.length === 0
+  ) {
+    return "Tidak ada Absensi.";
+  }
+  if (status === 99) {
+    return Attedance.attedance?.AbsensiDetails.map(
+      (student, index) => `${index + 1}. ${student.name}`
+    ).join("\n");
+  } else if (status === -1) {
+    return Attedance.attedance?.AbsensiDetails.filter(
+      (student) => student.status !== 1
+    )
+      .map((student, index) => `${index + 1}. ${student.name}`)
+      .join("\n");
+  } else {
+    return Attedance.attedance?.AbsensiDetails.filter(
+      (student) => student.status === status
+    )
+      .map((student, index) => `${index + 1}. ${student.name}`)
+      .join("\n");
+  }
+};
+
 const STUDENT_LIST_PLACEHOLDER = "[STUDENT_LIST]";
 const TEACHER_LIST_PLACEHOLDER = "[TEACHER_LIST]";
+const ABSENSI_LIST_PLACEHOLDER = "[ABSENSI_LIST]";
+const ABSENSI_HADIR_PLACEHOLDER = "[ABSENSI_LIST_HADIR]";
+const ABSENSI_IJIN_PLACEHOLDER = "[ABSENSI_LIST_IJIN]";
+const ABSENSI_ALFA_PLACEHOLDER = "[ABSENSI_LIST_ALFA]";
+const ABSENSI_BELUM_PLACEHOLDER = "[ABSENSI_LIST_BELUM_HADIR]";
 
 export default function PreviewTemplate({
   value,
@@ -81,6 +135,17 @@ export default function PreviewTemplate({
     staleTime: Infinity,
   });
 
+  const {
+    data: Attedance = null,
+    isError: isErrorAttedance,
+    error: errorAttedance,
+    refetch: refetchAttedance,
+  } = useQuery<AttedanceType, Error>({
+    queryKey: ["attedance", selectedClassName],
+    queryFn: () => fechingAttedance(selectedClassName as string),
+    staleTime: Infinity,
+  });
+
   useEffect(() => {
     if (isError) {
       console.log(error);
@@ -108,12 +173,52 @@ export default function PreviewTemplate({
         },
       });
     }
-  }, [isError, error, refetch, isErrorPeople, errorPeople, refetchPeople]);
+    if (isErrorAttedance) {
+      console.log(errorAttedance);
+      if (errorAttedance.message === "No classroom") return;
+      sonner.error("Pesan Error", {
+        description: (errorAttedance as Error).message,
+        action: {
+          label: "Refresh",
+          onClick: () => {
+            refetchAttedance();
+          },
+        },
+      });
+    }
+  }, [
+    isError,
+    error,
+    refetch,
+    isErrorPeople,
+    errorPeople,
+    refetchPeople,
+    isErrorAttedance,
+    errorAttedance,
+    refetchAttedance,
+  ]);
 
   const studentList = generateStudentListString(Students);
   const teacherList = generateTeacherListString(people);
+  const absensiStudentList = generateAbsensiStudentListString(Attedance, 99);
+  const absensiStudentHadirList = generateAbsensiStudentListString(
+    Attedance,
+    1
+  );
+  const absensiStudentBelumList = generateAbsensiStudentListString(
+    Attedance,
+    -1
+  );
+  const absensiStudentIjinList = generateAbsensiStudentListString(Attedance, 2);
+  const absensiStudentAlfaList = generateAbsensiStudentListString(Attedance, 0);
+
   let preview = value.replace(STUDENT_LIST_PLACEHOLDER, studentList);
   preview = preview.replace(TEACHER_LIST_PLACEHOLDER, teacherList);
+  preview = preview.replace(ABSENSI_LIST_PLACEHOLDER, absensiStudentList);
+  preview = preview.replace(ABSENSI_HADIR_PLACEHOLDER, absensiStudentHadirList);
+  preview = preview.replace(ABSENSI_BELUM_PLACEHOLDER, absensiStudentBelumList);
+  preview = preview.replace(ABSENSI_IJIN_PLACEHOLDER, absensiStudentIjinList);
+  preview = preview.replace(ABSENSI_ALFA_PLACEHOLDER, absensiStudentAlfaList);
 
   const handleCopy = () => {
     if (preview) {

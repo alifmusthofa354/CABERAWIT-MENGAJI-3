@@ -167,7 +167,7 @@ export default function Page() {
                       />
                     </div>
                     <p className="text-sm text-muted-foreground mt-3 mb-6">
-                      To display a list of students, type: [STUDENT_LIST]
+                      To display a list of Absensi, type: [ABSENSI_LIST]
                     </p>
                   </TabsContent>
                   <TabsContent value="preview" className="flex flex-col">

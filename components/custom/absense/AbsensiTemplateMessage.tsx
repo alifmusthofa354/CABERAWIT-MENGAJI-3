@@ -13,6 +13,7 @@ import { useState } from "react"; // Pastikan useState diimpor
 import SaveDialog from "@/components/custom/templateClass/SaveDialog";
 import PreviewTemplate from "@/components/custom/templateClass/PreviewTemplate";
 import { useRouter } from "next/navigation";
+import { SheetDictionary } from "../templateClass/SheetDictionary";
 
 // --- Definisi Tipe ---
 type TemplateType = {
@@ -182,8 +183,10 @@ export default function AbsensiTemplateMessage() {
                   />
                 </div>
                 <p className="text-sm text-muted-foreground mt-3 mb-6">
-                  To display a list of students, type: [STUDENT_LIST]
+                  To display a list of Absensi, type: [ABSENSI_LIST]
                 </p>
+
+                <SheetDictionary />
                 <Button
                   type="submit"
                   className="w-full mt-2 md:mt-4"
