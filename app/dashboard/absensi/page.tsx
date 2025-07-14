@@ -15,6 +15,7 @@ import EmptyAttedance from "@/components/custom/absense/EmptyAttedance";
 import AttedanceDetail from "@/components/custom/absense/AttedanceDetail";
 import AbsensiDetails from "@/components/custom/absense/AbsensiDetails";
 import AbsensiTable from "@/components/custom/absense/AbsensiTable";
+import AbsensiTemplateMessage from "@/components/custom/absense/AbsensiTemplateMessage";
 
 // --- Definisi Tipe ---
 
@@ -130,6 +131,7 @@ export default function Page() {
               AbsensiDetails={apiResponse.attedance.AbsensiDetails}
               emailAbsenser={AttendanceDetails.email}
             />
+            <AbsensiTemplateMessage />
           </div>
         </div>
       </>
