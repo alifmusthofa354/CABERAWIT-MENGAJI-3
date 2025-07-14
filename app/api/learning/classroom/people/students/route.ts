@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
       .select("id, name, photo, status") // Select the id_class column which links to the classroom table
       .eq("id_class", IDClass) // Filter by the user_classroom record ID
       .in("status", [0, 1]) // Filter by status 0 or 1
-      .order("created_at", { ascending: true });
+      .order("name", { ascending: true });
 
     if (error) {
       console.error("Supabase error fetching user classroom:", error);
