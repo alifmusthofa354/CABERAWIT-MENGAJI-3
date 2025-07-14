@@ -9,6 +9,7 @@ import { FaCopy } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { toast as sonner } from "sonner";
+import ButtonSendWa from "../absense/ButtonSendWa";
 
 type StudentsType = {
   id: string;
@@ -49,7 +50,13 @@ const generateTeacherListString = (teachers: PeopleType[]) => {
 const STUDENT_LIST_PLACEHOLDER = "[STUDENT_LIST]";
 const TEACHER_LIST_PLACEHOLDER = "[TEACHER_LIST]";
 
-export default function PreviewTemplate({ value }: { value: string }) {
+export default function PreviewTemplate({
+  value,
+  canSendWa = false,
+}: {
+  value: string;
+  canSendWa?: boolean;
+}) {
   const { selectedClassName } = useStore();
 
   const {
@@ -108,17 +115,19 @@ export default function PreviewTemplate({ value }: { value: string }) {
   let preview = value.replace(STUDENT_LIST_PLACEHOLDER, studentList);
   preview = preview.replace(TEACHER_LIST_PLACEHOLDER, teacherList);
 
+  const handleCopy = () => {
+    if (preview) {
+      navigator.clipboard.writeText(preview);
+      toast.success("Message has been copied to clipboard.");
+    } else {
+      toast.error("Sorry, an empty message cannot be copied.");
+    }
+  };
+
   return (
     <>
       <div className="p-1.5 w-full  flex justify-end gap-2 -mt-2 md:-mt-4">
-        <Button
-          size={"custom_icon"}
-          variant={"outline"}
-          onClick={() => {
-            navigator.clipboard.writeText(preview);
-            toast.success("Message has been copied to clipboard.");
-          }}
-        >
+        <Button size={"custom_icon"} variant={"outline"} onClick={handleCopy}>
           <span className="sr-only">Copy</span>
           <FaCopy />
         </Button>
@@ -126,6 +135,17 @@ export default function PreviewTemplate({ value }: { value: string }) {
       <div className="bg-gray-100 p-4 rounded-md whitespace-pre-wrap text-gray-800 border border-gray-300 h-full">
         {preview || "No template saved yet."}
       </div>
+      {canSendWa && (
+        <>
+          <div className="w-full mt-4 md:mt-6 flex flex-col gap-2 md:flex-row md:gap-4">
+            <Button className="w-full md:flex-1" onClick={handleCopy}>
+              <FaCopy />
+              <span>Copy</span>
+            </Button>
+            <ButtonSendWa handleCopy={handleCopy} />
+          </div>
+        </>
+      )}
     </>
   );
 }

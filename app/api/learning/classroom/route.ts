@@ -16,7 +16,7 @@ export async function GET() {
   try {
     const { data, error } = await supabase
       .from("user_classroom")
-      .select(`id, isOwner, classroom( name, description, image_url,status)`)
+      .select(`id, isOwner, classroom( name, description, image_url,status, link_wa )`)
       .eq("email", email)
       .in("status", [0, 1])
       .in("classroom.status", [0, 1])

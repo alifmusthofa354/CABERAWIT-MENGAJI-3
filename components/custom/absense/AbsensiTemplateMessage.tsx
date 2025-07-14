@@ -154,7 +154,7 @@ export default function AbsensiTemplateMessage() {
           {/* Div untuk Textarea dan elemen di bawahnya, ini akan flex-1 juga untuk mendorong Button ke bawah */}
 
           <div className="px-4 pb-4 flex-1 flex flex-col">
-            <Tabs defaultValue="template" className="w-full h-full">
+            <Tabs defaultValue="preview" className="w-full h-full">
               <TabsList>
                 <TabsTrigger value="template">Template</TabsTrigger>
                 <TabsTrigger value="preview">Preview</TabsTrigger>
@@ -184,19 +184,18 @@ export default function AbsensiTemplateMessage() {
                 <p className="text-sm text-muted-foreground mt-3 mb-6">
                   To display a list of students, type: [STUDENT_LIST]
                 </p>
+                <Button
+                  type="submit"
+                  className="w-full mt-2 md:mt-4"
+                  onClick={() => setIsSaveDialogOpen(true)}
+                >
+                  Save Template
+                </Button>
               </TabsContent>
               <TabsContent value="preview" className="flex flex-col">
-                <PreviewTemplate value={draftValue} />
+                <PreviewTemplate value={draftValue} canSendWa={true} />
               </TabsContent>
             </Tabs>
-
-            <Button
-              type="submit"
-              className="w-full mt-2 md:mt-4"
-              onClick={() => setIsSaveDialogOpen(true)}
-            >
-              Save Template
-            </Button>
           </div>
         </div>
         <SaveDialog

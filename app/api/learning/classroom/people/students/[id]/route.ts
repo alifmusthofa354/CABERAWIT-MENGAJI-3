@@ -78,14 +78,15 @@ export async function POST(
         .eq("isOwner", true)
         .single();
 
-    if (userClassroomError) {
+    // Periksa apakah ada error DAN itu BUKAN error "tidak ditemukan baris" (PGRST116)
+    if (userClassroomError && userClassroomError.code !== "PGRST116") {
       console.error(
-        "Supabase error fetching user_classroom:",
+        "Supabase error fetching classroom data:",
         userClassroomError
       );
       return NextResponse.json(
         {
-          error: "Internal Server Error, Please Try Again Later.",
+          error: "Internal Server Error, please try again later.",
           referenceId: idClassCurrent,
         },
         { status: 500 }
