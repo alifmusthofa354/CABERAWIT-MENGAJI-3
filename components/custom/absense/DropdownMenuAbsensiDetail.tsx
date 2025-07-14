@@ -14,6 +14,7 @@ import {
 
 import { FaEllipsisV, FaCheckCircle, FaBan } from "react-icons/fa";
 import { MdInfo } from "react-icons/md";
+import { ImSpinner2 } from "react-icons/im";
 
 export default function DropDownMenuSchedule({
   idAbsensi,
@@ -37,20 +38,30 @@ export default function DropDownMenuSchedule({
       idAbsensiStudent: string;
       Status: number;
     }) => updateAbsensi(idUserClassroom, idAbsensiStudent, Status),
+    onMutate: () => {
+      toast.loading("Memperbarui absensi...", { id: "updateAbsensi" });
+    },
     onSuccess: () => {
-      toast.success(`Update Absensi successfully!`);
+      toast.success(`Update Absensi successfully!`, { id: "updateAbsensi" });
       queryClient.invalidateQueries({
         queryKey: ["attedance", selectedClassName],
       });
     },
     onError: (error: Error) => {
       console.error(error);
-      toast.error("An unexpected network error occurred.");
+      toast.error(
+        `Gagal update absensi: ${
+          error.message || "Terjadi kesalahan tidak terduga."
+        }`,
+        { id: "updateAbsensi" }
+      );
     },
   });
 
   const handleUpdate = (newStatus: number) => {
-    // Panggil mutasi dengan idUserClassroom dan nilai status arsip
+    // Gunakan isPending
+    if (mutation.isPending) return;
+
     mutation.mutate({
       idUserClassroom: selectedClassName as string,
       idAbsensiStudent: idAbsensi as string,
@@ -62,8 +73,13 @@ export default function DropDownMenuSchedule({
     <>
       <div className="hidden">{idAbsensi}</div>
       <DropdownMenu modal={false}>
-        <DropdownMenuTrigger>
-          <FaEllipsisV />
+        {/* Gunakan isPending */}
+        <DropdownMenuTrigger disabled={mutation.isPending}>
+          {mutation.isPending ? (
+            <ImSpinner2 className="animate-spin h-4 w-4" />
+          ) : (
+            <FaEllipsisV />
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
@@ -72,21 +88,24 @@ export default function DropDownMenuSchedule({
           <DropdownMenuLabel>{defaultname}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            disabled={Status === 1}
+            // Gunakan isPending
+            disabled={Status === 1 || mutation.isPending}
             onClick={() => handleUpdate(1)}
           >
             <FaCheckCircle className="text-green-500 mr-2 h-4 w-4" />
             <span className="text-green-500">Hadir</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            disabled={Status === 2}
+            // Gunakan isPending
+            disabled={Status === 2 || mutation.isPending}
             onClick={() => handleUpdate(2)}
           >
             <MdInfo className="text-gray-500 mr-2 h-4 w-4" />
             <span className="text-gray-500">Ijin</span>
           </DropdownMenuItem>
           <DropdownMenuItem
-            disabled={Status === 0}
+            // Gunakan isPending
+            disabled={Status === 0 || mutation.isPending}
             onClick={() => handleUpdate(0)}
           >
             <FaBan className="text-red-500 mr-2 h-4 w-4" />
