@@ -1,4 +1,4 @@
-import { deleteSchedule } from "@/actions/ScheduleClassAction";
+import { deleteAttedance } from "@/actions/AbsensiAction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useStore from "@/stores/useStoreClass";
 import toast from "react-hot-toast";
@@ -17,11 +17,11 @@ import {
 export default function DeleteDialog({
   open, // Menerima prop 'open'
   onOpenChange, // Menerima prop 'onOpenChange'
-  idClass,
+  idAttedance,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  idClass: string;
+  idAttedance: string;
 }) {
   const { selectedClassName } = useStore();
   const queryClient = useQueryClient();
@@ -29,11 +29,11 @@ export default function DeleteDialog({
   const mutation = useMutation({
     mutationFn: ({
       idUserClassroom,
-      idSchedule,
+      idAttedance,
     }: {
       idUserClassroom: string;
-      idSchedule: string;
-    }) => deleteSchedule(idUserClassroom, idSchedule),
+      idAttedance: string;
+    }) => deleteAttedance(idUserClassroom, idAttedance),
     onSuccess: () => {
       toast.success(`Delete Attedance successfully!`);
       onOpenChange(false);
@@ -52,7 +52,7 @@ export default function DeleteDialog({
     // Panggil mutasi dengan idUserClassroom dan nilai status arsip
     mutation.mutate({
       idUserClassroom: selectedClassName as string,
-      idSchedule: idClass,
+      idAttedance: idAttedance,
     });
   };
 

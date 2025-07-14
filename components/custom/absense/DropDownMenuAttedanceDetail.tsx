@@ -13,7 +13,11 @@ import { FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
 
 import DeleteDialog from "./DeleteDialog";
 
-export default function DropDownMenuAttedanceDetail() {
+export default function DropDownMenuAttedanceDetail({
+  idAttedance,
+}: {
+  idAttedance: string;
+}) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const router = useRouter(); // Inisialisasi hook useRouter
 
@@ -64,7 +68,7 @@ export default function DropDownMenuAttedanceDetail() {
       <DeleteDialog
         open={isDeleteDialogOpen}
         onOpenChange={() => setIsDeleteDialogOpen(false)}
-        idClass={"lala"}
+        idAttedance={idAttedance}
       />
     </>
   );

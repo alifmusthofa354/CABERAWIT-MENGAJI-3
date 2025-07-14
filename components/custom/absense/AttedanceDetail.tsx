@@ -33,7 +33,7 @@ export default function AttedanceDetail({
                 Rekap Absensi
               </h3>
             </div>
-            <DropDownMenuAttedanceDetail />
+            <DropDownMenuAttedanceDetail idAttedance={AttendanceDetails.id} />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 text-base md:text-lg">

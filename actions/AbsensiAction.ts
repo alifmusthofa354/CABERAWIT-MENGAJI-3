@@ -57,3 +57,31 @@ export const addAttedance = async (
     }
   }
 };
+
+
+export const deleteAttedance = async (
+  userID: string,
+  idAttedance: string,
+) => {
+  try {
+    const URL = `${API_URL}/${userID}`;
+    const response = await axios.put(URL, {
+      idAttedance: idAttedance,
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    if (axios.isAxiosError(error)) {
+      console.log("custom error axios : ", error);
+      const message =
+        error.response?.data?.details?.[0]?.message ||
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        "Failed schdeule. Please try again.";
+      throw new Error(message);
+    } else {
+      throw new Error("Unpected error, Add schdeule. Please try again.");
+    }
+  }
+};
