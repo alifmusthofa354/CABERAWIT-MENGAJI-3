@@ -91,108 +91,63 @@ export async function PATCH(
       );
     }
 
-    const { data: absensiData, error: absensiError } = await supabase
-      .from("absensi")
-      .select("id_attedance") // Ambil is_deleted juga untuk pengecekan
-      .eq("id", idAbsensi)
-      .single(); // Ini untuk tabel 'absensi', bukan 'attedance'
+    // --- Langkah 2: Panggil Stored Procedure untuk memverifikasi dan mengupdate ---
+    // Meneruskan userClassroomData.id_class sebagai p_user_classroom_expected_class_id
+    const { data: funcResult, error: funcError } = await supabase
+      .rpc('update_absensi_status_and_get_class_id', {
+        p_id_absensi: idAbsensi,
+        p_new_status: Status,
+        p_user_classroom_expected_class_id: userClassroomData.id_class // <-- Parameter baru
+      });
 
-    // Periksa apakah ada error DAN itu BUKAN error "tidak ditemukan baris" (PGRST116)
-    if (absensiError && absensiError.code !== "PGRST116") {
-      console.error(
-        "Supabase error fetching absensi data:",
-        absensiError
-      );
-      return NextResponse.json(
-        {
-          error: "Internal Server Error, please try again later.",
-          referenceId: idClassCurrent,
-        },
-        { status: 500 }
-      );
+    // Penanganan error dari Stored Procedure
+    if (funcError) {
+        console.error("Supabase RPC error calling update_absensi_status_and_get_class_id:", funcError);
+        let status = 500;
+        let message = "Internal Server Error, Please Try Again Later.";
+
+        if (funcError.message.includes("Absensi record with ID") && funcError.message.includes("not found")) {
+            status = 404;
+            message = "Record absensi tidak ditemukan.";
+        } else if (funcError.message.includes("Related attedance record") && funcError.message.includes("not found")) {
+            status = 404;
+            message = "Record kehadiran terkait tidak ditemukan.";
+        } else if (funcError.message.includes("Related attedance record") && funcError.message.includes("is deleted")) {
+            status = 403; // Forbidden, karena record sudah dihapus
+            message = "Operasi tidak diizinkan. Record kehadiran terkait telah dihapus.";
+        } else if (funcError.message.includes("Classroom ID mismatch")) { // <-- Tangani error mismatch baru
+            status = 403; // Forbidden
+            message = "Akses Ditolak. Anda tidak memiliki izin untuk memodifikasi absensi di kelas ini.";
+        }
+
+        return NextResponse.json(
+            { error: message, referenceId: idClassCurrent },
+            { status: status }
+        );
     }
 
-    if (!absensiData) {
-      return NextResponse.json(
-        {
-          message:
-            "Record absensi atau kehadiran terkait tidak ditemukan.",
-        },
-        { status: 404 } // Or 403 Forbidden if record exists but user is not owner
-      );
+    // Jika funcResult kosong atau tidak ada data yang kembali (seharusnya tidak jika tidak ada error)
+    if (!funcResult || funcResult.length === 0) {
+        return NextResponse.json(
+            { error: "Stored procedure returned no data or failed silently." },
+            { status: 500 }
+        );
     }
 
-      const { data: AttedanceData, error: attedanceError } = await supabase
-      .from("attedance")
-      .select("id_class") // Ambil is_deleted juga untuk pengecekan
-      .eq("id", absensiData.id_attedance)
-      .eq("is_deleted", false)
-      .single(); // Ini untuk tabel 'absensi', bukan 'attedance'
-
-    // Periksa apakah ada error DAN itu BUKAN error "tidak ditemukan baris" (PGRST116)
-    if (attedanceError && attedanceError.code !== "PGRST116") {
-      console.error(
-        "Supabase error fetching attedance data:",
-        absensiError
-      );
-      return NextResponse.json(
-        {
-          error: "Internal Server Error, please try again later.",
-          referenceId: idClassCurrent,
-        },
-        { status: 500 }
-      );
-    }
-
-    if (!AttedanceData) {
-      return NextResponse.json(
-        {
-          message:
-            "Record attedance terkait tidak ditemukan.",
-        },
-        { status: 404 } // Or 403 Forbidden if record exists but user is not owner
-      );
-    }
-
-    if (userClassroomData.id_class !== AttedanceData.id_class) {
-      return NextResponse.json(
-        {
-          message:
-            "User classroom must match the classroom ID in the Absensi record.",
-        },
-        { status: 404 } // Or 403 Forbidden if record exists but user is not owner
-      );
-    }
-
-    // update data absensi
-
-    const { data, error } = await supabase
-      .from("absensi")
-      .update({ status: Status })
-      .eq("id", idAbsensi) 
-      .select();
-
-    if (error) {
-      console.error("Supabase error during absensi Update:", error);
-      return NextResponse.json(
-        {
-          error: "Internal Server Error, Please Try Again Later.",
-          referenceId: idClassCurrent,
-        },
-        { status: 500 }
-      );
-    }
-
-    if (!data || data.length === 0) {
-      return NextResponse.json(
-        { message: "absensi record to update not found." },
-        { status: 404 }
-      );
-    }
+    // Sekarang, semua validasi telah dilakukan di database.
+    const { absensi_id, absensi_status, attedance_class_id } = funcResult[0];
 
     // Success Response
-    const messageJson = `${email} update Absensi with Id : ${idAbsensi} successfully.`;
-    return NextResponse.json({ message: messageJson ,absensi: data[0],}, { status: 200 });
+    const messageJson = `${email} update Absensi with Id : ${absensi_id} successfully.`;
+    return NextResponse.json(
+      {
+        message: messageJson,
+        absensi: { id: absensi_id, status: absensi_status },
+        attedanceClassId: attedance_class_id
+      },
+      { status: 200 }
+    );
+    
   } catch (error) {
     // Penanganan kesalahan jika body bukan JSON yang valid
     if (error instanceof SyntaxError && error.message.includes("JSON")) {
