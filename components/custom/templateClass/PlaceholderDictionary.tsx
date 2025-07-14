@@ -7,28 +7,28 @@ import toast from "react-hot-toast"; // Untuk notifikasi toast
 
 // Data placeholder yang akan ditampilkan
 const placeholders = [
-  { placeholder: "[STUDENT_LIST]", description: "Daftar semua siswa" },
-  { placeholder: "[TEACHER_LIST]", description: "Daftar semua guru" },
   {
     placeholder: "[ABSENSI_LIST]",
-    description: "Daftar absensi lengkap (semua status)",
+    description: "Complete attendance list (all statuses)", // Terjemahan dari "Daftar absensi lengkap (semua status)"
   },
   {
     placeholder: "[ABSENSI_LIST_HADIR]",
-    description: "Daftar siswa dengan status Hadir",
+    description: "List of students with 'Present' status", // Terjemahan dari "Daftar siswa dengan status Hadir"
   },
   {
     placeholder: "[ABSENSI_LIST_IJIN]",
-    description: "Daftar siswa dengan status Izin",
+    description: "List of students with 'Permitted' status", // Terjemahan dari "Daftar siswa dengan status Izin"
   },
   {
     placeholder: "[ABSENSI_LIST_ALFA]",
-    description: "Daftar siswa dengan status Alfa",
+    description: "List of students with 'Absent' status", // Terjemahan dari "Daftar siswa dengan status Alfa"
   },
   {
     placeholder: "[ABSENSI_LIST_BELUM_HADIR]",
-    description: "Daftar siswa dengan status Belum Hadir",
+    description: "List of students with 'Not Yet Present' status", // Terjemahan dari "Daftar siswa dengan status Belum Hadir"
   },
+  { placeholder: "[STUDENT_LIST]", description: "List of all students" }, // Terjemahan dari "Daftar semua siswa"
+  { placeholder: "[TEACHER_LIST]", description: "List of all teachers" }, // Terjemahan dari "Daftar semua guru"
 ];
 
 export default function PlaceholderDictionary() {
@@ -65,7 +65,7 @@ export default function PlaceholderDictionary() {
         ))}
       </div>
 
-      <p className="text-sm text-gray-800 mt-8 text-center">
+      <p className="text-sm text-gray-800 mt-2 text-center bg-yellow-50 border border-yellow-300 rounded-md p-2">
         Please ensure you use the correct placeholder format (including square
         brackets[]).
       </p>
