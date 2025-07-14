@@ -126,6 +126,7 @@ export async function PATCH(
       .from("attedance")
       .select("id_class") // Ambil is_deleted juga untuk pengecekan
       .eq("id", absensiData.id_attedance)
+      .eq("is_deleted", false)
       .single(); // Ini untuk tabel 'absensi', bukan 'attedance'
 
     // Periksa apakah ada error DAN itu BUKAN error "tidak ditemukan baris" (PGRST116)
