@@ -18,7 +18,7 @@ import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
 import PreviewTemplate from "@/components/custom/templateClass/PreviewTemplate";
 import AddTemplate from "@/components/custom/templateClass/AddTemplate";
-import PlaceholderDictionary from "@/components/custom/templateClass/PlaceholderDictionary";
+import { SheetDictionary } from "@/components/custom/templateClass/SheetDictionary";
 
 // --- Definisi Tipe ---
 type TemplateType = {
@@ -170,7 +170,7 @@ export default function Page() {
                     <p className="text-sm text-muted-foreground mt-3 mb-6">
                       To display a list of Absensi, type: [ABSENSI_LIST]
                     </p>
-                    <PlaceholderDictionary />
+                    <SheetDictionary />
                   </TabsContent>
                   <TabsContent value="preview" className="flex flex-col">
                     <PreviewTemplate value={draftValue} />
