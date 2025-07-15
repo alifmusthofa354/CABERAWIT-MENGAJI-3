@@ -38,7 +38,7 @@ const ClassCard = ({ kelas }: { kelas: Class }) => {
           alt={`cover image ${kelas.classroom.name}`}
           src={
             kelas.classroom.image_url ??
-            "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
+            "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit/default/coverclass-default.webp"
           }
           className="w-full h-32 md:min-h-48 object-cover"
           width={500}

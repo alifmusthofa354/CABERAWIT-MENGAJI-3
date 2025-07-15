@@ -158,6 +158,8 @@ export async function POST(req: NextRequest) {
           { status: 500 }
         );
       }
+    }else{
+      imageUrl = "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit/default/coverclass-default.webp"
     }
 
     // const { data, error } = await supabase

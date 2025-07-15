@@ -101,7 +101,7 @@ export default function Page() {
               alt={`image kelas ${mainClass.classroom.name}`}
               src={
                 mainClass.classroom.image_url ??
-                "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit//coverclass-default.webp"
+                "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/cover-class-caberawit/default/coverclass-default.webp"
               }
               className="w-full h-32 md:h-48 object-cover"
               width={768} // Sesuaikan lebar
