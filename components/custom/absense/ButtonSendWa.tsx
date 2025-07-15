@@ -4,6 +4,27 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FaWhatsapp } from "react-icons/fa";
 
+// Fungsi validasi format link WhatsApp
+function isValidWhatsAppLink(url: string): boolean {
+  if (!url || typeof url !== "string") {
+    return false;
+  }
+  // Pola untuk link chat personal (wa.me atau api.whatsapp.com/send?phone=)
+  // Nomor telepon harus 10-15 digit
+  const waMeRegex =
+    /^https:\/\/(wa\.me\/|api\.whatsapp\.com\/send\?phone=)\d{10,15}$/;
+
+  // Pola untuk link undangan grup (chat.whatsapp.com)
+  // Menambahkan (?:\?.*)? untuk mengizinkan query parameter opsional di akhir
+  const waChatRegex =
+    /^https:\/\/chat\.whatsapp\.com\/[a-zA-Z0-9]{22}(?:\?.*)?$/; // <--- PERBAIKAN DI SINI
+
+  console.log("WA LINK : ", url);
+  console.log("WA ME : ", waMeRegex.test(url));
+  console.log("WA CHAT : ", waChatRegex.test(url));
+  return waMeRegex.test(url) || waChatRegex.test(url);
+}
+
 // Tipe untuk objek 'classroom' itu sendiri
 type ClassroomDetailType = {
   name: string;
@@ -26,6 +47,7 @@ export default function ButtonSendWa({ handleCopy }: ButtonSendWaProps) {
   const { selectedClassName } = useStore(); // ID kelas yang dipilih
   const queryClient = useQueryClient();
   const [linkWA, setLinkWA] = useState<string>(""); // State untuk menyimpan link WA
+  const [isLinkValid, setIsLinkValid] = useState<boolean>(false);
 
   useEffect(() => {
     // Mendapatkan data dari cache React Query
@@ -43,10 +65,13 @@ export default function ButtonSendWa({ handleCopy }: ButtonSendWaProps) {
 
       // Jika item ditemukan dan memiliki link_wa
       if (foundClassroom && foundClassroom.classroom.link_wa) {
-        setLinkWA(foundClassroom.classroom.link_wa);
+        const url = foundClassroom.classroom.link_wa;
+        setLinkWA(url);
+        setIsLinkValid(isValidWhatsAppLink(url)); // Set validitas berdasarkan format
       } else {
         // Jika tidak ditemukan atau link_wa kosong
         setLinkWA(""); // Reset linkWA jika tidak ditemukan atau tidak valid
+        setIsLinkValid(false);
         console.warn(
           "Classroom with selectedClassName not found or link_wa is missing:",
           selectedClassName
@@ -55,6 +80,7 @@ export default function ButtonSendWa({ handleCopy }: ButtonSendWaProps) {
     } else {
       // Reset linkWA jika tidak ada data kelas atau selectedClassName belum ada
       setLinkWA("");
+      setIsLinkValid(false);
       console.log(
         "No classroom data in cache or selectedClassName is not set."
       );
@@ -63,7 +89,7 @@ export default function ButtonSendWa({ handleCopy }: ButtonSendWaProps) {
 
   return (
     <>
-      {linkWA ? (
+      {isLinkValid ? (
         <a
           href={linkWA}
           target="_blank"
