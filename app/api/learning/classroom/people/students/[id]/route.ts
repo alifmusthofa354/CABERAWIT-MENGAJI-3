@@ -139,10 +139,7 @@ export async function POST(
         );
       }
     } else {
-      return NextResponse.json(
-        { message: "No image file provided." },
-        { status: 400 }
-      );
+      imageUrl = "https://nybxzkiebrcyzvunjmig.supabase.co/storage/v1/object/public/image-caberawit/default/953491a9-15a7-457c-be06-2b7876296ae2-photo-user-default.webp"
     }
 
     const classroomIdToUpdate = userClassroomData.id_class; // This is the actual class ID in the 'classroom' table

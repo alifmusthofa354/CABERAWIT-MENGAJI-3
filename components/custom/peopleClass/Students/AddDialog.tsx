@@ -73,14 +73,14 @@ export default function AddDialog({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (name && image) {
+    if (name) {
       const formData = new FormData();
       formData.append("name", name || "");
       formData.append("image", image || "");
       const idUserClassroom = selectedClassName as string;
       mutation.mutate({ idUserClassroom, formData });
     } else {
-      toast.error("Tolong isi semua data");
+      toast.error("Tolong isi nama siswa");
     }
   };
 
