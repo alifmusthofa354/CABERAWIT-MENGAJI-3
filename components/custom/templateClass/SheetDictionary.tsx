@@ -19,7 +19,12 @@ export function SheetDictionary() {
       <Sheet>
         <SheetTrigger asChild className="-ml-4 -mt-7">
           <span>
-            <Button variant="link">Explore Placeholders</Button>
+            <Button
+              variant="link"
+              className="text-gray-600 hover:text-gray-800 font-semibold text-base"
+            >
+              Explore Placeholders
+            </Button>
           </span>
         </SheetTrigger>
         <SheetContent className="flex flex-col  gap-0">
@@ -31,7 +36,7 @@ export function SheetDictionary() {
               </span>
             </SheetTitle>
             <SheetDescription>
-              Use the placeholders below in your message template.
+              Tap to copy the placeholder below to use in your message template.
             </SheetDescription>
           </SheetHeader>
           <div className="flex-1 overflow-y-auto">

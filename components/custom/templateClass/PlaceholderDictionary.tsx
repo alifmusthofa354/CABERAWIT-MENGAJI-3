@@ -34,41 +34,65 @@ const placeholders = [
 export default function PlaceholderDictionary() {
   // Fungsi untuk menyalin teks ke clipboard
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    toast.success(`${text} has been copied to clipboard.`);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          toast.success(`'${text}' copied to clipboard!`);
+        })
+        .catch((err) => {
+          console.error("Failed to copy text: ", err);
+          toast.error("Failed to copy. Please try again.");
+        });
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        toast.success(`'${text}' copied to clipboard!`);
+      } catch (err) {
+        console.error("Failed to copy text (execCommand): ", err);
+        toast.error("Failed to copy. Please try again.");
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
   };
 
   return (
-    <div className=" p-2 md:p-4 bg-gray-300">
+    <div className=" p-2 md:p-4 bg-gray-200 ">
       <div className="space-y-2 md:space-y-4 ">
         {placeholders.map((item, index) => (
           <div
             key={index}
-            className=" bg-gray-50 p-4 rounded-lg border border-gray-100 shadow-sm transition-all duration-200 hover:bg-gray-100"
+            className="flex flex-col bg-white p-5 rounded-xl border border-gray-200 shadow-md
+                       transition-all duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-lg
+                       hover:border-gray-500 cursor-pointer relative active:scale-[1.04] active:shadow-lg active:border-gray-800"
+            onClick={() => copyToClipboard(item.placeholder)}
           >
-            <p className="text-gray-700 font-medium text-sm md:text-base">
-              {item.description}
-            </p>
-            <p className=" text-blue-700 text-sm  rounded-md ">
+            <Button
+              disabled
+              variant="ghost" // Gunakan variant ghost agar tidak ada background
+              size="icon" // Gunakan size icon untuk tombol hanya ikon
+              className="absolute top-0 right-0 "
+            >
+              <FaCopy className="text-lg" />
+            </Button>
+            <p
+              className="text-gray-800 text-sm md:text-base text-center 
+                             mb-2 border-b border-gray-400 pb-2"
+            >
               {item.placeholder}
             </p>
 
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-4 py-2 text-blue-600 border-blue-300 hover:bg-blue-100 transition-colors duration-200 rounded-md shadow-sm"
-              onClick={() => copyToClipboard(item.placeholder)}
-            >
-              <FaCopy className="mr-2 text-xs" /> Salin
-            </Button>
+            <p className="text-gray-700  text-sm md:text-base text-center font-extralight ">
+              {item.description}
+            </p>
           </div>
         ))}
       </div>
-
-      <p className="text-sm text-gray-800 mt-2 text-center bg-yellow-50 border border-yellow-300 rounded-md p-2">
-        Please ensure you use the correct placeholder format (including square
-        brackets[]).
-      </p>
     </div>
   );
 }
