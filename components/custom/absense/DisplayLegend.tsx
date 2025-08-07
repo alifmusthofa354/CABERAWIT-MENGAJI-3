@@ -18,11 +18,11 @@ function mapStatusToAttendanceString(
   status: AbsensiDetails["status"]
 ): Attendance["status"] {
   switch (status) {
-    case 0:
-      return "Hadir";
     case 1:
-      return "Ijin";
+      return "Hadir";
     case 2:
+      return "Ijin";
+    case 0:
       return "Alfa";
     default:
       // Penanganan jika status tidak dikenal, bisa throw error atau return default
