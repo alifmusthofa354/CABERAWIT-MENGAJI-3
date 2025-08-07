@@ -83,6 +83,7 @@ export default function PeopleList() {
       </>
     );
   }
+  console.log("dapat edit : ", isCanEdit);
 
   return (
     <>
@@ -106,9 +107,11 @@ export default function PeopleList() {
         <StudentList isCanEdit={isCanEdit} />
 
         {/* Add student Section */}
-        <div className="fixed bottom-4 right-4">
-          <AddStudent />
-        </div>
+        {isCanEdit && (
+          <div className="fixed bottom-4 right-4">
+            <AddStudent />
+          </div>
+        )}
       </div>
       <Toaster />
     </>
