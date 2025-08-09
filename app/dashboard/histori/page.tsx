@@ -15,9 +15,7 @@ import EmpityHistory from "@/components/custom/HistoryDay/EmpityHistory";
 // import AttedanceDetail from "@/components/custom/absense/AttedanceDetail";
 import AbsensiDetails from "@/components/custom/absense/AbsensiDetails";
 // import HistoryTable from "@/components/custom/HistoryDay/HistoryTable";
-// import HistoryDayPage from "@/components/custom/HistoryDay/HistoryDayPage";
 import HistoryDateFilter from "@/components/custom/HistoryDay/HistoryDateFilter";
-// import HistoryDateFilter2 from "@/components/custom/HistoryDay/HistoryDateFilter2";
 import ListHistoryDay from "@/components/custom/HistoryDay/ListHistoryDay";
 
 // --- Definisi Tipe ---
