@@ -232,7 +232,7 @@ export default function PreviewTemplate({
   return (
     <>
       <div className="p-1.5 w-full  flex justify-end gap-2 -mt-2 md:-mt-4">
-        <Button size={"custom_icon"} variant={"outline"} onClick={handleCopy}>
+        <Button size={"default"} variant={"outline"} onClick={handleCopy}>
           <span className="sr-only">Copy</span>
           <FaCopy />
         </Button>
