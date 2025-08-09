@@ -148,7 +148,7 @@ export default function Page() {
                   <TabsContent value="template" className="flex flex-col">
                     <div className="p-1.5 w-full  flex justify-end gap-2 -mt-2 md:-mt-4">
                       <Button
-                        size={"custom_icon"}
+                        size={"default"}
                         variant={"outline"}
                         onClick={() => {
                           setDraftValue("");
