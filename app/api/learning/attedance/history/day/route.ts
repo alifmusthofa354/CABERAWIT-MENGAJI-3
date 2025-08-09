@@ -83,11 +83,11 @@ export async function GET(request: NextRequest) {
     }
 
     const IDClass = userClassroomData[0].id_class; // This is the actual class ID in the 'classroom' table
-    const { data, error } = await supabase.rpc("get_attendance_today", {
+    const { data, error } = await supabase.rpc("get_last_history", {
       p_id_class: IDClass,
     });
 
-    console.log("Data fetched from get_attendance_today: \n", data);
+    console.log("Data fetched from get_last_history:\n", data);
 
     if (error) {
       console.error("Supabase error fetching attedance:", error);

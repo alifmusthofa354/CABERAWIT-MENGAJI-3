@@ -1,10 +1,9 @@
 import LegendAbsensi from "@/components/custom/absense/LegendAbsensi";
 
 type AbsensiDetails = {
-  id: string;
+  id_student: string;
   name: string;
   status: 0 | 1 | 2;
-  id_student: string;
 };
 
 interface Attendance {
@@ -35,7 +34,7 @@ function transformAbsensiDetailsToAttendance(
   absensiDetailsArray: AbsensiDetails[]
 ): Attendance[] {
   return absensiDetailsArray.map((detail) => ({
-    id: detail.id,
+    id: detail.id_student, // Menggunakan id_student sebagai ID unik
     name: detail.name,
     status: mapStatusToAttendanceString(detail.status),
     // id_student tidak perlu karena tidak ada di interface Attendance
