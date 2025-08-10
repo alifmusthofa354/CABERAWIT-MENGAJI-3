@@ -10,7 +10,6 @@ import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formathour } from "@/util/dateFormatter";
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 type AttendanceDetailsType = {
   id: string;
@@ -65,16 +64,23 @@ export default function ListHistoryDay({
               </TableHeader>
               <TableBody>
                 {AttendanceDetails.map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.schedule.name}</TableCell>
+                  <TableRow
+                    key={item.id}
+                    className="relative cursor-pointer transition-colors hover:bg-muted/50 group" // Tambahkan group
+                  >
+                    <TableCell className="font-medium">
+                      {item.schedule.name}
+                      <Link
+                        href={`/dashboard/histori/day/${item.id}`}
+                        className="absolute inset-0 z-10"
+                      />
+                    </TableCell>
                     <TableCell>{item.user_classroom.users.name}</TableCell>
-                    <TableCell>{formathour(item.created_at)}</TableCell>
-                    <TableCell className="text-right">
-                      <Link href={`/dashboard/histori/day/${item.id}`} passHref>
-                        <Button variant="ghost" size="icon">
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </Link>
+                    <TableCell>
+                      <div className="flex justify-between items-center pr-4">
+                        <span>{formathour(item.created_at)}</span>
+                        <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))}
