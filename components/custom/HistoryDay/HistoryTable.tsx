@@ -13,7 +13,7 @@ import {
   FaUserCheck,
   FaCalendarAlt,
   FaChalkboardTeacher,
-  FaFingerprint,
+  FaLink,
 } from "react-icons/fa"; // Icon untuk tanggal/waktu
 
 import { formatFriendlyDate, formatNumberDate } from "@/util/dateFormatter";
@@ -84,8 +84,8 @@ export default function HistoryTable({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 text-base md:text-lg">
-              <div className="flex items-center p-3 bg-white/10 rounded-lg shadow-sm">
-                <FaFingerprint className="text-blue-200 text-xl flex-shrink-0 mr-3" />
+              <div className="hidden md:flex items-center p-3 bg-white/10 rounded-lg shadow-sm">
+                <FaLink className="text-blue-200 text-xl flex-shrink-0 mr-3" />
                 <span className="font-medium text-white overflow-hidden truncate">
                   {AttendanceDetails.id}
                 </span>
