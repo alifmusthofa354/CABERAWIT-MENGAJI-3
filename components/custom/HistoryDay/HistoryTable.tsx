@@ -129,7 +129,7 @@ export default function HistoryTable({
                   <TableHead className="font-bold text-gray-700 px-6 py-3 text-left">
                     Nama
                   </TableHead>
-                  <TableHead className="font-bold text-gray-700 text-right whitespace-nowrap  py-3">
+                  <TableHead className="font-bold text-gray-700 text-right whitespace-nowrap  px-6">
                     Status
                   </TableHead>
                 </TableRow>
