@@ -76,11 +76,9 @@ export default function ListHistoryDay({
                       />
                     </TableCell>
                     <TableCell>{item.user_classroom.users.name}</TableCell>
-                    <TableCell>
-                      <div className="flex justify-between items-center pr-4">
-                        <span>{formathour(item.created_at)}</span>
-                        <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary" />
-                      </div>
+                    <TableCell>{formathour(item.created_at)}</TableCell>
+                    <TableCell className="text-right">
+                      <ArrowRight className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-primary group-active:text-primary" />
                     </TableCell>
                   </TableRow>
                 ))}
