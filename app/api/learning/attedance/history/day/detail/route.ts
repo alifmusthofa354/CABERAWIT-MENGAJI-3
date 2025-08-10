@@ -83,20 +83,11 @@ export async function GET(request: NextRequest) {
     }
 
     const IDClass = userClassroomData[0].id_class; // This is the actual class ID in the 'classroom' table
+    const { data, error } = await supabase.rpc("get_last_history", {
+      p_id_class: IDClass,
+    });
 
-    /// Fetch the all history
-    const { data, error } = await supabase
-      .from("attedance")
-      .select(
-        `
-        id,
-        created_at,
-        user_classroom!inner(email),
-        schedule!inner(name)
-      `
-      )
-      .order("created_at", { ascending: false })
-      .eq("id_class", IDClass);
+    console.log("Data fetched from get_last_history:\n", data);
 
     if (error) {
       console.error("Supabase error fetching attedance:", error);
@@ -116,10 +107,17 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    if (!data.AbsensiDetails || data.AbsensiDetails.length === 0) {
+      return NextResponse.json(
+        { attedance: null, AbsensiDetails: [], idUserClassCurrent },
+        { status: 200 }
+      );
+    }
+
     // Success Response
 
     return NextResponse.json(
-      { attedance: { AttendanceDetails: data }, idUserClassCurrent },
+      { attedance: data, idUserClassCurrent },
       { status: 200 }
     );
   } catch (error) {

@@ -28,13 +28,17 @@ type AbsensiDetails = {
 
 type AttendanceDetails = {
   id: string;
-  name: string;
-  email: string;
+  schedule: {
+    name: string;
+  };
+  user_classroom: {
+    email: string;
+  };
   created_at: string;
 };
 
 type attedance = {
-  AttendanceDetails: AttendanceDetails;
+  AttendanceDetails: AttendanceDetails[];
   AbsensiDetails: AbsensiDetails[];
 };
 
@@ -108,10 +112,9 @@ export default function Page() {
   if (
     apiResponse &&
     apiResponse.attedance &&
-    apiResponse.attedance.AttendanceDetails &&
-    apiResponse.attedance.AbsensiDetails.length > 0
+    apiResponse.attedance.AttendanceDetails.length > 0
   ) {
-    // const AttendanceDetails = apiResponse.attedance.AttendanceDetails;
+    const AttendanceDetails = apiResponse.attedance.AttendanceDetails;
 
     return (
       <>
@@ -131,7 +134,7 @@ export default function Page() {
               AbsensiDetails={apiResponse.attedance.AbsensiDetails}
             /> */}
             <HistoryDateFilter />
-            <ListHistoryDay />
+            <ListHistoryDay AttendanceDetails={AttendanceDetails} />
           </div>
         </div>
       </>
