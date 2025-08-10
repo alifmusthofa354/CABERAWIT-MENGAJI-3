@@ -17,11 +17,21 @@ export async function GET(request: NextRequest) {
   try {
     // Ambil ID Kelas dari Path Parameter
 
-    const classroomId = request.nextUrl.searchParams.get("id");
+    const classroomId = request.nextUrl.searchParams.get("idUser");
+
     if (classroomId) {
       if (!z.string().uuid().safeParse(classroomId).success) {
         return NextResponse.json(
           { error: "Invalid ID Classroom" },
+          { status: 400 }
+        );
+      }
+    }
+    const idAttedance = request.nextUrl.searchParams.get("idAttedance");
+    if (idAttedance) {
+      if (!z.string().uuid().safeParse(idAttedance).success) {
+        return NextResponse.json(
+          { error: "Invalid ID Attedance" },
           { status: 400 }
         );
       }
@@ -82,12 +92,13 @@ export async function GET(request: NextRequest) {
       idUserClassCurrent = userClassroomData[0].id;
     }
 
-    const IDClass = userClassroomData[0].id_class; // This is the actual class ID in the 'classroom' table
-    const { data, error } = await supabase.rpc("get_last_history", {
-      p_id_class: IDClass,
-    });
+    const IDClass = userClassroomData[0].id_class;
 
-    console.log("Data fetched from get_last_history:\n", data);
+    // Memanggil fungsi get_last_history untuk mendapatkan data absensi
+    const { data, error } = await supabase.rpc("get_detail_attedance", {
+      p_id_class: IDClass,
+      p_id_attedance: idAttedance,
+    });
 
     if (error) {
       console.error("Supabase error fetching attedance:", error);

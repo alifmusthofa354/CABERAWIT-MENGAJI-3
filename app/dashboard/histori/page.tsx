@@ -12,9 +12,6 @@ import LoadingClass from "@/components/custom/LoadingClass";
 import ErrorClass from "@/components/custom/ErrorClass";
 import EmpityHistory from "@/components/custom/HistoryDay/EmpityHistory";
 
-// import AttedanceDetail from "@/components/custom/absense/AttedanceDetail";
-import AbsensiDetails from "@/components/custom/absense/AbsensiDetails";
-// import HistoryTable from "@/components/custom/HistoryDay/HistoryTable";
 import HistoryDateFilter from "@/components/custom/HistoryDay/HistoryDateFilter";
 import ListHistoryDay from "@/components/custom/HistoryDay/ListHistoryDay";
 
@@ -75,7 +72,7 @@ export default function Page() {
     if (apiResponse && apiResponse.idUserClassCurrent) {
       if (apiResponse.idUserClassCurrent !== selectedClassName) {
         queryClient.setQueryData(
-          ["attedance", apiResponse.idUserClassCurrent],
+          ["historyDay", apiResponse.idUserClassCurrent],
           apiResponse
         );
         updateSelectedClassName(apiResponse.idUserClassCurrent);
@@ -132,10 +129,6 @@ export default function Page() {
           </div>
           {/* Konten Utama */}
           <div className="p-4 md:p-6 mt-1 flex-1 flex flex-col gap-4">
-            {/* <AttedanceDetail AttendanceDetails={AttendanceDetails} />
-            <HistoryTable
-              AbsensiDetails={apiResponse.attedance.AbsensiDetails}
-            /> */}
             <HistoryDateFilter />
             <ListHistoryDay AttendanceDetails={AttendanceDetails} />
           </div>

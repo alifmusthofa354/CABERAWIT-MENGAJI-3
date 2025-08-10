@@ -87,8 +87,6 @@ export async function GET(request: NextRequest) {
       p_id_class: IDClass,
     });
 
-    console.log("Data fetched from get_attendance_today: \n", data);
-
     if (error) {
       console.error("Supabase error fetching attedance:", error);
       return NextResponse.json(
