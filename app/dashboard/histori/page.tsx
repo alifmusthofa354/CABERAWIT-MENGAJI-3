@@ -33,6 +33,9 @@ type AttendanceDetails = {
   };
   user_classroom: {
     email: string;
+    users: {
+      name: string;
+    };
   };
   created_at: string;
 };

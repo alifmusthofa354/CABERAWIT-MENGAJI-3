@@ -91,7 +91,12 @@ export async function GET(request: NextRequest) {
         `
         id,
         created_at,
-        user_classroom!inner(email),
+        user_classroom!inner(
+          email,
+          users!inner(
+            name
+          )
+        ),
         schedule!inner(name)
       `
       )

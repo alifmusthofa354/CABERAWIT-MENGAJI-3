@@ -9,6 +9,8 @@ import {
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formathour } from "@/util/dateFormatter";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type AttendanceDetailsType = {
   id: string;
@@ -17,6 +19,9 @@ type AttendanceDetailsType = {
   };
   user_classroom: {
     email: string;
+    users: {
+      name: string;
+    };
   };
   created_at: string;
 };
@@ -28,7 +33,7 @@ export default function ListHistoryDay({
 }) {
   const isLoading = false;
   const hasFiltered = true;
-  console.log("AttendanceDetails:\n", AttendanceDetails);
+
   return (
     <>
       <Card className="w-full transition-all duration-300 ease-in-out hover:scale-[1.01] hover:shadow-2xl">
@@ -52,26 +57,25 @@ export default function ListHistoryDay({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
                   <TableHead>Acara</TableHead>
                   <TableHead>Pencatat</TableHead>
                   <TableHead>Waktu</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {AttendanceDetails.map((item) => (
                   <TableRow key={item.id}>
-                    <TableCell className="font-medium">
-                      <Link
-                        href={`/dashboard/histori/day/${item.id}`}
-                        className="text-blue-600 hover:underline"
-                      >
-                        {item.id}
+                    <TableCell>{item.schedule.name}</TableCell>
+                    <TableCell>{item.user_classroom.users.name}</TableCell>
+                    <TableCell>{formathour(item.created_at)}</TableCell>
+                    <TableCell className="text-right">
+                      <Link href={`/dashboard/histori/day/${item.id}`} passHref>
+                        <Button variant="ghost" size="icon">
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
                       </Link>
                     </TableCell>
-                    <TableCell>{item.schedule.name}</TableCell>
-                    <TableCell>{item.user_classroom.email}</TableCell>
-                    <TableCell>{formathour(item.created_at)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
